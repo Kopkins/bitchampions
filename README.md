@@ -12,6 +12,4 @@
 * [What is it?](http://editorconfig.org/)
 * [Get a plugin for your Editor](http://editorconfig.org/#download)
 
-### JavaFX
-
 ### Swing
