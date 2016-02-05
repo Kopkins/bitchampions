@@ -1,5 +1,7 @@
 # Bit Champions Referances
 
+## Resources
+
 ### UML
 * [UML basics](http://www.ibm.com/developerworks/rational/library/content/RationalEdge/sep04/bell/)
 
@@ -19,3 +21,22 @@
   * [Intro](http://docs.oracle.com/javase/tutorial/uiswing/dnd/intro.html)
   * [Demo](http://docs.oracle.com/javase/tutorial/uiswing/dnd/basicdemo.html)
   * [Tutorial](http://zetcode.com/tutorials/javaswingtutorial/draganddrop/)
+  
+## Specification
+### Goals for 1st iteration
++ ClassBox with text fields
++ Be able to move that box
++ Have a toolbox with buttons.
++ draw arrows (arbitrarily)
++ Menu bar
++ When ClassBox button is clicked a classboxk will be generated in canvas
++ Edit text directly in classbox.
+
+###Future Development
++ Anchor arrows
++ Add anchor to class
++ bend arrows
++ Drag classbox directly out of toolbox and place on canvas
++ Multiple arrow heads
++ Snap to grid
+
