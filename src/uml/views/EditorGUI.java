@@ -1,49 +1,53 @@
 package uml.views;
 
+import uml.controls.DialogManager;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 //TODO Write tests for this class
+
 /**
  * The main view and driver class for the UML app.
  *
  * @author Vincent Smith
- * 2/4/16
+ *         2/4/16
  */
-public class EditorGUI extends JFrame {
+public class EditorGUI {
 
     // Global Variables
     final private static int WIDTH = 800;
-    final private static int HEIGTH = 600;
+    final private static int HEIGHT = 600;
     final private static String TITLE = "UML - Editor";
-    private static EditorGUI sharedApp;
+    public JFrame window;
+    private static EditorGUI _sharedApp;
 
     /**
      * Constructor
      */
-    private EditorGUI()
-    {
+    private EditorGUI() {
+        window = new JFrame();
         initialize();
     }
 
     /**
      * Sets up the EditorGUI and  and positions it within
      */
-    private void initialize()
-    {
-        // Center Frame in middle of window
+    private void initialize() {
+        // Center Frame in middle of this
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension dimension = toolkit.getScreenSize();
-        this.setSize(WIDTH, HEIGTH);
-        int xPos = (dimension.width/2) - (this.getWidth() / 2);
-        int yPos = (dimension.height/2) - (this.getHeight() / 2);
-        this.setTitle(TITLE);
+        window.setSize(WIDTH, HEIGHT);
+        int xPos = (dimension.width / 2) - (window.getWidth() / 2);
+        int yPos = (dimension.height / 2) - (window.getHeight() / 2);
+        window.setTitle(TITLE);
         this.attachMenuBar();
-        this.setLocation(xPos, yPos);
+        window.setLocation(xPos, yPos);
         this.setExitOnWindowClose();
-        this.setVisible(true);
+        window.setVisible(true);
     }
 
     /**
@@ -52,45 +56,52 @@ public class EditorGUI extends JFrame {
      *
      * @return EditorGUI sharedApp
      */
-    public static EditorGUI getSharedApp()
-    {
-        if (sharedApp == null)
-        {
-            sharedApp = new EditorGUI();
+    public static EditorGUI getSharedApp() {
+        if (_sharedApp == null) {
+            _sharedApp = new EditorGUI();
         }
-        return sharedApp;
+        return _sharedApp;
     }
 
     /**
-     * Binds a JMenuBar to our current window.
+     * Binds a JMenuBar to our current this.
      */
-    private void attachMenuBar()
-    {
+    private void attachMenuBar() {
         JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu, helpMenu;
+        JMenu fileMenu, aboutMenu;
         fileMenu = new JMenu("File");
-        helpMenu = new JMenu("About");
+        aboutMenu = new JMenu("About");
 
-        // New Diagram Button
-        JMenuItem newMenu = new JMenuItem("New Diagram...");
+        // Buttons
+        JMenuItem newDiagram = new JMenuItem("New Diagram...");
+        JMenuItem exit = new JMenuItem("Exit");
+        JMenuItem about = new JMenuItem("About Us...");
 
-        fileMenu.add(newMenu);
+        // Bind Events to buttons
+        exit.addActionListener(e -> DialogManager.confirmTermination(window));
+        about.addActionListener(e -> DialogManager.showAbout(window));
+        newDiagram.addActionListener(e -> DialogManager.showNotImplemented(window));
+
+        // Bind Buttons to Menu
+        fileMenu.add(newDiagram);
+        fileMenu.add(exit);
+        aboutMenu.add(about);
 
         menuBar.add(fileMenu);
-        menuBar.add(helpMenu);
+        menuBar.add(aboutMenu);
 
-        this.setJMenuBar(menuBar);
+        window.setJMenuBar(menuBar);
     }
 
     /**
-     * Sets the program to terminate when the window is closed
+     * Sets the program to terminate when the this is closed
      */
-    private void setExitOnWindowClose()
-    {
-        this.addWindowListener(new WindowAdapter() {
+    private void setExitOnWindowClose() {
+        window.setDefaultCloseOperation(window.DO_NOTHING_ON_CLOSE);
+        window.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                System.exit(0);
+                DialogManager.confirmTermination(window);
             }
         });
     }
@@ -100,8 +111,7 @@ public class EditorGUI extends JFrame {
      *
      * @param args which are command line arguments
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         getSharedApp();
     }
 
