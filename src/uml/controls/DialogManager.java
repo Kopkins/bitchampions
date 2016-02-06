@@ -2,15 +2,26 @@ package uml.controls;
 
 import javax.swing.*;
 
+/**
+ * Manages dialog boxes and modals
+ */
 public class DialogManager {
 
+    // Instance variables
     private static JFrame frame;
 
+    /**
+     * Constructor
+     * @param parentFrame which is the JFrame on which a dialog will act.
+     */
     public DialogManager(JFrame parentFrame)
     {
         frame = parentFrame;
     }
 
+    /**
+     * Displays a modal confirming application termination.
+     */
     public void confirmTermination() {
         String message = "Are you sure you want to leave?";
         String title = "Exit";
@@ -26,6 +37,10 @@ public class DialogManager {
         }
     }
 
+    /**
+     * Displays a modal displaying info about the project and
+     * its contributors.
+     */
     public void showAbout() {
         String message = "Kyle Hopkins, Jared McAndrews,\n"
             + "Jesse Platts, Vincent Smith, Vince Viggiano";
@@ -33,6 +48,9 @@ public class DialogManager {
         JOptionPane.showMessageDialog(frame, message, title, JOptionPane.PLAIN_MESSAGE);
     }
 
+    /**
+     * Displays a dialog stating that a feature is not yet implemented.
+     */
     public void showNotImplemented() {
         String message = "Sorry. This feature is not yet implemented";
         String title = "Oh no!";
