@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 //TODO Write tests for this class
 
@@ -22,14 +21,17 @@ public class EditorGUI {
     final private static int WIDTH = 800;
     final private static int HEIGHT = 600;
     final private static String TITLE = "UML - Editor";
-    public JFrame window;
+
+    public JFrame _window;
+    private DialogManager _dm;
     private static EditorGUI _sharedApp;
 
     /**
      * Constructor
      */
     private EditorGUI() {
-        window = new JFrame();
+        _window = new JFrame();
+        _dm = new DialogManager(_window);
         initialize();
     }
 
@@ -40,14 +42,14 @@ public class EditorGUI {
         // Center Frame in middle of this
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension dimension = toolkit.getScreenSize();
-        window.setSize(WIDTH, HEIGHT);
-        int xPos = (dimension.width / 2) - (window.getWidth() / 2);
-        int yPos = (dimension.height / 2) - (window.getHeight() / 2);
-        window.setTitle(TITLE);
+        _window.setSize(WIDTH, HEIGHT);
+        int xPos = (dimension.width / 2) - (_window.getWidth() / 2);
+        int yPos = (dimension.height / 2) - (_window.getHeight() / 2);
+        _window.setTitle(TITLE);
         this.attachMenuBar();
-        window.setLocation(xPos, yPos);
+        _window.setLocation(xPos, yPos);
         this.setExitOnWindowClose();
-        window.setVisible(true);
+        _window.setVisible(true);
     }
 
     /**
@@ -78,9 +80,9 @@ public class EditorGUI {
         JMenuItem about = new JMenuItem("About Us...");
 
         // Bind Events to buttons
-        exit.addActionListener(e -> DialogManager.confirmTermination(window));
-        about.addActionListener(e -> DialogManager.showAbout(window));
-        newDiagram.addActionListener(e -> DialogManager.showNotImplemented(window));
+        exit.addActionListener(e -> _dm.confirmTermination());
+        about.addActionListener(e -> _dm.showAbout());
+        newDiagram.addActionListener(e -> _dm.showNotImplemented());
 
         // Bind Buttons to Menu
         fileMenu.add(newDiagram);
@@ -90,18 +92,18 @@ public class EditorGUI {
         menuBar.add(fileMenu);
         menuBar.add(aboutMenu);
 
-        window.setJMenuBar(menuBar);
+        _window.setJMenuBar(menuBar);
     }
 
     /**
      * Sets the program to terminate when the this is closed
      */
     private void setExitOnWindowClose() {
-        window.setDefaultCloseOperation(window.DO_NOTHING_ON_CLOSE);
-        window.addWindowListener(new WindowAdapter() {
+        _window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        _window.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                DialogManager.confirmTermination(window);
+                _dm.confirmTermination();
             }
         });
     }

@@ -1,15 +1,17 @@
 package uml.controls;
 
-import uml.views.EditorGUI;
-
 import javax.swing.*;
 
 public class DialogManager {
 
-    public DialogManager() {
+    private static JFrame frame;
+
+    public DialogManager(JFrame parentFrame)
+    {
+        frame = parentFrame;
     }
 
-    public static void confirmTermination(JFrame frame) {
+    public void confirmTermination() {
         String message = "Are you sure you want to leave?";
         String title = "Exit";
         Object[] options = {"Yes", "No, I should stay...",};
@@ -22,17 +24,16 @@ public class DialogManager {
         if (result == 0) {
             System.exit(0);
         }
-
     }
 
-    public static void showAbout(JFrame frame) {
+    public void showAbout() {
         String message = "Kyle Hopkins, Jared McAndrews,\n"
             + "Jesse Platts, Vincent Smith, Vince Viggiano";
         String title = "bit_Champions: UML Editor";
         JOptionPane.showMessageDialog(frame, message, title, JOptionPane.PLAIN_MESSAGE);
     }
 
-    public static void showNotImplemented(JFrame frame) {
+    public void showNotImplemented() {
         String message = "Sorry. This feature is not yet implemented";
         String title = "Oh no!";
         JOptionPane.showMessageDialog(frame, message, title, JOptionPane.PLAIN_MESSAGE);
