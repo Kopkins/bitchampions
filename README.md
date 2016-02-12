@@ -1,4 +1,4 @@
-# Bit Champions Referances
+# Bit Champions References
 
 ## Resources
 
