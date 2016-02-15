@@ -1,0 +1,10 @@
+uml/controls/CanvasManager.class
+uml/controls/EventManager.class
+uml/views/EditorGUI$1.class
+uml/models/ToolBox.class
+uml/controls/DialogManager.class
+uml/models/Relationship.class
+uml/models/ClassBox.class
+uml/models/Canvas.class
+uml/views/EditorGUI.class
+uml/controls/ClassBoxManager.class
