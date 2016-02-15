@@ -15,6 +15,6 @@ public class Canvas extends JPanel {
 
     private void init()
     {
-
+        this.setLayout(null);
     }
 }

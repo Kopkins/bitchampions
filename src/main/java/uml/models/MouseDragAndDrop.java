@@ -10,40 +10,6 @@ public class MouseDragAndDrop extends JFrame {
     public MouseDragAndDrop() {
         Container window = getContentPane();
         //window.setLayout(null);
-        JMenuBar menuBar = new JMenuBar();
-        menuBar.setSize(new Dimension(100, 25));
-        JButton button = new JButton("+ Add a Class Box");
-        button.setPreferredSize(new Dimension(50, 25));
-        menuBar.add(button);
-        window.add(menuBar, BorderLayout.NORTH);
-
-        JButton button2 = new JButton("+ Add a Line");
-        button2.setPreferredSize(new Dimension(50, 25));
-        menuBar.add(button2);
-
-        canvas = new JPanel();
-        canvas.setLayout(null);
-        window.add(canvas);
-        button.addActionListener(new ActionListener() {
-            int counter = 0;
-            public void actionPerformed(ActionEvent e) {
-                counter++;
-                ClassBox classBox = new ClassBox(counter);
-                classBox.setBounds(10 * counter, 10 * counter, classBox.getWidth(), classBox.getHeight());
-                canvas.add(classBox, 0);
-                canvas.revalidate();
-                canvas.repaint();
-            }
-        });
-
-        button2.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-
-                canvas.revalidate();
-                canvas.repaint();
-            }
-        });
 
         setSize(900, 900);
         setVisible(true);
@@ -56,9 +22,8 @@ public class MouseDragAndDrop extends JFrame {
     class ClassBox extends JPanel {
         int p, q;
         int p1, q1, p2, q2;
-        int id;
-        public ClassBox(int count) {
-            id = count;
+
+        public ClassBox() {
             //this.setLocation(5*count, 5*count);
             this.setBackground(Color.gray);
             this.setSize(new Dimension(225, 270));
@@ -83,40 +48,6 @@ public class MouseDragAndDrop extends JFrame {
             this.add(textField);
             this.add(scrollPane1);
             this.add(scrollPane2);
-            addMouseListener(new EventMouseListener());
-            addMouseMotionListener(new EventMouseMotionListener());
-        }
-
-        class EventMouseListener extends MouseAdapter {
-
-            public void mousePressed(MouseEvent event) {
-                p = getX();
-                q = getY();
-                p1 = event.getX();
-                q1 = event.getY();
-                setBackground(Color.blue);
-            }
-
-            public void mouseReleased(MouseEvent event) {
-                setBackground(Color.gray);
-            }
-
-            public void mouseClicked(MouseEvent event) {
-            }
-        }
-
-        class EventMouseMotionListener extends MouseMotionAdapter {
-
-            public void mouseDragged(MouseEvent event) {
-
-                p2 = event.getX();
-                q2 = event.getY();
-
-                p = p + p2 - p1;
-                q = q + q2 - q1;
-
-                setLocation(p, q);
-            }
         }
     }
 }

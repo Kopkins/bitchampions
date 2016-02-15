@@ -49,21 +49,23 @@ public class EditorGUI {
         Container pane = _window.getContentPane();
 
         // Add toolbox to Pane
-        JPanel toolbox = new JPanel(new GridLayout(0,1));
-        CompoundBorder line = new CompoundBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10),
+        JPanel toolbox = new JPanel();
+        toolbox.setLayout(new BoxLayout(toolbox, BoxLayout.PAGE_AXIS));
+        CompoundBorder line = new CompoundBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5),
             BorderFactory.createLineBorder(Color.black));
 
         Border toolboxBorder = BorderFactory.createTitledBorder(line, "Toolbox");
         toolbox.setBorder(toolboxBorder);
         toolbox.setBackground(Color.CYAN);
+        toolbox.setPreferredSize(new Dimension(150, _window.getHeight()));
 
-        for (int i = 0; i <= 2;i++)
-        {
-            String btnName = "Button" + i;
-            toolbox.add(new JButton(btnName));
-        }
-
-        //  toolbox.setPreferredSize(new Dimension(height, 20));
+        //Bind Buttons to Toolbox
+        JButton button = new JButton("+ Add a Class Box");
+        button.setPreferredSize(new Dimension(50, 25));
+        toolbox.add(button);
+        JButton button2 = new JButton("+ Add a Line");
+        button2.setPreferredSize(new Dimension(25, 50));
+        toolbox.add(button2);
         pane.add(toolbox, BorderLayout.LINE_START);
         _cm.bindCanvas(_window.getContentPane());
 
