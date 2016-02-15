@@ -2,6 +2,7 @@ package uml.views;
 
 import uml.controls.CanvasManager;
 import uml.controls.DialogManager;
+import uml.controls.EventManager;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -56,14 +57,15 @@ public class EditorGUI {
 
         Border toolboxBorder = BorderFactory.createTitledBorder(line, "Toolbox");
         toolbox.setBorder(toolboxBorder);
-        toolbox.setBackground(Color.CYAN);
         toolbox.setPreferredSize(new Dimension(150, _window.getHeight()));
 
         //Bind Buttons to Toolbox
         JButton button = new JButton("+ Add a Class Box");
+        button.addActionListener(_cm.getAddBoxListener());
         button.setPreferredSize(new Dimension(50, 25));
         toolbox.add(button);
         JButton button2 = new JButton("+ Add a Line");
+        button2.addActionListener(e -> _dm.showNotImplemented());
         button2.setPreferredSize(new Dimension(25, 50));
         toolbox.add(button2);
         pane.add(toolbox, BorderLayout.LINE_START);

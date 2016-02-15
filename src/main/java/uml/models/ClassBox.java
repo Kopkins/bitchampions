@@ -12,6 +12,11 @@ public class ClassBox extends JPanel {
     int p1, q1, p2, q2;
 
     public ClassBox() {
+        init();
+    }
+
+    private void init()
+    {
         //this.setLocation(5*count, 5*count);
         this.setBackground(Color.gray);
         this.setSize(new Dimension(225, 270));
@@ -39,6 +44,7 @@ public class ClassBox extends JPanel {
         addMouseListener(new EventMouseListener());
         addMouseMotionListener(new EventMouseMotionListener());
     }
+
     class EventMouseListener extends MouseAdapter {
 
         public void mousePressed(MouseEvent event) {
