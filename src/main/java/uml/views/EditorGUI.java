@@ -1,8 +1,11 @@
 package uml.views;
 
+import uml.controls.CanvasManager;
 import uml.controls.DialogManager;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -24,7 +27,9 @@ public class EditorGUI {
 
     public JFrame _window;
     private DialogManager _dm;
+    private CanvasManager _cm;
     private static EditorGUI _sharedApp;
+
 
     /**
      * Constructor
@@ -32,6 +37,7 @@ public class EditorGUI {
     private EditorGUI() {
         _window = new JFrame();
         _dm = new DialogManager(_window);
+        _cm = new CanvasManager();
         initialize();
     }
 
@@ -39,6 +45,28 @@ public class EditorGUI {
      * Sets up the EditorGUI and  and positions it within
      */
     private void initialize() {
+
+        Container pane = _window.getContentPane();
+
+        // Add toolbox to Pane
+        JPanel toolbox = new JPanel(new GridLayout(0,1));
+        CompoundBorder line = new CompoundBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10),
+            BorderFactory.createLineBorder(Color.black));
+
+        Border toolboxBorder = BorderFactory.createTitledBorder(line, "Toolbox");
+        toolbox.setBorder(toolboxBorder);
+        toolbox.setBackground(Color.CYAN);
+
+        for (int i = 0; i <= 2;i++)
+        {
+            String btnName = "Button" + i;
+            toolbox.add(new JButton(btnName));
+        }
+
+        //  toolbox.setPreferredSize(new Dimension(height, 20));
+        pane.add(toolbox, BorderLayout.LINE_START);
+        _cm.bindCanvas(_window.getContentPane());
+
         // Center Frame in middle of this
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension dimension = toolkit.getScreenSize();
