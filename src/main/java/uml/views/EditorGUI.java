@@ -1,12 +1,15 @@
 package uml.views;
 
+import uml.controls.CanvasManager;
 import uml.controls.DialogManager;
+import uml.controls.EventManager;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 //TODO Write tests for this class
 
@@ -22,14 +25,20 @@ public class EditorGUI {
     final private static int WIDTH = 800;
     final private static int HEIGHT = 600;
     final private static String TITLE = "UML - Editor";
-    public JFrame window;
+
+    public JFrame _window;
+    private DialogManager _dm;
+    private CanvasManager _cm;
     private static EditorGUI _sharedApp;
+
 
     /**
      * Constructor
      */
     private EditorGUI() {
-        window = new JFrame();
+        _window = new JFrame();
+        _dm = new DialogManager(_window);
+        _cm = new CanvasManager();
         initialize();
     }
 
@@ -37,17 +46,42 @@ public class EditorGUI {
      * Sets up the EditorGUI and  and positions it within
      */
     private void initialize() {
+
+        Container pane = _window.getContentPane();
+
+        // Add toolbox to Pane
+        JPanel toolbox = new JPanel();
+        toolbox.setLayout(new BoxLayout(toolbox, BoxLayout.PAGE_AXIS));
+        CompoundBorder line = new CompoundBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5),
+            BorderFactory.createLineBorder(Color.black));
+
+        Border toolboxBorder = BorderFactory.createTitledBorder(line, "Toolbox");
+        toolbox.setBorder(toolboxBorder);
+        toolbox.setPreferredSize(new Dimension(150, _window.getHeight()));
+
+        //Bind Buttons to Toolbox
+        JButton button = new JButton("+ Add a Class Box");
+        button.addActionListener(_cm.getAddBoxListener());
+        button.setPreferredSize(new Dimension(50, 25));
+        toolbox.add(button);
+        JButton button2 = new JButton("+ Add a Line");
+        button2.addActionListener(e -> _dm.showNotImplemented());
+        button2.setPreferredSize(new Dimension(25, 50));
+        toolbox.add(button2);
+        pane.add(toolbox, BorderLayout.LINE_START);
+        _cm.bindCanvas(_window.getContentPane());
+
         // Center Frame in middle of this
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension dimension = toolkit.getScreenSize();
-        window.setSize(WIDTH, HEIGHT);
-        int xPos = (dimension.width / 2) - (window.getWidth() / 2);
-        int yPos = (dimension.height / 2) - (window.getHeight() / 2);
-        window.setTitle(TITLE);
+        _window.setSize(WIDTH, HEIGHT);
+        int xPos = (dimension.width / 2) - (_window.getWidth() / 2);
+        int yPos = (dimension.height / 2) - (_window.getHeight() / 2);
+        _window.setTitle(TITLE);
         this.attachMenuBar();
-        window.setLocation(xPos, yPos);
+        _window.setLocation(xPos, yPos);
         this.setExitOnWindowClose();
-        window.setVisible(true);
+        _window.setVisible(true);
     }
 
     /**
@@ -78,9 +112,9 @@ public class EditorGUI {
         JMenuItem about = new JMenuItem("About Us...");
 
         // Bind Events to buttons
-        exit.addActionListener(e -> DialogManager.confirmTermination(window));
-        about.addActionListener(e -> DialogManager.showAbout(window));
-        newDiagram.addActionListener(e -> DialogManager.showNotImplemented(window));
+        exit.addActionListener(e -> _dm.confirmTermination());
+        about.addActionListener(e -> _dm.showAbout());
+        newDiagram.addActionListener(e -> _dm.showNotImplemented());
 
         // Bind Buttons to Menu
         fileMenu.add(newDiagram);
@@ -90,18 +124,18 @@ public class EditorGUI {
         menuBar.add(fileMenu);
         menuBar.add(aboutMenu);
 
-        window.setJMenuBar(menuBar);
+        _window.setJMenuBar(menuBar);
     }
 
     /**
      * Sets the program to terminate when the this is closed
      */
     private void setExitOnWindowClose() {
-        window.setDefaultCloseOperation(window.DO_NOTHING_ON_CLOSE);
-        window.addWindowListener(new WindowAdapter() {
+        _window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        _window.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                DialogManager.confirmTermination(window);
+                _dm.confirmTermination();
             }
         });
     }
