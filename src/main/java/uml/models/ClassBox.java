@@ -17,7 +17,6 @@ public class ClassBox extends JPanel {
 
     private void init()
     {
-        //this.setLocation(5*count, 5*count);
         this.setBackground(Color.gray);
         this.setSize(new Dimension(225, 270));
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -45,6 +44,9 @@ public class ClassBox extends JPanel {
         addMouseMotionListener(new EventMouseMotionListener());
     }
 
+    /*
+    TODO These should probably be abstracted out into ClassBoxManager or an Event Manager
+     */
     class EventMouseListener extends MouseAdapter {
 
         public void mousePressed(MouseEvent event) {

@@ -8,7 +8,7 @@ public class Canvas extends JPanel {
 
     public Canvas()
     {
-        _boxes = new ArrayList<>();
+        _boxes = new ArrayList<ClassBox>();
         init();
     }
 
@@ -16,5 +16,10 @@ public class Canvas extends JPanel {
     {
         // Set to Null so Boxes and Lines can be placed freely
         this.setLayout(null);
+    }
+
+    public void addBox(ClassBox box)
+    {
+        _boxes.add(box);
     }
 }

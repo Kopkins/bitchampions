@@ -15,7 +15,6 @@ public class CanvasManager {
 
     // Local Variables
     private Canvas _canvas;
-    ArrayList<ClassBox> _boxes;
 
     /**
      * Constructor
@@ -55,7 +54,7 @@ public class CanvasManager {
     }
 
     /**
-     *
+     * Get an ActionListener that will add new CanvasBoxes to the canvas.
      * @return
      */
     public ActionListener getAddBoxListener()
@@ -71,6 +70,7 @@ public class CanvasManager {
                 getSharedCanvas().add(classBox, 0);
                 getSharedCanvas().revalidate();
                 getSharedCanvas().repaint();
+                getSharedCanvas().addBox(classBox);
             }
         };
         return listener;
@@ -94,7 +94,7 @@ public class CanvasManager {
      * Get an ActionListener for revalidating and repainting the canvas panel
      * @return listener
      */
-    public ActionListener getRevalidcateListener()
+    public ActionListener getRevalidateListener()
     {
         ActionListener listener = new ActionListener()
         {
