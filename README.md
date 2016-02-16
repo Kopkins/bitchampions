@@ -53,7 +53,7 @@ Mac, Windows, or Linux machines with JRE8u73 x64 installed and properly configur
 ### Functional Description
 #### Feature List
 * Drag and Drop class boxes
-* Ability yo draw lines on a canvas
+* Ability to draw lines on a canvas
 * Ability to label class boxes with class name, attributes, and methods
 
 ### User Interface
