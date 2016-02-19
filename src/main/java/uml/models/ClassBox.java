@@ -8,18 +8,19 @@ import java.awt.event.MouseMotionAdapter;
 
 public class ClassBox extends JPanel {
 
-    int p, q;
-    int p1, q1, p2, q2;
+    private Point origin;
+    private Point clickedPoint;
 
     public ClassBox() {
         init();
     }
 
-    private void init()
-    {
-        this.setBackground(Color.gray);
-        this.setSize(new Dimension(225, 270));
-        this.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+    private void init() {
+        origin = new Point();
+        clickedPoint = new Point();
+        setBackground(Color.gray);
+        setSize(new Dimension(225, 270));
+        setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
         JTextField textField = new JTextField();
         textField.setPreferredSize(new Dimension(200, 25));
@@ -37,9 +38,9 @@ public class ClassBox extends JPanel {
         scrollPane2.setPreferredSize(new Dimension(200, 100));
         scrollPane2.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
-        this.add(textField);
-        this.add(scrollPane1);
-        this.add(scrollPane2);
+        add(textField);
+        add(scrollPane1);
+        add(scrollPane2);
         addMouseListener(new EventMouseListener());
         addMouseMotionListener(new EventMouseMotionListener());
     }
@@ -50,10 +51,8 @@ public class ClassBox extends JPanel {
     class EventMouseListener extends MouseAdapter {
 
         public void mousePressed(MouseEvent event) {
-            p = getX();
-            q = getY();
-            p1 = event.getX();
-            q1 = event.getY();
+            origin = getLocation();
+            clickedPoint = event.getPoint();
             setBackground(Color.blue);
         }
 
@@ -68,14 +67,9 @@ public class ClassBox extends JPanel {
     class EventMouseMotionListener extends MouseMotionAdapter {
 
         public void mouseDragged(MouseEvent event) {
-
-            p2 = event.getX();
-            q2 = event.getY();
-
-            p = p + p2 - p1;
-            q = q + q2 - q1;
-
-            setLocation(p, q);
+            origin.x += event.getX() - clickedPoint.x;
+            origin.y += event.getY() - clickedPoint.y;
+            setLocation(origin);
         }
     }
 }

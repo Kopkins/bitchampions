@@ -2,7 +2,6 @@ package uml.views;
 
 import uml.controls.CanvasManager;
 import uml.controls.DialogManager;
-import uml.controls.EventManager;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -65,7 +64,7 @@ public class EditorGUI {
         button.setPreferredSize(new Dimension(50, 25));
         toolbox.add(button);
         JButton button2 = new JButton("+ Add a Line");
-        button2.addActionListener(e -> _dm.showNotImplemented());
+        button2.addActionListener(_cm.getAddRelationshipListener());
         button2.setPreferredSize(new Dimension(25, 50));
         toolbox.add(button2);
         pane.add(toolbox, BorderLayout.LINE_START);
