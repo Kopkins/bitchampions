@@ -21,7 +21,8 @@
   * [Intro](http://docs.oracle.com/javase/tutorial/uiswing/dnd/intro.html)
   * [Demo](http://docs.oracle.com/javase/tutorial/uiswing/dnd/basicdemo.html)
   * [Tutorial](http://zetcode.com/tutorials/javaswingtutorial/draganddrop/)
-  
+* [Drawing a Grid](http://www.java2s.com/Tutorial/Java/0261__2D-Graphics/Mousedraganddraw.htm)
+
 # Iteration #1
 ## Responsbilities
 | Name      | Responsibility    | Due Date  |
