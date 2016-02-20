@@ -2,7 +2,7 @@ package uml.controls;
 
 import uml.models.Canvas;
 import uml.models.ClassBox;
-
+import uml.models.Relationship;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -15,7 +15,7 @@ public class CanvasManager {
 
     // Local Variables
     private Canvas _canvas;
-
+    private static final int OFFSET = 20;
     /**
      * Constructor
      */
@@ -66,25 +66,35 @@ public class CanvasManager {
             public void actionPerformed(ActionEvent e) {
                 counter++;
                 ClassBox classBox = new ClassBox();
-                classBox.setBounds(10 * counter, 10 * counter, classBox.getWidth(), classBox.getHeight());
+                classBox.setBounds(OFFSET * counter, OFFSET * counter, classBox.getWidth(), classBox.getHeight());
                 getSharedCanvas().add(classBox, 0);
                 getSharedCanvas().revalidate();
                 getSharedCanvas().repaint();
                 getSharedCanvas().addBox(classBox);
+                
             }
+            
         };
         return listener;
     }
 
-    /**
-     *
+     /**
+     * Get an ActionListener that will add new Relationship to the canvas.
      * @return
      */
-    public ActionListener getAddLineListener()
+    public ActionListener getAddRelationshipListener()
     {
         ActionListener listener = new ActionListener() {
+            int counter = 0;
+            
             @Override
             public void actionPerformed(ActionEvent e) {
+                Relationship line = new Relationship();
+                line.setBounds(OFFSET  * counter, OFFSET * counter, line.getWidth(), line.getHeight());
+                getSharedCanvas().add(line, 0);
+                getSharedCanvas().revalidate();
+                getSharedCanvas().repaint();
+                getSharedCanvas().addRelationship(line);
             }
         };
         return listener;
