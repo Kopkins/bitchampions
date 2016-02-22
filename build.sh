@@ -7,22 +7,25 @@
 # This must be run from the same directory holding pom.xml
 # and expects one argument which is the src directory.
 
-build_dir_base="uml-app"
+build_dir_base="uml-app/"
 build_dir="uml-app/src/main/java/bitchampions/"
 build_dir_test="uml-app/src/test/java/bitchampions/"
 
-# Clean out old builds
-if [ -d $build_dir_base ]; then
-	echo "Build Dir found ... cleaning"
-	rm -R $build_dir_base
-fi
 
-# Create new build directory
-mkdir -p $build_dir
-mkdir -p $build_dir_test
-
+# Make sure the location of the source code is given
 if [ $1 ]; then
-	
+
+	# Clean out old builds
+	if [ -d $build_dir_base ]; then
+		echo "Build Dir found ... cleaning"
+		rm -rf $build_dir_base
+	fi
+
+	# Create new build directory
+	mkdir -p $build_dir
+	mkdir -p $build_dir_test
+
+	# Find sources and move the to the build dir
 	sources=$(find $1 -regex '.*\.java')
 	for source in $sources
 	do
@@ -35,6 +38,7 @@ if [ $1 ]; then
 		fi
 	done
 
+	# Set up the build 
 	cp pom.xml $build_dir_base
 	cd $build_dir_base
 	mvn compile
