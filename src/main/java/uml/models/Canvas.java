@@ -1,5 +1,6 @@
 package uml.models;
 
+import uml.controls.CanvasManager;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -12,8 +13,6 @@ public class Canvas extends JPanel {
 
     private ArrayList<ClassBox> m_boxes;
     private ArrayList<Relationship> m_relationships;
-    private int m_activeIndex;
-    private Point m_clickPoint;
 
     public Canvas() {
         init();
@@ -21,13 +20,9 @@ public class Canvas extends JPanel {
 
     private void init() {
         // Set to Null so Boxes and Lines can be placed freely
-   
         this.setLayout(null);
         m_boxes = new ArrayList<ClassBox>();
         m_relationships = new ArrayList<Relationship>();
-        m_activeIndex = -1;
-        addMouseListener(new Canvas.EventMouseListener());
-        addMouseMotionListener(new Canvas.EventMouseMotionListener());
     }
 
     public void addBox(ClassBox box) {
@@ -38,46 +33,16 @@ public class Canvas extends JPanel {
         m_relationships.add(relationship);
     }
 
-    class EventMouseListener extends MouseAdapter {
-
-        public void mousePressed(MouseEvent event) {
-
-            m_clickPoint = event.getPoint();
-            for (int i = 0; i < m_relationships.size(); i++) {
-                if (m_relationships.get(i).getPoint1().distance(m_clickPoint) <= 5) {
-                    m_activeIndex = i;
-                    m_relationships.get(i).setColor(Color.blue);
-                    repaint();
-                }
-            }
-        }
-
-        public void mouseReleased(MouseEvent event) {
-            if (m_activeIndex != -1) {
-                m_relationships.get(m_activeIndex).setColor(Color.gray);
-                repaint();
-                m_activeIndex = -1;
-            }
-        }
+    public void addRelationship(Integer index, Relationship relationship) {
+        m_relationships.add(index, relationship);
     }
 
-    class EventMouseMotionListener extends MouseMotionAdapter {
+    public ArrayList<ClassBox> getBoxes() {
+        return m_boxes;
+    }
 
-        public void mouseDragged(MouseEvent event) {
-            if (m_activeIndex != -1) {
-                Relationship activeRelationship = m_relationships.get(m_activeIndex);
-                int x = activeRelationship.getPoint1().x - event.getX();
-                int y = activeRelationship.getPoint1().y - event.getY();
-                activeRelationship.setPoint1(event.getPoint());
-                x = activeRelationship.getPoint2().x - x;
-                y = activeRelationship.getPoint2().y - y;
-                activeRelationship.setPoint2(new Point(x, y));
-                m_clickPoint = activeRelationship.getPoint1();
-                m_relationships.add(m_activeIndex, activeRelationship);
-                repaint();
-            }
-        }
-
+    public ArrayList<Relationship> getRelationships() {
+        return m_relationships;
     }
 
     public void paint(Graphics g) {
@@ -94,6 +59,6 @@ public class Canvas extends JPanel {
             g2d.setColor(r.getColor());
             g2d.drawLine(x1, y1, x2, y2);
         }
-
     }
+
 }
