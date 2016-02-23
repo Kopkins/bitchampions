@@ -8,16 +8,16 @@ import java.awt.event.MouseMotionAdapter;
 
 public class ClassBox extends JPanel {
 
-    private Point origin;
-    private Point clickedPoint;
+    private Point m_origin;
+    private Point m_clickedPoint;
 
     public ClassBox() {
         init();
     }
 
     private void init() {
-        origin = new Point();
-        clickedPoint = new Point();
+        m_origin = new Point();
+        m_clickedPoint = new Point();
         setBackground(Color.gray);
         setSize(new Dimension(225, 270));
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -51,25 +51,22 @@ public class ClassBox extends JPanel {
     class EventMouseListener extends MouseAdapter {
 
         public void mousePressed(MouseEvent event) {
-            origin = getLocation();
-            clickedPoint = event.getPoint();
+            m_origin = getLocation();
+            m_clickedPoint = event.getPoint();
             setBackground(Color.blue);
         }
 
         public void mouseReleased(MouseEvent event) {
             setBackground(Color.gray);
         }
-
-        public void mouseClicked(MouseEvent event) {
-        }
     }
 
     class EventMouseMotionListener extends MouseMotionAdapter {
 
         public void mouseDragged(MouseEvent event) {
-            origin.x += event.getX() - clickedPoint.x;
-            origin.y += event.getY() - clickedPoint.y;
-            setLocation(origin);
+            m_origin.x += event.getX() - m_clickedPoint.x;
+            m_origin.y += event.getY() - m_clickedPoint.y;
+            setLocation(m_origin);
         }
     }
 }

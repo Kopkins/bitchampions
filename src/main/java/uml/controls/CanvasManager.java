@@ -90,8 +90,6 @@ public class CanvasManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Relationship line = new Relationship();
-                line.setBounds(OFFSET  * counter, OFFSET * counter, line.getWidth(), line.getHeight());
-                getSharedCanvas().add(line, 0);
                 getSharedCanvas().revalidate();
                 getSharedCanvas().repaint();
                 getSharedCanvas().addRelationship(line);
