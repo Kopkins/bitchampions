@@ -14,7 +14,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 
-public class CanvasManager extends JPanel{
+public class CanvasManager {
 
     // Local Variables
     private Canvas m_canvas;
@@ -66,15 +66,6 @@ public class CanvasManager extends JPanel{
         }
         return m_canvas;
     }
-    
-    /**
-     * Gets a singleton instance of canvas for the editors window.
-     *
-     * @return
-     */
-    public ArrayList<Relationship> getRelationships (){
-        return m_relationships;
-    }
 
     /**
      * Get an ActionListener that will add new CanvasBoxes to the canvas.
@@ -111,7 +102,6 @@ public class CanvasManager extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 Relationship line = new Relationship();
                 m_relationships.add(line);
-                System.out.println(m_relationships.size());
                 getSharedCanvas().setRelationships(m_relationships);
                 getSharedCanvas().repaint();
 
@@ -212,9 +202,6 @@ public class CanvasManager extends JPanel{
                 activeRelationship.setPoint2(new Point(x, y));
                 //update the click point to where the active relationship's origin point was moved to
                 m_clickPoint = activeRelationship.getPoint1();
-                // update the active relationship in the relationships array list
-                m_relationships.add(m_activeIndex, activeRelationship);
-                // repaint the canvas to show the movement of the active relationship
                 getSharedCanvas().repaint();
             }
         }
