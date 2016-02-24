@@ -13,22 +13,15 @@ public class Relationship extends JComponent {
      * Constructor
      */
     public Relationship() {
-        init();
-    }
-
-    /**
-     * Initialize data members
-     *
-     */
-    private void init() {
         m_point1 = new Point(20, 20);
         m_point2 = new Point(220, 20);
+        m_color = Color.gray;
     }
 
     /**
      * Gets the color for drawing the line.
      *
-     * @return color
+     * @return
      */
     public Color getColor() {
         return m_color;
@@ -45,7 +38,7 @@ public class Relationship extends JComponent {
     /**
      * Gets point1.
      *
-     * @return point
+     * @return
      */
     public Point getPoint1() {
         return m_point1;
@@ -62,7 +55,7 @@ public class Relationship extends JComponent {
     /**
      * Gets point2.
      *
-     * @return point
+     * @return
      */
     public Point getPoint2() {
         return m_point2;

@@ -7,7 +7,6 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import java.awt.*;
-import java.awt.Graphics.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -15,18 +14,28 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 
-public class CanvasManager {
+public class CanvasManager extends JPanel{
 
     // Local Variables
     private Canvas m_canvas;
-    private static final int OFFSET = 20;
     private Point m_clickPoint;
     private int m_activeIndex;
+    private ArrayList<ClassBox> m_classBoxes;
+    private ArrayList<Relationship> m_relationships;
 
     /**
      * Constructor
      */
     public CanvasManager() {
+        m_classBoxes = new ArrayList<ClassBox>();
+        m_relationships = new ArrayList<Relationship>();
+        init();
+    }
+
+    /**
+     * Add MouseListeners to CanvasManager
+     */
+    private void init() {
         getSharedCanvas().addMouseListener(new EventMouseListener());
         getSharedCanvas().addMouseMotionListener(new EventMouseMotionListener());
     }
@@ -57,6 +66,15 @@ public class CanvasManager {
         }
         return m_canvas;
     }
+    
+    /**
+     * Gets a singleton instance of canvas for the editors window.
+     *
+     * @return
+     */
+    public ArrayList<Relationship> getRelationships (){
+        return m_relationships;
+    }
 
     /**
      * Get an ActionListener that will add new CanvasBoxes to the canvas.
@@ -65,20 +83,18 @@ public class CanvasManager {
      */
     public ActionListener getAddBoxListener() {
         ActionListener listener = new ActionListener() {
-            int counter = 0;
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                counter++;
-                ClassBox classBox = new ClassBox();
-                classBox.setBounds(OFFSET * counter, OFFSET * counter, classBox.getWidth(), classBox.getHeight());
+                ClassBoxManager classBoxManager = new ClassBoxManager();
+                ClassBox classBox = classBoxManager.getSharedClassBox();
+                int offset = m_classBoxes.size() + 1;
+                classBox.setBounds(classBox.getOrigin().x * offset, classBox.getOrigin().y * offset, classBox.getWidth(), classBox.getHeight());
                 getSharedCanvas().add(classBox, 0);
+                m_classBoxes.add(classBox);
                 getSharedCanvas().revalidate();
                 getSharedCanvas().repaint();
-                getSharedCanvas().addBox(classBox);
-
             }
-
         };
         return listener;
     }
@@ -90,14 +106,15 @@ public class CanvasManager {
      */
     public ActionListener getAddRelationshipListener() {
         ActionListener listener = new ActionListener() {
-            int counter = 0;
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 Relationship line = new Relationship();
-                getSharedCanvas().revalidate();
+                m_relationships.add(line);
+                System.out.println(m_relationships.size());
+                getSharedCanvas().setRelationships(m_relationships);
                 getSharedCanvas().repaint();
-                getSharedCanvas().addRelationship(line);
+
             }
         };
         return listener;
@@ -119,51 +136,87 @@ public class CanvasManager {
         return listener;
     }
 
-    public class EventMouseListener extends MouseAdapter {
+    /**
+     * Get an ActionListener that will add new Relationship to the canvas.
+     *
+     * @return
+     */
+    public ActionListener getClearCanvasListener() {
+        ActionListener listener = new ActionListener() {
 
-        ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                m_classBoxes.clear();
+                m_relationships.clear();
+                getSharedCanvas().removeAll();
+                getSharedCanvas().revalidate();
+                getSharedCanvas().repaint();
+            }
+        };
+        return listener;
+    }
+
+    /**
+     * EventMouseListener for detecting when mouse is pressed and released
+     *
+     */
+    public class EventMouseListener extends MouseAdapter {
 
         public void mousePressed(MouseEvent event) {
 
+            // get the point the mouse is pressed on
             m_clickPoint = event.getPoint();
-            for (int i = 0; i < relationships.size(); i++) {
-                if (relationships.get(i).getPoint1().distance(m_clickPoint) <= 5) {
+            // loop through relationships arraylist and see if click point is within a 5 point radius of any of the relationships origin point
+            for (int i = 0; i < m_relationships.size(); i++) {
+                if (m_relationships.get(i).getPoint1().distance(m_clickPoint) <= 5) {
+                    //get the index of the active relationship
                     m_activeIndex = i;
-                    relationships.get(i).setColor(Color.blue);
-                    getSharedCanvas().revalidate();
+                    // if clickpoint is within 5 point radius of relationship's origin point, set the relationship to active
+                    m_relationships.get(i).setColor(Color.blue);
+                    // repaint the canvas so the active relationship's color is blue
                     getSharedCanvas().repaint();
                 }
             }
         }
 
         public void mouseReleased(MouseEvent event) {
+            // deactivate the active relationship
             if (m_activeIndex != -1) {
-                relationships.get(m_activeIndex).setColor(Color.gray);
-                getSharedCanvas().revalidate();
+                // change relationship's color back to gray to show it is no longer active and repaint
+                m_relationships.get(m_activeIndex).setColor(Color.gray);
                 getSharedCanvas().repaint();
                 m_activeIndex = -1;
             }
         }
     }
 
+    /**
+     * EventMouseListener for detecting when mouse is dragged
+     *
+     */
     public class EventMouseMotionListener extends MouseMotionAdapter {
 
         public void mouseDragged(MouseEvent event) {
             if (m_activeIndex != -1) {
-                Relationship activeRelationship = getSharedCanvas().getRelationships().get(m_activeIndex);
+                //get the active relationship
+                Relationship activeRelationship = m_relationships.get(m_activeIndex);
+                // get the distance the origin point is moved
                 int x = activeRelationship.getPoint1().x - event.getX();
                 int y = activeRelationship.getPoint1().y - event.getY();
+                // set the active relationship's origin point to the point where the mouse is dragged
                 activeRelationship.setPoint1(event.getPoint());
+                //calculte the point to move the active relationship's second point to, based on the distance it's origin point is moved
                 x = activeRelationship.getPoint2().x - x;
                 y = activeRelationship.getPoint2().y - y;
+                //move the active relationship's second point to the point calculated above
                 activeRelationship.setPoint2(new Point(x, y));
+                //update the click point to where the active relationship's origin point was moved to
                 m_clickPoint = activeRelationship.getPoint1();
-                getSharedCanvas().addRelationship(m_activeIndex, activeRelationship);
-                getSharedCanvas().revalidate();
+                // update the active relationship in the relationships array list
+                m_relationships.add(m_activeIndex, activeRelationship);
+                // repaint the canvas to show the movement of the active relationship
                 getSharedCanvas().repaint();
             }
         }
-
     }
-
 }

@@ -1,56 +1,49 @@
 package uml.models;
 
-import uml.controls.CanvasManager;
-import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import javax.swing.*;
-import java.util.ArrayList;
 import java.awt.*;
+import java.util.ArrayList;
+import uml.controls.CanvasManager;
 
 public class Canvas extends JPanel {
 
-    private ArrayList<ClassBox> m_boxes;
+    // Local Variables
+    private int m_minWidth, m_minHeight;
     private ArrayList<Relationship> m_relationships;
 
+    /**
+     * Constructor
+     */
     public Canvas() {
+        m_minWidth = 800;
+        m_minHeight = 800;
+        m_relationships = new ArrayList<Relationship>();
         init();
     }
 
     private void init() {
         // Set to Null so Boxes and Lines can be placed freely
         this.setLayout(null);
-        m_boxes = new ArrayList<ClassBox>();
-        m_relationships = new ArrayList<Relationship>();
     }
 
-    public void addBox(ClassBox box) {
-        m_boxes.add(box);
+    /**
+     * Sets the ArrayList of Relationships for paint
+     */
+    public void setRelationships(ArrayList<Relationship> r) {
+        m_relationships = r;
     }
 
-    public void addRelationship(Relationship relationship) {
-        m_relationships.add(relationship);
-    }
-
-    public void addRelationship(Integer index, Relationship relationship) {
-        m_relationships.add(index, relationship);
-    }
-
-    public ArrayList<ClassBox> getBoxes() {
-        return m_boxes;
-    }
-
-    public ArrayList<Relationship> getRelationships() {
-        return m_relationships;
-    }
-
+    /**
+     * Override paint method to draw relationships on canvas
+     *
+     */
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
+        //Antialiasing to smooth lines
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setStroke(new BasicStroke(2.0f));
-
+        //draw each relationship
         for (Relationship r : m_relationships) {
             int x1 = (int) Math.round(r.getPoint1().x);
             int y1 = (int) Math.round(r.getPoint1().y);
@@ -60,5 +53,4 @@ public class Canvas extends JPanel {
             g2d.drawLine(x1, y1, x2, y2);
         }
     }
-
 }
