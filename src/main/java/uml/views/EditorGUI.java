@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-//TODO Write tests for this class
 /**
  * The main view and driver class for the UML app.
  *
