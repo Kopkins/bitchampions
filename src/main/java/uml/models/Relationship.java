@@ -6,15 +6,15 @@ import javax.swing.*;
 public class Relationship extends JComponent {
 
 // Local Variables
-    private Point m_point1, m_point2;
+    private Point m_start, m_end;
     private Color m_color;
 
     /**
      * Constructor
      */
     public Relationship() {
-        m_point1 = new Point(20, 20);
-        m_point2 = new Point(220, 20);
+        m_start = new Point(320, 20);
+        m_end = new Point(440, 20);
         m_color = Color.gray;
     }
 
@@ -36,36 +36,36 @@ public class Relationship extends JComponent {
     }
 
     /**
-     * Gets point1.
+     * Gets end point.
      *
      * @return
      */
-    public Point getPoint1() {
-        return m_point1;
+    public Point getStartPoint() {
+        return m_start;
     }
 
     /**
-     * Sets point1.
+     * Sets start point.
      *
      */
-    public void setPoint1(Point p) {
-        m_point1 = p;
+    public void setStartPoint(Point p) {
+        m_start = p;
     }
 
     /**
-     * Gets point2.
+     * Gets end point.
      *
      * @return
      */
-    public Point getPoint2() {
-        return m_point2;
+    public Point getEndPoint() {
+        return m_end;
     }
 
     /**
-     * Sets point2.
+     * Sets end point.
      *
      */
-    public void setPoint2(Point p) {
-        m_point2 = p;
+    public void setEndPoint(Point p) {
+        m_end = p;
     }
 }

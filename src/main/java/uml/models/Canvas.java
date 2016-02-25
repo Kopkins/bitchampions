@@ -44,10 +44,10 @@ public class Canvas extends JPanel {
         g2d.setStroke(new BasicStroke(2.0f));
         //draw each relationship
         for (Relationship r : m_relationships) {
-            int x1 = (int) Math.round(r.getPoint1().x);
-            int y1 = (int) Math.round(r.getPoint1().y);
-            int x2 = (int) Math.round(r.getPoint2().x);
-            int y2 = (int) Math.round(r.getPoint2().y);
+            int x1 = (int) Math.round(r.getStartPoint().x);
+            int y1 = (int) Math.round(r.getStartPoint().y);
+            int x2 = (int) Math.round(r.getEndPoint().x);
+            int y2 = (int) Math.round(r.getEndPoint().y);
             g2d.setColor(r.getColor());
             g2d.drawLine(x1, y1, x2, y2);
         }
