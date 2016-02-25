@@ -11,12 +11,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 //TODO Write tests for this class
-
 /**
  * The main view and driver class for the UML app.
  *
- * @author Vincent Smith
- *         2/4/16
+ * @author Vincent Smith 2/4/16
  */
 public class EditorGUI {
 
@@ -30,7 +28,6 @@ public class EditorGUI {
     private CanvasManager _cm;
     private static EditorGUI _sharedApp;
 
-
     /**
      * Constructor
      */
@@ -42,7 +39,7 @@ public class EditorGUI {
     }
 
     /**
-     * Sets up the EditorGUI and  and positions it within
+     * Sets up the EditorGUI and and positions it within
      */
     private void initialize() {
 
@@ -52,7 +49,7 @@ public class EditorGUI {
         JPanel toolbox = new JPanel();
         toolbox.setLayout(new BoxLayout(toolbox, BoxLayout.PAGE_AXIS));
         CompoundBorder line = new CompoundBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5),
-            BorderFactory.createLineBorder(Color.black));
+                BorderFactory.createLineBorder(Color.black));
 
         Border toolboxBorder = BorderFactory.createTitledBorder(line, "Toolbox");
         toolbox.setBorder(toolboxBorder);
@@ -67,6 +64,10 @@ public class EditorGUI {
         button2.addActionListener(_cm.getAddRelationshipListener());
         button2.setPreferredSize(new Dimension(25, 50));
         toolbox.add(button2);
+        JButton button3 = new JButton("Clear Canvas");
+        button3.addActionListener(_cm.getClearCanvasListener());
+        button3.setPreferredSize(new Dimension(25, 50));
+        toolbox.add(button3);
         pane.add(toolbox, BorderLayout.LINE_START);
         _cm.bindCanvas(_window.getContentPane());
 
@@ -84,8 +85,7 @@ public class EditorGUI {
     }
 
     /**
-     * Ensures that only one instance of this class is in
-     * use at a time.
+     * Ensures that only one instance of this class is in use at a time.
      *
      * @return EditorGUI sharedApp
      */
