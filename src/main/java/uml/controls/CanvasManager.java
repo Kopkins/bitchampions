@@ -157,8 +157,7 @@ public class CanvasManager {
             m_clickPoint = event.getPoint();
             // loop through relationships arraylist and see if click point is within a 5 point radius of any of the relationships origin point
             for (int i = 0; i < m_relationships.size(); i++) {
-                if (m_relationships.get(i).getPoint1().distance(m_clickPoint) <= 5
-                        || m_relationships.get(i).getPoint2().distance(m_clickPoint) <= 5) {
+                if (m_relationships.get(i).getPoint1().distance(m_clickPoint) <= 5) {
                     //get the index of the active relationship
                     m_activeIndex = i;
                     // if clickpoint is within 5 point radius of relationship's origin point, set the relationship to active
