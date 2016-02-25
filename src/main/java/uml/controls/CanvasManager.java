@@ -155,7 +155,6 @@ public class CanvasManager {
 
             // get the point the mouse is pressed on
             m_clickPoint = event.getPoint();
-            // TODO magic number
             // loop through relationships arraylist and see if click point is within a 5 point radius of any of the relationships origin point
             for (int i = 0; i < m_relationships.size(); i++) {
                 if (m_relationships.get(i).getPoint1().distance(m_clickPoint) <= 5
@@ -195,7 +194,6 @@ public class CanvasManager {
                 int x = activeRelationship.getPoint1().x - event.getX();
                 int y = activeRelationship.getPoint1().y - event.getY();
                 // set the active relationship's origin point to the point where the mouse is dragged
-                //TODO SetPoint2 if point2 is clicked
                 activeRelationship.setPoint1(event.getPoint());
                 // calculate the point to move the active relationship's second point to, based on the
                 // distance it's origin point is moved
