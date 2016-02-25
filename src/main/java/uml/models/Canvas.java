@@ -3,7 +3,6 @@ package uml.models;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import uml.controls.CanvasManager;
 
 public class Canvas extends JPanel {
 

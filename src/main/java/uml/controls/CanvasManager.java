@@ -104,7 +104,6 @@ public class CanvasManager {
                 m_relationships.add(line);
                 getSharedCanvas().setRelationships(m_relationships);
                 getSharedCanvas().repaint();
-
             }
         };
         return listener;
@@ -156,9 +155,11 @@ public class CanvasManager {
 
             // get the point the mouse is pressed on
             m_clickPoint = event.getPoint();
+            // TODO magic number
             // loop through relationships arraylist and see if click point is within a 5 point radius of any of the relationships origin point
             for (int i = 0; i < m_relationships.size(); i++) {
-                if (m_relationships.get(i).getPoint1().distance(m_clickPoint) <= 5) {
+                if (m_relationships.get(i).getPoint1().distance(m_clickPoint) <= 5
+                        || m_relationships.get(i).getPoint2().distance(m_clickPoint) <= 5) {
                     //get the index of the active relationship
                     m_activeIndex = i;
                     // if clickpoint is within 5 point radius of relationship's origin point, set the relationship to active
@@ -188,19 +189,21 @@ public class CanvasManager {
 
         public void mouseDragged(MouseEvent event) {
             if (m_activeIndex != -1) {
-                //get the active relationship
+                // get the active relationship
                 Relationship activeRelationship = m_relationships.get(m_activeIndex);
                 // get the distance the origin point is moved
                 int x = activeRelationship.getPoint1().x - event.getX();
                 int y = activeRelationship.getPoint1().y - event.getY();
                 // set the active relationship's origin point to the point where the mouse is dragged
+                //TODO SetPoint2 if point2 is clicked
                 activeRelationship.setPoint1(event.getPoint());
-                //calculte the point to move the active relationship's second point to, based on the distance it's origin point is moved
+                // calculate the point to move the active relationship's second point to, based on the
+                // distance it's origin point is moved
                 x = activeRelationship.getPoint2().x - x;
                 y = activeRelationship.getPoint2().y - y;
-                //move the active relationship's second point to the point calculated above
+                // move the active relationship's second point to the point calculated above
                 activeRelationship.setPoint2(new Point(x, y));
-                //update the click point to where the active relationship's origin point was moved to
+                // update the click point to where the active relationship's origin point was moved to
                 m_clickPoint = activeRelationship.getPoint1();
                 getSharedCanvas().repaint();
             }
