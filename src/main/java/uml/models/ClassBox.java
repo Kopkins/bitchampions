@@ -4,18 +4,21 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ClassBox extends JPanel {
- 
+
 // Local Variables
     private int m_width;
     private int m_height;
     private Point m_origin;
+    private Point m_clickPoint;
+
     /**
      * Constructor
      */
     public ClassBox() {
         m_width = 220;
         m_height = 270;
-        m_origin = new Point(20,20);
+        m_origin = new Point(20, 20);
+        m_clickPoint = new Point();
         init();
     }
 
@@ -53,8 +56,38 @@ public class ClassBox extends JPanel {
         add(scrollPane1);
         add(scrollPane2);
     }
-    
-    public Point getOrigin(){
+
+    /**
+     * Gets the origin point.
+     *
+     * @return
+     */
+    public Point getOrigin() {
         return m_origin;
+    }
+
+    /**
+     * Sets the origin point.
+     *
+     */
+    public void setOrigin(Point p) {
+        m_origin = p;
+    }
+
+    /**
+     * Gets the point that was clicked on.
+     *
+     * @return
+     */
+    public Point getClickPoint() {
+        return m_clickPoint;
+    }
+
+    /**
+     * Sets the point that was clicked on.
+     *
+     */
+    public void setClickPoint(Point p) {
+        m_clickPoint = p;
     }
 }
