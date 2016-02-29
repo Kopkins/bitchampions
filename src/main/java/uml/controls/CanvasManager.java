@@ -23,6 +23,9 @@ public class CanvasManager {
     private int m_activeRelationshipIndex;
     private ArrayList<ClassBox> m_classBoxes;
     private ArrayList<Relationship> m_relationships;
+    public boolean m_isDeleteMode = false;
+    private CanvasManager m_canvasManager = this;
+ 
 
     /**
      * Constructor
@@ -61,7 +64,7 @@ public class CanvasManager {
      *
      * @return
      */
-    private Canvas getSharedCanvas() {
+    public Canvas getSharedCanvas() {
         if (m_canvas == null) {
             m_canvas = new Canvas();
         }
@@ -92,6 +95,15 @@ public class CanvasManager {
      */
     public ArrayList<Relationship> getRelationships() {
         return m_relationships;
+    }
+    
+     /**
+     * Gets the ArrayList of ClassBoxes.
+     *
+     * @return
+     */
+    public ArrayList<ClassBox> getClassBoxes() {
+        return m_classBoxes;
     }
     
     /**
@@ -129,7 +141,7 @@ public class CanvasManager {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                ClassBoxManager classBoxManager = new ClassBoxManager();
+                ClassBoxManager classBoxManager = new ClassBoxManager(m_canvasManager);
                 ClassBox classBox = classBoxManager.getSharedClassBox();
                 int offset = m_classBoxes.size() + 1;
                 Point origin = new Point(classBox.getOrigin().x * offset, classBox.getOrigin().y * offset);
@@ -197,5 +209,49 @@ public class CanvasManager {
             }
         };
         return listener;
+        
+        
+    }
+    
+ /**
+     * Get an ActionListener that will add new Relationship to the canvas.
+     *
+     * @return
+     */
+    public ActionListener getDeleteModeListener() {
+        ActionListener listener;
+        listener = new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!m_isDeleteMode){
+                    //a way to show if we are in delete mode.
+                    //this doesnt have to stay or we could use a different color like red
+                    for (Relationship r : getRelationships()){
+                        r.setColor(Color.blue);
+                    }
+                     for (ClassBox c : m_classBoxes){
+                        c.setBackground(Color.blue);
+                    }
+                    getSharedCanvas().revalidate();
+                    getSharedCanvas().repaint();
+                    
+                    m_isDeleteMode = true;
+                }else{
+                     for (Relationship r : getRelationships()){
+                        r.setColor(Color.gray);
+                    }
+                     for (ClassBox c : m_classBoxes){
+                        c.setBackground(Color.gray);
+                    }
+                    m_isDeleteMode = false;
+                }
+                
+                
+            }
+        };
+        return listener;
+        
+        
     }
 }

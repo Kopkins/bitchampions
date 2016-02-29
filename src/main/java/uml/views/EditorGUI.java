@@ -61,6 +61,7 @@ public class EditorGUI {
         buttons.get("addClassBoxButton").addActionListener(_cm.getAddBoxListener());
         buttons.get("addRelationshipButton").addActionListener(_cm.getAddRelationshipListener());
         buttons.get("clearCanvasButton").addActionListener(_cm.getClearCanvasListener());
+        buttons.get("deleteSModeButton").addActionListener(_cm.getDeleteModeListener());
         
         //Add the toolbox to the pane and bind the canvas
         pane.add(toolbox, BorderLayout.LINE_START);
