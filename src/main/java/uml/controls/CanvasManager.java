@@ -168,6 +168,11 @@ public class CanvasManager {
             public void actionPerformed(ActionEvent e) {
                 Relationship line = new Relationship();
                 m_relationships.add(line);
+                int offset = m_relationships.size() * 8;
+                Point startPoint = new Point(line.getStartPoint().x + offset, line.getStartPoint().y + offset);
+                Point endPoint = new Point(line.getEndPoint().x + offset, line.getEndPoint().y + offset);
+                line.setStartPoint(startPoint);
+                line.setEndPoint(endPoint);
                 getSharedCanvas().setRelationships(m_relationships);
                 getSharedCanvas().repaint();
             }
@@ -214,7 +219,7 @@ public class CanvasManager {
     }
     
  /**
-     * Get an ActionListener that will add new Relationship to the canvas.
+     * Get an ActionListener that will put canvas in delete mode.
      *
      * @return
      */
