@@ -23,14 +23,14 @@
   * [Tutorial](http://zetcode.com/tutorials/javaswingtutorial/draganddrop/)
 * [Drawing a Grid](http://www.java2s.com/Tutorial/Java/0261__2D-Graphics/Mousedraganddraw.htm)
 
-# Iteration #1
+# Iteration #2
 ## Responsbilities
 | Name      | Responsibility    | Due Date  |
 |---        |:---:              |---:       |
-| Jesse     | Specification     | 2/9/16    |
-| Jared     | Design            | 2/9/16    |
-| Kyle      | Implementation    | 2/26/16   |
-| Vince S.  | Tests             | 2/26/16   |
+| Jared     | Specification     | 3/3/16    |
+| Vince S   | Design            | 3/3/16    |
+| Jesse     | Implementation    | 3/25/16   |
+| Kyle      | Tests             | 3/25/16   |
 ---
 ## Problem Statement
 Users requre a tool with which they can easily and efficiently edit UML class diagrams.
