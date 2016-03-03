@@ -49,8 +49,16 @@ public class EventManager implements MouseMotionListener,
         if (m_isClassBoxManager) {
             // get point the mouse is pressed on
             m_classBox.setClickPoint(event.getPoint());
-            // changed color to blus to show classBox is active
-            m_classBox.setBackground(Color.blue);
+            //check if in deleteMode
+            if (m_classBox.getCanvasManager().m_isDeleteMode) {
+                m_classBox.getCanvasManager().getSharedCanvas().remove(m_classBox);
+
+                m_classBox.getCanvasManager().repaintCanvas();
+            } else {
+                // changed color to blus to show classBox is active
+                m_classBox.setBackground(Color.blue);
+            }
+
         } else {
             // get the point the mouse is pressed on
             m_canvasManager.setClickPoint(event.getPoint());
@@ -58,12 +66,19 @@ public class EventManager implements MouseMotionListener,
             ArrayList<Relationship> relationships = m_canvasManager.getRelationships();
             for (int i = 0; i < relationships.size(); i++) {
                 if (relationships.get(i).getStartPoint().distance(event.getPoint()) <= RADIUS) {
-                    //get the index of the active relationship
-                    m_canvasManager.setActiveRelationshipIndex(i);
-                    // if clickpoint is within 5 point radius of relationship's origin point, set the relationship to active
-                    relationships.get(i).setColor(Color.blue);
-                    // repaint the canvas so the active relationship's color is blue
-                    m_canvasManager.repaintCanvas();
+                    //check if in delete mode
+                    if (m_canvasManager.m_isDeleteMode) {
+                        relationships.remove(i);
+                        m_canvasManager.repaintCanvas();
+                    } else //get the index of the active relationship
+                    {
+                        m_canvasManager.setActiveRelationshipIndex(i);
+                        // if clickpoint is within 5 point radius of relationship's origin point, set the relationship to active
+                        relationships.get(i).setColor(Color.blue);
+                        // repaint the canvas so the active relationship's color is blue
+                        m_canvasManager.repaintCanvas();
+                    }
+                    
                 }
             }
 

@@ -12,11 +12,14 @@ public class ClassBoxManager {
 
     // Local Variables
     private ClassBox m_classBox;
+    private CanvasManager m_canvasManager;
 
     /**
      * Constructor
+     * @param c
      */
-    public ClassBoxManager() {
+    public ClassBoxManager(CanvasManager c) {
+        m_canvasManager = c;
         init();
     }
 
@@ -35,7 +38,7 @@ public class ClassBoxManager {
      */
     public ClassBox getSharedClassBox() {
         if (m_classBox == null) {
-            m_classBox = new ClassBox();
+            m_classBox = new ClassBox(m_canvasManager);
         }
         return m_classBox;
     }

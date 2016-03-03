@@ -34,6 +34,12 @@ public class ToolBox extends JPanel {
         clearBoxButton.setPreferredSize(new Dimension(25, 50));
         add(clearBoxButton);
         m_buttons.put("clearCanvasButton", clearBoxButton);
+        
+        JButton deleteSModeButton = new JButton("Delete Item");
+        deleteSModeButton.setPreferredSize(new Dimension(25, 50));
+        add(deleteSModeButton);
+        m_buttons.put("deleteSModeButton", deleteSModeButton);
+        
     }
     
     /**
