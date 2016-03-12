@@ -2,7 +2,6 @@ package uml.models;
 
 import javax.swing.*;
 import java.awt.*;
-import uml.controls.CanvasManager;
 
 public class ClassBox extends JPanel {
 
@@ -11,13 +10,11 @@ public class ClassBox extends JPanel {
     private int m_height;
     private Point m_origin;
     private Point m_clickPoint;
-    private CanvasManager m_canvasManager;
 
     /**
      * Constructor
      */
-    public ClassBox(CanvasManager c) {
-        m_canvasManager = c;
+    public ClassBox() {
         m_width = 220;
         m_height = 270;
         m_origin = new Point(20, 20);
@@ -92,14 +89,5 @@ public class ClassBox extends JPanel {
      */
     public void setClickPoint(Point p) {
         m_clickPoint = p;
-    }
-    
-    /**
-     * Gets the classBox's CanvasManager.
-     *
-     * @return
-     */
-    public CanvasManager getCanvasManager() {
-        return m_canvasManager;
     }
 }

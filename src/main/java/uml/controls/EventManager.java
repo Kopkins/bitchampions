@@ -12,7 +12,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import uml.models.ClassBox;
-import uml.controls.ClassBoxManager;
 import uml.models.Relationship;
 
 /**
@@ -26,14 +25,15 @@ public class EventManager implements MouseMotionListener,
     private static int RADIUS = 5;
     private ClassBox m_classBox;
     private CanvasManager m_canvasManager;
-    private boolean m_isClassBoxManager;
+    private boolean m_isClassBox;
 
     /**
      * Constructor that takes a ClassBoxManager
      */
-    public EventManager(ClassBoxManager classBoxManager) {
-        m_classBox = classBoxManager.getSharedClassBox();
-        m_isClassBoxManager = true;
+    public EventManager(CanvasManager canvasManager, ClassBox classBox) {
+        m_canvasManager = canvasManager;
+        m_classBox = classBox;
+        m_isClassBox = true;
     }
 
     /**
@@ -41,19 +41,18 @@ public class EventManager implements MouseMotionListener,
      */
     public EventManager(CanvasManager canvasManager) {
         m_canvasManager = canvasManager;
-        m_isClassBoxManager = false;
+        m_isClassBox = false;
     }
 
     @Override
     public void mousePressed(MouseEvent event) {
-        if (m_isClassBoxManager) {
+        if (m_isClassBox) {
             // get point the mouse is pressed on
             m_classBox.setClickPoint(event.getPoint());
             //check if in deleteMode
-            if (m_classBox.getCanvasManager().m_isDeleteMode) {
-                m_classBox.getCanvasManager().getSharedCanvas().remove(m_classBox);
-
-                m_classBox.getCanvasManager().repaintCanvas();
+            if (m_canvasManager.m_isDeleteMode) {
+                m_canvasManager.deleteClassBox(m_classBox);
+                m_canvasManager.repaintCanvas();
             } else {
                 // changed color to blus to show classBox is active
                 m_classBox.setBackground(Color.blue);
@@ -63,12 +62,13 @@ public class EventManager implements MouseMotionListener,
             // get the point the mouse is pressed on
             m_canvasManager.setClickPoint(event.getPoint());
             // loop through relationships arraylist and see if click point is within a 5 point radius of any of the relationships origin point
-            ArrayList<Relationship> relationships = m_canvasManager.getRelationships();
+            ArrayList<Relationship> relationships = m_canvasManager.getSharedCanvas().getRelationships();
             for (int i = 0; i < relationships.size(); i++) {
                 if (relationships.get(i).getStartPoint().distance(event.getPoint()) <= RADIUS) {
                     //check if in delete mode
                     if (m_canvasManager.m_isDeleteMode) {
-                        relationships.remove(i);
+                        m_canvasManager.deleteRelationship(i);
+                        m_canvasManager.setActiveRelationshipIndex(-1);
                         m_canvasManager.repaintCanvas();
                     } else //get the index of the active relationship
                     {
@@ -78,7 +78,7 @@ public class EventManager implements MouseMotionListener,
                         // repaint the canvas so the active relationship's color is blue
                         m_canvasManager.repaintCanvas();
                     }
-                    
+
                 }
             }
 
@@ -87,7 +87,7 @@ public class EventManager implements MouseMotionListener,
 
     @Override
     public void mouseDragged(MouseEvent event) {
-        if (m_isClassBoxManager) {
+        if (m_isClassBox) {
             //calculate the distance of mouse drag event, update the origin to this point and move the location of the classbox
             int x = m_classBox.getOrigin().x + event.getX() - m_classBox.getClickPoint().x;
             int y = m_classBox.getOrigin().y + event.getY() - m_classBox.getClickPoint().y;
@@ -97,7 +97,7 @@ public class EventManager implements MouseMotionListener,
             int activeIndex = m_canvasManager.getActiveRelationshipIndex();
             if (activeIndex != -1) {
                 // get the active relationship
-                Relationship activeRelationship = m_canvasManager.getRelationships().get(activeIndex);
+                Relationship activeRelationship = m_canvasManager.getSharedCanvas().getRelationships().get(activeIndex);
                 // get the distance the origin point is moved
                 int x = activeRelationship.getStartPoint().x - event.getX();
                 int y = activeRelationship.getStartPoint().y - event.getY();
@@ -128,7 +128,7 @@ public class EventManager implements MouseMotionListener,
 
     @Override
     public void mouseReleased(MouseEvent event) {
-        if (m_isClassBoxManager) {
+        if (m_isClassBox) {
             // change color back to gray to show classBox is no longer active
             m_classBox.setBackground(Color.gray);
         } else {
@@ -136,7 +136,7 @@ public class EventManager implements MouseMotionListener,
             int activeIndex = m_canvasManager.getActiveRelationshipIndex();
             if (activeIndex != -1) {
                 // change relationship's color back to gray to show it is no longer active and repaint
-                ArrayList<Relationship> relationships = m_canvasManager.getRelationships();
+                ArrayList<Relationship> relationships = m_canvasManager.getSharedCanvas().getRelationships();
                 relationships.get(activeIndex).setColor(Color.gray);
                 m_canvasManager.repaintCanvas();
                 m_canvasManager.setActiveRelationshipIndex(-1);

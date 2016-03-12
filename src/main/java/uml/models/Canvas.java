@@ -9,6 +9,7 @@ public class Canvas extends JPanel {
     // Local Variables
     private int m_minWidth, m_minHeight;
     private ArrayList<Relationship> m_relationships;
+    private ArrayList<ClassBox> m_classBoxes;
 
     /**
      * Constructor
@@ -17,6 +18,7 @@ public class Canvas extends JPanel {
         m_minWidth = 800;
         m_minHeight = 800;
         m_relationships = new ArrayList<Relationship>();
+        m_classBoxes = new ArrayList<ClassBox>();
         init();
     }
 
@@ -26,10 +28,17 @@ public class Canvas extends JPanel {
     }
 
     /**
-     * Sets the ArrayList of Relationships for paint
+     * gets the ArrayList of Relationships
      */
-    public void setRelationships(ArrayList<Relationship> r) {
-        m_relationships = r;
+    public ArrayList<Relationship> getRelationships() {
+        return m_relationships;
+    }
+
+    /**
+     * gets the ArrayList of ClassBoxes
+     */
+    public ArrayList<ClassBox> getClassBoxes() {
+        return m_classBoxes;
     }
 
     /**
