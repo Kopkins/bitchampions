@@ -97,6 +97,7 @@ public class CanvasManager {
      *
      */
     public void repaintCanvas() {
+    	getSharedCanvas().revalidate();
         getSharedCanvas().repaint();
     }
 
@@ -200,12 +201,11 @@ public class CanvasManager {
                 ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
                 if (!m_isDeleteMode) {
                     //a way to show if we are in delete mode.
-                    //this doesnt have to stay or we could use a different color like red
                     for (Relationship r : getSharedCanvas().getRelationships()) {
-                        r.setColor(Color.blue);
+                        r.setColor(Color.red);
                     }
                     for (ClassBox c : classBoxes) {
-                        c.setBackground(Color.blue);
+                        c.setBackground(Color.red);
                     }
                     getSharedCanvas().revalidate();
                     getSharedCanvas().repaint();
@@ -218,6 +218,8 @@ public class CanvasManager {
                     for (ClassBox c : classBoxes) {
                         c.setBackground(Color.gray);
                     }
+                    getSharedCanvas().revalidate();
+                    getSharedCanvas().repaint();
                     m_isDeleteMode = false;
                 }
 
