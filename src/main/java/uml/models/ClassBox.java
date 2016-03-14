@@ -2,80 +2,92 @@ package uml.models;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 
 public class ClassBox extends JPanel {
 
-    int p, q;
-    int p1, q1, p2, q2;
+// Local Variables
+    private int m_width;
+    private int m_height;
+    private Point m_origin;
+    private Point m_clickPoint;
 
+    /**
+     * Constructor
+     */
     public ClassBox() {
+        m_width = 220;
+        m_height = 270;
+        m_origin = new Point(20, 20);
+        m_clickPoint = new Point();
         init();
     }
 
-    private void init()
-    {
-        this.setBackground(Color.gray);
-        this.setSize(new Dimension(225, 270));
-        this.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+    /**
+     * Build components for ClassBox
+     */
+    private void init() {
 
+        //set the color, size, and border for the classbox 
+        setBackground(Color.gray);
+        setSize(new Dimension(m_width, m_height));
+        setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+
+        //initialize the textfield for the classbox name and set it's size and border
         JTextField textField = new JTextField();
         textField.setPreferredSize(new Dimension(200, 25));
         textField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
+        //initialize the textarea for the classbox attributes and set it's size and border
         JTextArea textArea1 = new JTextArea();
         textArea1.setLineWrap(true);
         JScrollPane scrollPane1 = new JScrollPane(textArea1);
         scrollPane1.setPreferredSize(new Dimension(200, 100));
         scrollPane1.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
+        //initialize the textarea for the classbox methods and set it's size and border
         JTextArea textArea2 = new JTextArea();
         textArea2.setLineWrap(true);
         JScrollPane scrollPane2 = new JScrollPane(textArea2);
         scrollPane2.setPreferredSize(new Dimension(200, 100));
         scrollPane2.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
-        this.add(textField);
-        this.add(scrollPane1);
-        this.add(scrollPane2);
-        addMouseListener(new EventMouseListener());
-        addMouseMotionListener(new EventMouseMotionListener());
+        //add the name, attribute, and method fields to the classbox
+        add(textField);
+        add(scrollPane1);
+        add(scrollPane2);
     }
 
-    /*
-    TODO These should probably be abstracted out into ClassBoxManager or an Event Manager
+    /**
+     * Gets the origin point.
+     *
+     * @return
      */
-    class EventMouseListener extends MouseAdapter {
-
-        public void mousePressed(MouseEvent event) {
-            p = getX();
-            q = getY();
-            p1 = event.getX();
-            q1 = event.getY();
-            setBackground(Color.blue);
-        }
-
-        public void mouseReleased(MouseEvent event) {
-            setBackground(Color.gray);
-        }
-
-        public void mouseClicked(MouseEvent event) {
-        }
+    public Point getOrigin() {
+        return m_origin;
     }
 
-    class EventMouseMotionListener extends MouseMotionAdapter {
+    /**
+     * Sets the origin point.
+     *
+     */
+    public void setOrigin(Point p) {
+        m_origin = p;
+    }
 
-        public void mouseDragged(MouseEvent event) {
+    /**
+     * Gets the point that was clicked on.
+     *
+     * @return
+     */
+    public Point getClickPoint() {
+        return m_clickPoint;
+    }
 
-            p2 = event.getX();
-            q2 = event.getY();
-
-            p = p + p2 - p1;
-            q = q + q2 - q1;
-
-            setLocation(p, q);
-        }
+    /**
+     * Sets the point that was clicked on.
+     *
+     */
+    public void setClickPoint(Point p) {
+        m_clickPoint = p;
     }
 }

@@ -2,7 +2,7 @@ package uml.views;
 
 import uml.controls.CanvasManager;
 import uml.controls.DialogManager;
-import uml.controls.EventManager;
+import uml.models.ToolBox;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -10,14 +10,12 @@ import javax.swing.border.CompoundBorder;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
-//TODO Write tests for this class
+import java.util.Map;
 
 /**
  * The main view and driver class for the UML app.
  *
- * @author Vincent Smith
- *         2/4/16
+ * @author Vincent Smith 2/4/16
  */
 public class EditorGUI {
 
@@ -31,7 +29,6 @@ public class EditorGUI {
     private CanvasManager _cm;
     private static EditorGUI _sharedApp;
 
-
     /**
      * Constructor
      */
@@ -43,31 +40,30 @@ public class EditorGUI {
     }
 
     /**
-     * Sets up the EditorGUI and  and positions it within
+     * Sets up the EditorGUI and and positions it within
      */
     private void initialize() {
 
         Container pane = _window.getContentPane();
 
         // Add toolbox to Pane
-        JPanel toolbox = new JPanel();
+        ToolBox toolbox = new ToolBox();
         toolbox.setLayout(new BoxLayout(toolbox, BoxLayout.PAGE_AXIS));
         CompoundBorder line = new CompoundBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5),
-            BorderFactory.createLineBorder(Color.black));
+                BorderFactory.createLineBorder(Color.black));
 
         Border toolboxBorder = BorderFactory.createTitledBorder(line, "Toolbox");
         toolbox.setBorder(toolboxBorder);
         toolbox.setPreferredSize(new Dimension(150, _window.getHeight()));
 
-        //Bind Buttons to Toolbox
-        JButton button = new JButton("+ Add a Class Box");
-        button.addActionListener(_cm.getAddBoxListener());
-        button.setPreferredSize(new Dimension(50, 25));
-        toolbox.add(button);
-        JButton button2 = new JButton("+ Add a Line");
-        button2.addActionListener(e -> _dm.showNotImplemented());
-        button2.setPreferredSize(new Dimension(25, 50));
-        toolbox.add(button2);
+        //Add ActionListeners to toolbox buttons
+        Map<String, JButton>  buttons = toolbox.getButtons();
+        buttons.get("addClassBoxButton").addActionListener(_cm.getAddBoxListener());
+        buttons.get("addRelationshipButton").addActionListener(_cm.getAddRelationshipListener());
+        buttons.get("clearCanvasButton").addActionListener(_cm.getClearCanvasListener());
+        buttons.get("deleteSModeButton").addActionListener(_cm.getDeleteModeListener());
+        
+        //Add the toolbox to the pane and bind the canvas
         pane.add(toolbox, BorderLayout.LINE_START);
         _cm.bindCanvas(_window.getContentPane());
 
@@ -85,8 +81,7 @@ public class EditorGUI {
     }
 
     /**
-     * Ensures that only one instance of this class is in
-     * use at a time.
+     * Ensures that only one instance of this class is in use at a time.
      *
      * @return EditorGUI sharedApp
      */
