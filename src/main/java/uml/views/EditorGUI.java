@@ -57,12 +57,17 @@ public class EditorGUI {
         toolbox.setPreferredSize(new Dimension(150, _window.getHeight()));
 
         //Add ActionListeners to toolbox buttons
-        Map<String, JButton>  buttons = toolbox.getButtons();
+        Map<String, JButton> buttons = toolbox.getButtons();
         buttons.get("addClassBoxButton").addActionListener(_cm.getAddBoxListener());
-        buttons.get("addRelationshipButton").addActionListener(_cm.getAddRelationshipListener());
+        buttons.get("addAssociationButton").addActionListener(_cm.getAddRelationshipListener("Association"));
+        buttons.get("addDirectedAssociationButton").addActionListener(_cm.getAddRelationshipListener("DirectedAssociation"));
+        buttons.get("addDependencyButton").addActionListener(_cm.getAddRelationshipListener("Dependency"));
+        buttons.get("addGeneralizationButton").addActionListener(_cm.getAddRelationshipListener("Generalization"));
+        buttons.get("addAggregationButton").addActionListener(_cm.getAddRelationshipListener("Aggregation"));
+        buttons.get("addCompositionButton").addActionListener(_cm.getAddRelationshipListener("Composition"));
         buttons.get("clearCanvasButton").addActionListener(_cm.getClearCanvasListener());
         buttons.get("deleteSModeButton").addActionListener(_cm.getDeleteModeListener());
-        
+
         //Add the toolbox to the pane and bind the canvas
         pane.add(toolbox, BorderLayout.LINE_START);
         _cm.bindCanvas(_window.getContentPane());

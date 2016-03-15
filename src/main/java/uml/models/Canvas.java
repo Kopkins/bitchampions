@@ -50,15 +50,38 @@ public class Canvas extends JLayeredPane {
         Graphics2D g2d = (Graphics2D) g;
         //Antialiasing to smooth lines
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setStroke(new BasicStroke(2.0f));
+
         //draw each relationship
         for (Relationship r : m_relationships) {
+            if (r.getType() == "Dependency") {
+                g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0));
+            } else {
+                g2d.setStroke(new BasicStroke(2.0f));
+            }
             int x1 = (int) Math.round(r.getStartPoint().x);
             int y1 = (int) Math.round(r.getStartPoint().y);
             int x2 = (int) Math.round(r.getEndPoint().x);
             int y2 = (int) Math.round(r.getEndPoint().y);
             g2d.setColor(r.getColor());
             g2d.drawLine(x1, y1, x2, y2);
+            g2d.rotate(r.getAngle(), r.getEndPoint().x, r.getEndPoint().y);
+            if (r.getType() == "Dependency") {
+                g2d.setStroke(new BasicStroke(2.0f));
+            }
+            if (r.getType() == "Dependency" || r.getType() == "DirectedAssociation") {
+                Polygon symbol = r.getSymbol();
+                g2d.drawLine(symbol.xpoints[0], symbol.ypoints[0], symbol.xpoints[1], symbol.ypoints[1]);
+                g2d.drawLine(symbol.xpoints[0], symbol.ypoints[0], symbol.xpoints[2], symbol.ypoints[2]);
+            } else if (r.getType() == "Composition") {
+                g2d.fillPolygon(r.getSymbol());
+            } else {
+                g2d.setColor(this.getBackground());
+                //fill with color of canvas to cover the end of the line going through the symbol
+                g2d.fillPolygon(r.getSymbol());
+                g2d.setColor(r.getColor());
+                g2d.drawPolygon(r.getSymbol());
+            }
+            g2d.rotate(-r.getAngle(), r.getEndPoint().x, r.getEndPoint().y);
         }
     }
 }

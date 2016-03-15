@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import javax.swing.SwingUtilities;
 import uml.models.ClassBox;
 import uml.models.Relationship;
 
@@ -67,7 +68,8 @@ public class EventManager implements MouseMotionListener,
             // loop through relationships arraylist and see if click point is within a 5 point radius of any of the relationships origin point
             ArrayList<Relationship> relationships = m_canvasManager.getSharedCanvas().getRelationships();
             for (int i = 0; i < relationships.size(); i++) {
-                if (relationships.get(i).getStartPoint().distance(event.getPoint()) <= RADIUS) {
+                if (relationships.get(i).getStartPoint().distance(event.getPoint()) <= RADIUS
+                        || relationships.get(i).getEndPoint().distance(event.getPoint()) <= RADIUS) {
                     //check if in delete mode
                     if (m_canvasManager.m_isDeleteMode) {
                         m_canvasManager.deleteRelationship(i);
@@ -81,52 +83,89 @@ public class EventManager implements MouseMotionListener,
                         // repaint the canvas so the active relationship's color is blue
                         m_canvasManager.repaintCanvas();
                     }
-
                 }
             }
-
         }
     }
 
     @Override
     public void mouseDragged(MouseEvent event) {
         if (m_isClassBox) {
-            //calculate the distance of mouse drag event, update the origin to this point and move the location of the classbox
-            int x = m_classBox.getOrigin().x + event.getX() - m_classBox.getClickPoint().x;
-            int y = m_classBox.getOrigin().y + event.getY() - m_classBox.getClickPoint().y;
-            // snap to grid logic
-            // Should gridSize be GLOBAL?
-            /*
-            int gridSize = 20;
-            int offset = x % gridSize;
-            x = (offset > gridSize / 2) ? x + gridSize - offset : x - offset;
-            offset = y % gridSize;
-            y = (offset > gridSize / 2) ? y + gridSize - offset : y - offset;
-            */
-            /////////////////////
-            m_classBox.setOrigin(new Point(x, y));
-            m_classBox.setLocation(m_classBox.getOrigin());
+            if (SwingUtilities.isLeftMouseButton(event)) {
+                //calculate the distance of mouse drag event, update the origin to this point and move the location of the classbox
+                int x = m_classBox.getOrigin().x + event.getX() - m_classBox.getClickPoint().x;
+                int y = m_classBox.getOrigin().y + event.getY() - m_classBox.getClickPoint().y;
+                // snap to grid logic
+                // Should gridSize be GLOBAL?
+                /*
+                int gridSize = 20;
+                int offset = x % gridSize;
+                x = (offset > gridSize / 2) ? x + gridSize - offset : x - offset;
+                offset = y % gridSize;
+                y = (offset > gridSize / 2) ? y + gridSize - offset : y - offset;
+                 */
+                /////////////////////
+                m_classBox.setOrigin(new Point(x, y));
+                m_classBox.setLocation(m_classBox.getOrigin());
+            } else if (SwingUtilities.isRightMouseButton(event)) {
+                m_classBox.resize(event.getPoint());
+                m_canvasManager.getSharedCanvas().revalidate();
+                m_canvasManager.getSharedCanvas().repaint();
+                m_classBox.setClickPoint(event.getPoint());
+            }
         } else {
             int activeIndex = m_canvasManager.getActiveRelationshipIndex();
             if (activeIndex != -1) {
                 // get the active relationship
                 Relationship activeRelationship = m_canvasManager.getSharedCanvas().getRelationships().get(activeIndex);
-                // get the distance the origin point is moved
-                int x = activeRelationship.getStartPoint().x - event.getX();
-                int y = activeRelationship.getStartPoint().y - event.getY();
-                // set the active relationship's origin point to the point where the mouse is dragged
-                activeRelationship.setStartPoint(event.getPoint());
-                // calculate the point to move the active relationship's second point to, based on the
-                // distance it's origin point is moved
-                x = activeRelationship.getEndPoint().x - x;
-                y = activeRelationship.getEndPoint().y - y;
-                // move the active relationship's second point to the point calculated above
-                activeRelationship.setEndPoint(new Point(x, y));
-                // update the click point to where the active relationship's origin point was moved to
-                m_canvasManager.setClickPoint(activeRelationship.getStartPoint());
+                if (SwingUtilities.isLeftMouseButton(event)) {
+                    if (activeRelationship.getStartPoint().distance(m_canvasManager.getClickPoint()) <= RADIUS) {
+                        // get the distance the origin point is moved
+                        int x = activeRelationship.getStartPoint().x - event.getX();
+                        int y = activeRelationship.getStartPoint().y - event.getY();
+                        // set the active relationship's origin point to the point where the mouse is dragged
+                        activeRelationship.setStartPoint(event.getPoint());
+                        // calculate the point to move the active relationship's second point to, based on the
+                        // distance it's origin point is moved
+                        x = activeRelationship.getEndPoint().x - x;
+                        y = activeRelationship.getEndPoint().y - y;
+                        // move the active relationship's second point to the point calculated above
+                        activeRelationship.setEndPoint(new Point(x, y));
+                        // update the click point to where the active relationship's origin point was moved to
+                        m_canvasManager.setClickPoint(activeRelationship.getStartPoint());
+                    } else {
+                        // get the distance the end point is moved
+                        int x = activeRelationship.getEndPoint().x - event.getX();
+                        int y = activeRelationship.getEndPoint().y - event.getY();
+                        // set the active relationship's end point to the point where the mouse is dragged
+                        activeRelationship.setEndPoint(event.getPoint());
+                        // calculate the point to move the active relationship's origin point to, based on the
+                        // distance it's endpoint point is moved
+                        x = activeRelationship.getStartPoint().x - x;
+                        y = activeRelationship.getStartPoint().y - y;
+                        // move the active relationship's second point to the point calculated above
+                        activeRelationship.setStartPoint(new Point(x, y));
+                        // update the click point to where the active relationship's end point was moved to
+                        m_canvasManager.setClickPoint(activeRelationship.getEndPoint());
+
+                    }
+                } else if (SwingUtilities.isRightMouseButton(event)) {
+                    if (activeRelationship.getStartPoint().distance(m_canvasManager.getClickPoint()) <= RADIUS) {
+                        // set the active relationship's origin point to the point where the mouse is dragged
+                        activeRelationship.setStartPoint(event.getPoint());
+                        // update the click point to where the active relationship's origin point was moved to
+                        m_canvasManager.setClickPoint(activeRelationship.getStartPoint());
+                        activeRelationship.rotate();
+                    } else {
+                        // set the active relationship's end point to the point where the mouse is dragged
+                        activeRelationship.setEndPoint(event.getPoint());
+                        // update the click point to where the active relationship's end point was moved to
+                        m_canvasManager.setClickPoint(activeRelationship.getEndPoint());
+                        activeRelationship.rotate();
+                    }
+                }
                 m_canvasManager.repaintCanvas();
             }
-
         }
     }
 
