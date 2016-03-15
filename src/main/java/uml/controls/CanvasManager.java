@@ -207,17 +207,17 @@ public class CanvasManager {
                 ArrayList<ClassBox> classBoxes = getSharedCanvas().getClassBoxes();
                 ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
                 if (!m_isDeleteMode) {
+                    m_isDeleteMode = true;
                     //a way to show if we are in delete mode.
                     for (Relationship r : getSharedCanvas().getRelationships()) {
                         r.setColor(Color.red);
                     }
                     for (ClassBox c : classBoxes) {
-                        c.setBackground(Color.red);
+                        addColorToBox(c);
                     }
                     getSharedCanvas().revalidate();
                     getSharedCanvas().repaint();
 
-                    m_isDeleteMode = true;
                 } else {
                     m_isDeleteMode = false;
                     ResetItemColor();
@@ -236,10 +236,11 @@ public class CanvasManager {
     public void addClassBox(ClassBox cb) {
         ArrayList<ClassBox> classBoxes = getSharedCanvas().getClassBoxes();
         classBoxes.add(cb);
-        getSharedCanvas().add(cb, 0);
+        getSharedCanvas().add(cb, JLayeredPane.DRAG_LAYER);
+        getSharedCanvas().moveToFront(cb);
+        addColorToBox(cb);
         cb.addMouseListener(new EventManager(m_canvasManager, cb));
         cb.addMouseMotionListener(new EventManager(m_canvasManager, cb));
-
     }
 
     /**
@@ -256,6 +257,9 @@ public class CanvasManager {
      *
      */
     public void deleteClassBox(ClassBox cb) {
+
+        ArrayList<ClassBox> boxes = getSharedCanvas().getClassBoxes();
+        boxes.remove(cb);
         getSharedCanvas().remove(cb);
     }
 
@@ -290,6 +294,11 @@ public class CanvasManager {
             c.setBackground(Color.gray);
         }
         getSharedCanvas().repaint();
+    }
+
+    private void addColorToBox(ClassBox box) {
+        Color color = m_isDeleteMode ? Color.red : Color.gray;
+        box.setBackground(color);
     }
 
 }

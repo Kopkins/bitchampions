@@ -49,6 +49,7 @@ public class EventManager implements MouseMotionListener,
     @Override
     public void mousePressed(MouseEvent event) {
         if (m_isClassBox) {
+            m_canvasManager.getSharedCanvas().moveToFront(m_classBox);
             // get point the mouse is pressed on
             m_classBox.setClickPoint(event.getPoint());
             //check if in deleteMode
