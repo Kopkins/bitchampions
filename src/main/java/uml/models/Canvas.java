@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Canvas extends JPanel {
+public class Canvas extends JLayeredPane {
 
     // Local Variables
     private int m_minWidth, m_minHeight;
