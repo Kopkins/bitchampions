@@ -15,8 +15,10 @@ import uml.models.ClassBox;
 import uml.models.Relationship;
 
 /**
- *
- * @author webstudent
+ * @author Vincent Smith
+ * @author Jared M.
+ * @author Jesse Platts
+ * @author Kyle Hopkins
  */
 public class EventManager implements MouseMotionListener,
         MouseListener {
@@ -54,7 +56,7 @@ public class EventManager implements MouseMotionListener,
                 m_canvasManager.deleteClassBox(m_classBox);
                 m_canvasManager.repaintCanvas();
             } else {
-                // changed color to blus to show classBox is active
+                // changed color to blue to show classBox is active
                 m_classBox.setBackground(Color.blue);
             }
 
@@ -91,6 +93,16 @@ public class EventManager implements MouseMotionListener,
             //calculate the distance of mouse drag event, update the origin to this point and move the location of the classbox
             int x = m_classBox.getOrigin().x + event.getX() - m_classBox.getClickPoint().x;
             int y = m_classBox.getOrigin().y + event.getY() - m_classBox.getClickPoint().y;
+            // snap to grid logic
+            // Should gridSize be GLOBAL?
+            /*
+            int gridSize = 20;
+            int offset = x % gridSize;
+            x = (offset > gridSize / 2) ? x + gridSize - offset : x - offset;
+            offset = y % gridSize;
+            y = (offset > gridSize / 2) ? y + gridSize - offset : y - offset;
+            */
+            /////////////////////
             m_classBox.setOrigin(new Point(x, y));
             m_classBox.setLocation(m_classBox.getOrigin());
         } else {

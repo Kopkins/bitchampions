@@ -136,7 +136,7 @@ public class CanvasManager {
      */
     public ActionListener getAddRelationshipListener() {
         ActionListener listener = new ActionListener() {
-            
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 //turn off delete mode if adding Relationship
@@ -208,20 +208,19 @@ public class CanvasManager {
                 ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
                 if (!m_isDeleteMode) {
                     //a way to show if we are in delete mode.
-                    //this doesnt have to stay or we could use a different color like red
                     for (Relationship r : getSharedCanvas().getRelationships()) {
-                        r.setColor(Color.blue);
+                        r.setColor(Color.red);
                     }
                     for (ClassBox c : classBoxes) {
-                        c.setBackground(Color.blue);
+                        c.setBackground(Color.red);
                     }
                     getSharedCanvas().revalidate();
                     getSharedCanvas().repaint();
 
                     m_isDeleteMode = true;
                 } else {
-                    ResetItemColor();
                     m_isDeleteMode = false;
+                    ResetItemColor();
                 }
 
             }
@@ -290,8 +289,7 @@ public class CanvasManager {
         for (ClassBox c : getSharedCanvas().getClassBoxes()) {
             c.setBackground(Color.gray);
         }
-        
-                   
+        getSharedCanvas().repaint();
     }
 
 }
