@@ -97,7 +97,6 @@ public class CanvasManager {
      *
      */
     public void repaintCanvas() {
-    	getSharedCanvas().revalidate();
         getSharedCanvas().repaint();
     }
 
@@ -111,6 +110,10 @@ public class CanvasManager {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                //turn off delete mode if adding classBox
+                m_isDeleteMode = false;
+                ResetItemColor();
+                
                 ClassBox classBox = new ClassBox();
 
                 ArrayList<ClassBox> classBoxes = getSharedCanvas().getClassBoxes();
@@ -136,6 +139,10 @@ public class CanvasManager {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                //turn off delete mode if adding Relationship
+                m_isDeleteMode = false;
+                ResetItemColor();
+                
                 Relationship line = new Relationship();
                 ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
                 addRelationship(line);
@@ -212,14 +219,7 @@ public class CanvasManager {
 
                     m_isDeleteMode = true;
                 } else {
-                    for (Relationship r : getSharedCanvas().getRelationships()) {
-                        r.setColor(Color.gray);
-                    }
-                    for (ClassBox c : classBoxes) {
-                        c.setBackground(Color.gray);
-                    }
-                    getSharedCanvas().revalidate();
-                    getSharedCanvas().repaint();
+                    ResetItemColor();
                     m_isDeleteMode = false;
                 }
 
@@ -278,6 +278,19 @@ public class CanvasManager {
         classBoxes.clear();
         relationships.clear();
         getSharedCanvas().removeAll();
+    }
+    
+     public void ResetItemColor(){
+ 
+        for (Relationship r : getSharedCanvas().getRelationships()) {
+            r.setColor(Color.gray);
+        }
+    
+        for (ClassBox c : getSharedCanvas().getClassBoxes()) {
+            c.setBackground(Color.gray);
+        }
+        
+                   
     }
 
 }
