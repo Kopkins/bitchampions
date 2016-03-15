@@ -219,8 +219,8 @@ public class CanvasManager {
 
                     m_isDeleteMode = true;
                 } else {
-                    ResetItemColor();
                     m_isDeleteMode = false;
+                    ResetItemColor();
                 }
 
             }
@@ -289,8 +289,7 @@ public class CanvasManager {
         for (ClassBox c : getSharedCanvas().getClassBoxes()) {
             c.setBackground(Color.gray);
         }
-        
-                   
+        getSharedCanvas().repaint();
     }
 
 }

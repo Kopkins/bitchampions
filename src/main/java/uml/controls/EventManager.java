@@ -15,8 +15,10 @@ import uml.models.ClassBox;
 import uml.models.Relationship;
 
 /**
- *
- * @author webstudent
+ * @author Vincent Smith
+ * @author Jared M.
+ * @author Jesse Platts
+ * @author Kyle Hopkins
  */
 public class EventManager implements MouseMotionListener,
         MouseListener {
@@ -93,11 +95,13 @@ public class EventManager implements MouseMotionListener,
             int y = m_classBox.getOrigin().y + event.getY() - m_classBox.getClickPoint().y;
             // snap to grid logic
             // Should gridSize be GLOBAL?
+            /*
             int gridSize = 20;
             int offset = x % gridSize;
             x = (offset > gridSize / 2) ? x + gridSize - offset : x - offset;
             offset = y % gridSize;
             y = (offset > gridSize / 2) ? y + gridSize - offset : y - offset;
+            */
             /////////////////////
             m_classBox.setOrigin(new Point(x, y));
             m_classBox.setLocation(m_classBox.getOrigin());
