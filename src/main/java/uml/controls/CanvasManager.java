@@ -17,7 +17,7 @@ public class CanvasManager {
     private static int RADIUS = 5;
     private Canvas m_canvas;
     private Point m_clickPoint;
-    private int m_activeRelationshipIndex;
+    private int m_activeRelationshipIndex = -1;
     public boolean m_isDeleteMode = false;
     private CanvasManager m_canvasManager = this;
 
@@ -113,7 +113,7 @@ public class CanvasManager {
                 //turn off delete mode if adding classBox
                 m_isDeleteMode = false;
                 ResetItemColor();
-                
+
                 ClassBox classBox = new ClassBox();
 
                 ArrayList<ClassBox> classBoxes = getSharedCanvas().getClassBoxes();
@@ -134,7 +134,7 @@ public class CanvasManager {
      *
      * @return
      */
-    public ActionListener getAddRelationshipListener() {
+    public ActionListener getAddRelationshipListener(String type) {
         ActionListener listener = new ActionListener() {
 
             @Override
@@ -142,8 +142,7 @@ public class CanvasManager {
                 //turn off delete mode if adding Relationship
                 m_isDeleteMode = false;
                 ResetItemColor();
-                
-                Relationship line = new Relationship();
+                Relationship line = new Relationship(type);
                 ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
                 addRelationship(line);
                 int offset = relationships.size() * 8;
@@ -151,7 +150,6 @@ public class CanvasManager {
                 Point endPoint = new Point(line.getEndPoint().x + offset, line.getEndPoint().y + offset);
                 line.setStartPoint(startPoint);
                 line.setEndPoint(endPoint);
-                //getSharedCanvas().setRelationships(relationships);
                 getSharedCanvas().repaint();
             }
         };
@@ -283,13 +281,13 @@ public class CanvasManager {
         relationships.clear();
         getSharedCanvas().removeAll();
     }
-    
-     public void ResetItemColor(){
- 
+
+    public void ResetItemColor() {
+
         for (Relationship r : getSharedCanvas().getRelationships()) {
             r.setColor(Color.gray);
         }
-    
+
         for (ClassBox c : getSharedCanvas().getClassBoxes()) {
             c.setBackground(Color.gray);
         }
