@@ -97,21 +97,31 @@ public class ClassBox extends JPanel {
         //Calculate the distance the mouse traveled
         int adjustedWidth = p.x - m_clickPoint.x;
         int adjustedHeight = p.y - m_clickPoint.y;
-        //Add the distance the mouse traveled to the height and width of the ClassBox and resize it
-        m_width += adjustedWidth;
-        m_height += adjustedHeight;
+        //If the clickPoint is on the right side of the classbox then resize the width
+        if (m_clickPoint.x > m_width * .5) {
+            m_width += adjustedWidth;
+        }
+        //If the clickPoint is not on the upper part of the classBox then resize the height
+        if (m_clickPoint.y > .2 * m_height) {
+            m_height += adjustedHeight;
+        }
         setSize(new Dimension(m_width, m_height));
         //resize the text fields based on size of the ClassBox
         m_name.setPreferredSize(new Dimension(m_width - 6, m_name.getHeight()));
         if (m_clickPoint.y > .8 * m_height) {
+            //If the clickPoint is on bottom of classBox then reisze the height the second textArea
             m_attributes.setPreferredSize(new Dimension(m_width - 6, m_attributes.getHeight()));
             m_operations.setPreferredSize(new Dimension(m_width - 6, m_operations.getHeight() + adjustedHeight));
 
-        } else {
-            m_attributes.setPreferredSize(new Dimension(m_width - 6, m_attributes.getHeight() + adjustedHeight));            //m_attributes.getComponent(0).setSize(new Dimension(m_width - 6, m_attributes.getHeight() + adjustedHeight));
+        } else if (m_clickPoint.y > .2 * m_height) {
+            //If the clickPoint is on middle of classBox then reisze the height the first textArea
+            m_attributes.setPreferredSize(new Dimension(m_width - 6, m_attributes.getHeight() + adjustedHeight));
             m_operations.setPreferredSize(new Dimension(m_width - 6, m_operations.getHeight()));
             //if the middle textArea's height changes then we need to move the last textArea's location 
             m_operations.setLocation(m_operations.getX(), m_operations.getY() + adjustedHeight);
+        } else {
+            m_attributes.setPreferredSize(new Dimension(m_width - 6, m_attributes.getHeight()));
+            m_operations.setPreferredSize(new Dimension(m_width - 6, m_operations.getHeight()));
         }
     }
 }
