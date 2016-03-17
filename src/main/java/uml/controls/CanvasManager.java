@@ -1,8 +1,10 @@
 package uml.controls;
 
+import uml.Settings;
 import uml.models.Canvas;
 import uml.models.ClassBox;
-import uml.models.Relationship;
+import uml.models.Generics.GenericRelationship;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -41,14 +43,11 @@ public class CanvasManager {
      */
     public void bindCanvas(Container pane) {
         Canvas canvas = getSharedCanvas();
-        // Setup border
-        CompoundBorder line = new CompoundBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5),
-                BorderFactory.createLineBorder(Color.black));
-        Border canvasBorder = BorderFactory.createTitledBorder(line, "Canvas");
-        canvas.setBorder(canvasBorder);
-
+        canvas.setPreferredSize(new Dimension(2000, 2000));
+        canvas.setBackground(Color.white);
+        canvas.setOpaque(true);
         // Bind canvas
-        pane.add(canvas, BorderLayout.CENTER);
+        pane.add(new JScrollPane(canvas), BorderLayout.CENTER);
     }
 
     /**
@@ -142,14 +141,11 @@ public class CanvasManager {
                 //turn off delete mode if adding Relationship
                 m_isDeleteMode = false;
                 ResetItemColor();
-                Relationship line = new Relationship(type);
-                ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
+                GenericRelationship line = RelationshipFactory.getFromType(type);
+                ArrayList<GenericRelationship> relationships = getSharedCanvas().getRelationships();
                 addRelationship(line);
                 int offset = relationships.size() * 8;
-                Point startPoint = new Point(line.getStartPoint().x + offset, line.getStartPoint().y + offset);
-                Point endPoint = new Point(line.getEndPoint().x + offset, line.getEndPoint().y + offset);
-                line.setStartPoint(startPoint);
-                line.setEndPoint(endPoint);
+                line.translate(offset, offset);
                 getSharedCanvas().repaint();
             }
         };
@@ -188,7 +184,6 @@ public class CanvasManager {
             }
         };
         return listener;
-
     }
 
     /**
@@ -203,12 +198,12 @@ public class CanvasManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ArrayList<ClassBox> classBoxes = getSharedCanvas().getClassBoxes();
-                ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
+                ArrayList<GenericRelationship> relationships = getSharedCanvas().getRelationships();
                 if (!m_isDeleteMode) {
                     m_isDeleteMode = true;
                     //a way to show if we are in delete mode.
-                    for (Relationship r : getSharedCanvas().getRelationships()) {
-                        r.setColor(Color.red);
+                    for (GenericRelationship r : getSharedCanvas().getRelationships()) {
+                        r.setColor(Settings.Colors.DELETE.color);
                     }
                     for (ClassBox c : classBoxes) {
                         addColorToBox(c);
@@ -220,11 +215,9 @@ public class CanvasManager {
                     m_isDeleteMode = false;
                     ResetItemColor();
                 }
-
             }
         };
         return listener;
-
     }
 
     /**
@@ -245,8 +238,8 @@ public class CanvasManager {
      * Add a Relationship to the Canvas
      *
      */
-    public void addRelationship(Relationship r) {
-        ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
+    public void addRelationship(GenericRelationship r) {
+        ArrayList<GenericRelationship> relationships = getSharedCanvas().getRelationships();
         relationships.add(r);
     }
 
@@ -266,7 +259,7 @@ public class CanvasManager {
      *
      */
     public void deleteRelationship(int index) {
-        ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
+        ArrayList<GenericRelationship> relationships = getSharedCanvas().getRelationships();
         relationships.remove(index);
     }
 
@@ -276,7 +269,7 @@ public class CanvasManager {
      */
     public void clearCanvas() {
         ArrayList<ClassBox> classBoxes = getSharedCanvas().getClassBoxes();
-        ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
+        ArrayList<GenericRelationship> relationships = getSharedCanvas().getRelationships();
         classBoxes.clear();
         relationships.clear();
         getSharedCanvas().removeAll();
@@ -284,18 +277,18 @@ public class CanvasManager {
 
     public void ResetItemColor() {
 
-        for (Relationship r : getSharedCanvas().getRelationships()) {
-            r.setColor(Color.gray);
+        for (GenericRelationship r : getSharedCanvas().getRelationships()) {
+            r.setColor(Settings.Colors.DEFAULT.color);
         }
 
         for (ClassBox c : getSharedCanvas().getClassBoxes()) {
-            c.setBackground(Color.gray);
+            c.setBackground(Settings.Colors.DEFAULT.color);
         }
         getSharedCanvas().repaint();
     }
 
     private void addColorToBox(ClassBox box) {
-        Color color = m_isDeleteMode ? Color.red : Color.gray;
+        Color color = m_isDeleteMode ? Settings.Colors.DELETE.color : Settings.Colors.DEFAULT.color;
         box.setBackground(color);
     }
 

@@ -1,5 +1,7 @@
 package uml.models;
 
+import uml.models.Generics.GenericRelationship;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -8,7 +10,7 @@ public class Canvas extends JLayeredPane {
 
     // Local Variables
     private int m_minWidth, m_minHeight;
-    private ArrayList<Relationship> m_relationships;
+    private ArrayList<GenericRelationship> m_relationships;
     private ArrayList<ClassBox> m_classBoxes;
 
     /**
@@ -17,7 +19,7 @@ public class Canvas extends JLayeredPane {
     public Canvas() {
         m_minWidth = 800;
         m_minHeight = 800;
-        m_relationships = new ArrayList<Relationship>();
+        m_relationships = new ArrayList<GenericRelationship>();
         m_classBoxes = new ArrayList<ClassBox>();
         init();
     }
@@ -30,7 +32,7 @@ public class Canvas extends JLayeredPane {
     /**
      * gets the ArrayList of Relationships
      */
-    public ArrayList<Relationship> getRelationships() {
+    public ArrayList<GenericRelationship> getRelationships() {
         return m_relationships;
     }
 
@@ -52,7 +54,7 @@ public class Canvas extends JLayeredPane {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         //draw each relationship
-        for (Relationship r : m_relationships) {
+        for (GenericRelationship r : m_relationships) {
             if (r.getType() == "Dependency") {
                 g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0));
             } else {

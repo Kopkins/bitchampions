@@ -1,5 +1,7 @@
 package uml.models;
 
+import uml.Settings;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -15,8 +17,8 @@ public class ClassBox extends JPanel {
      * Constructor
      */
     public ClassBox() {
-        m_width = 200;
-        m_height = 240;
+        m_width = 120;
+        m_height = 150;
         m_origin = new Point(20, 20);
         m_clickPoint = new Point();
         init();
@@ -28,25 +30,27 @@ public class ClassBox extends JPanel {
     private void init() {
 
         //set the color, size, and border for the classbox 
-        setBackground(Color.gray);
+        setBackground(Settings.Colors.DEFAULT.color);
         setSize(new Dimension(m_width, m_height));
         setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
         //initialize the textfield for the classbox name and set it's size and border
         m_name = new JTextField();
-        m_name.setPreferredSize(new Dimension(194, 20));
+        m_name.setFont(new Font(m_name.getFont().getName(), Font.BOLD, 16));
+        m_name.setHorizontalAlignment(SwingConstants.CENTER);
+        m_name.setPreferredSize(new Dimension(m_width - 6, (m_height - 18) / 7));
         m_name.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
         //initialize the textarea for the classbox attributes and set it's size and border
         m_attributes = new JTextArea();
         m_attributes.setLineWrap(true);
-        m_attributes.setPreferredSize(new Dimension(194, 100));
+        m_attributes.setPreferredSize(new Dimension(m_width - 6, (m_height - 18) * 3 / 7));
         m_attributes.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
         //initialize the textarea for the classbox methods and set it's size and border
         m_operations = new JTextArea();
         m_operations.setLineWrap(true);
-        m_operations.setPreferredSize(new Dimension(194, 100));
+        m_operations.setPreferredSize(new Dimension(m_width - 6, (m_height - 18) * 3 / 7));
         m_operations.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
         //add the name, attribute, and method fields to the classbox

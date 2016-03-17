@@ -69,8 +69,9 @@ public class EditorGUI {
         buttons.get("deleteSModeButton").addActionListener(_cm.getDeleteModeListener());
 
         //Add the toolbox to the pane and bind the canvas
-        pane.add(toolbox, BorderLayout.LINE_START);
-        _cm.bindCanvas(_window.getContentPane());
+        pane.setLayout(new BorderLayout());
+        pane.add(toolbox, BorderLayout.WEST);
+        _cm.bindCanvas(pane);
 
         // Center Frame in middle of this
         Toolkit toolkit = Toolkit.getDefaultToolkit();
