@@ -42,11 +42,15 @@ public class CanvasManager {
      * Attaches a canvas to the main window
      */
     public void bindCanvas(Container pane) {
+        // Get shared instance of canvas.
         Canvas canvas = getSharedCanvas();
-        canvas.setPreferredSize(new Dimension(2000, 2000));
+
+        // Prepare dimensions/preferences
+        canvas.setPreferredSize(new Dimension(canvas.m_width, canvas.m_height));
         canvas.setBackground(Color.white);
         canvas.setOpaque(true);
-        // Bind canvas
+
+        // Bind
         pane.add(new JScrollPane(canvas), BorderLayout.CENTER);
     }
 

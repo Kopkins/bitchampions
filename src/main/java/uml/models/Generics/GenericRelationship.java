@@ -12,21 +12,18 @@ public abstract class GenericRelationship extends JComponent {
     protected String m_type;
     protected double m_angle;
 
-    public void init()
-    {
+    public void init() {
         m_angle = 0.0;
         m_start = new Point(320, 20);
         m_end = new Point(440, 20);
         m_color = Settings.Colors.DEFAULT.color;
     }
 
-    public void setType(String type)
-    {
+    public void setType(String type) {
         m_type = type;
     }
 
-    public String getType()
-    {
+    public String getType() {
         return m_type;
     }
 
@@ -58,8 +55,7 @@ public abstract class GenericRelationship extends JComponent {
         return m_angle;
     }
 
-    public void translate(int dx, int dy)
-    {
+    public void translate(int dx, int dy) {
         m_start.translate(dx, dy);
         m_end.translate(dx, dy);
         refreshSymbol();
@@ -71,9 +67,12 @@ public abstract class GenericRelationship extends JComponent {
 
     public void rotate() {
         m_angle = Math.atan2(m_end.getY() - m_start.getY(), m_end.getX() - m_start.getX());
+        refreshSymbol();
     }
 
-    public Polygon getSymbol() { return m_symbol; }
+    public Polygon getSymbol() {
+        return m_symbol;
+    }
 
     public void setSymbol(Polygon symbol) {
         m_symbol = symbol;

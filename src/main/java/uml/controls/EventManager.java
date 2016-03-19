@@ -5,16 +5,16 @@
  */
 package uml.controls;
 
+import uml.Settings;
+import uml.models.ClassBox;
+import uml.models.Generics.GenericRelationship;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
-import javax.swing.SwingUtilities;
-
-import uml.Settings;
-import uml.models.ClassBox;
-import uml.models.Generics.GenericRelationship;
 
 /**
  * @author Vincent Smith
@@ -23,7 +23,7 @@ import uml.models.Generics.GenericRelationship;
  * @author Kyle Hopkins
  */
 public class EventManager implements MouseMotionListener,
-        MouseListener {
+    MouseListener {
 
     // Local Variables
     private static int RADIUS = 5;
@@ -70,7 +70,7 @@ public class EventManager implements MouseMotionListener,
             ArrayList<GenericRelationship> relationships = m_canvasManager.getSharedCanvas().getRelationships();
             for (int i = 0; i < relationships.size(); i++) {
                 if (relationships.get(i).getStartPoint().distance(event.getPoint()) <= RADIUS
-                        || relationships.get(i).getEndPoint().distance(event.getPoint()) <= RADIUS) {
+                    || relationships.get(i).getEndPoint().distance(event.getPoint()) <= RADIUS) {
                     //check if in delete mode
                     if (m_canvasManager.m_isDeleteMode) {
                         m_canvasManager.deleteRelationship(i);
@@ -122,16 +122,16 @@ public class EventManager implements MouseMotionListener,
                         int x = activeRelationship.getStartPoint().x - event.getX();
                         int y = activeRelationship.getStartPoint().y - event.getY();
 
-//                        // set the active relationship's origin point to the point where the mouse is dragged
+                        // set the active relationship's origin point to the point where the mouse is dragged
                         activeRelationship.setStartPoint(event.getPoint());
-//                        // calculate the point to move the active relationship's second point to, based on the
-//                        // distance it's origin point is moved
+                        // calculate the point to move the active relationship's second point to, based on the
+                        // distance it's origin point is moved
                         x = activeRelationship.getEndPoint().x - x;
                         y = activeRelationship.getEndPoint().y - y;
-//                        activeRelationship.translate(x, y);
-//                        // move the active relationship's second point to the point calculated above
+                        // move the active relationship's second point to the point calculated above
                         activeRelationship.setEndPoint(new Point(x, y));
-//                        // update the click point to where the active relationship's origin point was moved to
+                        // update the click point to where the active relationship's origin point was moved to
+                        activeRelationship.refreshSymbol();
                         m_canvasManager.setClickPoint(activeRelationship.getStartPoint());
                     } else {
                         // get the distance the end point is moved
@@ -146,6 +146,7 @@ public class EventManager implements MouseMotionListener,
                         // move the active relationship's second point to the point calculated above
                         activeRelationship.setStartPoint(new Point(x, y));
                         // update the click point to where the active relationship's end point was moved to
+                        activeRelationship.refreshSymbol();
                         m_canvasManager.setClickPoint(activeRelationship.getEndPoint());
 
                     }
@@ -199,8 +200,7 @@ public class EventManager implements MouseMotionListener,
 
     @Override
     public void mouseEntered(MouseEvent event) {
-        if (m_isClassBox)
-        {
+        if (m_isClassBox) {
             m_classBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
     }

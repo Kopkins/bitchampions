@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Canvas extends JLayeredPane {
 
     // Local Variables
-    private int m_minWidth, m_minHeight;
+    public int m_width, m_height;
     private ArrayList<GenericRelationship> m_relationships;
     private ArrayList<ClassBox> m_classBoxes;
 
@@ -17,8 +17,8 @@ public class Canvas extends JLayeredPane {
      * Constructor
      */
     public Canvas() {
-        m_minWidth = 800;
-        m_minHeight = 800;
+        m_width = 1500;
+        m_height = 1500;
         m_relationships = new ArrayList<GenericRelationship>();
         m_classBoxes = new ArrayList<ClassBox>();
         init();
@@ -60,10 +60,10 @@ public class Canvas extends JLayeredPane {
             } else {
                 g2d.setStroke(new BasicStroke(2.0f));
             }
-            int x1 = (int) Math.round(r.getStartPoint().x);
-            int y1 = (int) Math.round(r.getStartPoint().y);
-            int x2 = (int) Math.round(r.getEndPoint().x);
-            int y2 = (int) Math.round(r.getEndPoint().y);
+            int x1 = Math.round(r.getStartPoint().x);
+            int y1 = Math.round(r.getStartPoint().y);
+            int x2 = Math.round(r.getEndPoint().x);
+            int y2 = Math.round(r.getEndPoint().y);
             g2d.setColor(r.getColor());
             g2d.drawLine(x1, y1, x2, y2);
             g2d.rotate(r.getAngle(), r.getEndPoint().x, r.getEndPoint().y);

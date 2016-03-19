@@ -12,10 +12,10 @@ public class DialogManager {
 
     /**
      * Constructor
+     *
      * @param parentFrame which is the JFrame on which a dialog will act.
      */
-    public DialogManager(JFrame parentFrame)
-    {
+    public DialogManager(JFrame parentFrame) {
         frame = parentFrame;
     }
 
