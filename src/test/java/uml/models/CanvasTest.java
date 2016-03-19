@@ -14,8 +14,7 @@ public class CanvasTest extends TestCase {
     Canvas canvas;
 
     protected void setUp() {
-        cm = new CanvasManager();
-        canvas = cm.getSharedCanvas();
+        canvas = CanvasManager.getSharedCanvas();
     }
 
     public void testAddBoxWithManager(){

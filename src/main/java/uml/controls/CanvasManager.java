@@ -47,8 +47,6 @@ public class CanvasManager {
      * Add MouseListeners to CanvasManager
      */
     private void init() {
-        getSharedCanvas().addMouseListener(new EventManager(this));
-        getSharedCanvas().addMouseMotionListener(new EventManager(this));
     }
 
     /**
@@ -57,16 +55,12 @@ public class CanvasManager {
 
     public static void bindCanvas(Container pane) {
         // Get shared instance of canvas.
-
         Canvas canvas = getSharedCanvas();
-        // Setup border
-        CompoundBorder line = new CompoundBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5),
-                BorderFactory.createLineBorder(Color.black));
-        Border canvasBorder = BorderFactory.createTitledBorder(line, "Canvas");
-        canvas.setBorder(canvasBorder);
 
         // Prepare dimensions/preferences
-        canvas.setPreferredSize(new Dimension(canvas.m_width, canvas.m_height));
+        canvas.setPreferredSize(
+            new Dimension(canvas.m_width, canvas.m_height));
+
         canvas.setBackground(Color.white);
         canvas.setOpaque(true);
 
@@ -159,17 +153,17 @@ public class CanvasManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //turn off delete mode if adding Relationship
-                m_isDeleteMode = false;
                 ResetItemColor();
+
                 GenericRelationship line = RelationshipFactory.getFromType(type);
                 ArrayList<GenericRelationship> relationships = getSharedCanvas().getRelationships();
-                addRelationship(line);
+
                 getInstance().toggleDeleteMode();
-                Relationship line = new Relationship(type);
-                ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
                 getInstance().addRelationship(line);
+
                 int offset = relationships.size() * 8;
                 line.translate(offset, offset);
+
                 getSharedCanvas().repaint();
             }
         };

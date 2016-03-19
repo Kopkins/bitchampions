@@ -13,17 +13,20 @@ public class Settings {
     private FileInputStream input;
     private FileOutputStream output;
     private static Settings m_instance;
-    public static int GRIDSIZE;
+    private int GRID_SIZE, CANVAS_WIDTH,
+        CANVAS_HEIGHT, BOX_WIDTH, BOX_HEIGHT;
 
     // Properties to maintain
-    String gridSize;
-    String selectColor;
-    String defaultColor;
-    String deleteColor;
-    String maxCanvasWidth;
-    String maxCanvasHeight;
+    private String gridSize;
+    private String selectColor;
+    private String defaultColor;
+    private String deleteColor;
+    private String maxCanvasWidth;
+    private String maxCanvasHeight;
+    private String defaultBoxWidth;
+    private String defaultBoxHeight;
 
-    public Settings()
+    private Settings()
     {
         properties = new Properties();
         propertiesFile = "app.properties";
@@ -47,6 +50,8 @@ public class Settings {
             properties.setProperty("defaultColor", defaultColor);
             properties.setProperty("maxCanvasWidth", maxCanvasWidth);
             properties.setProperty("maxCanvasHeight", maxCanvasHeight);
+            properties.setProperty("defaultBoxWidth", defaultBoxWidth);
+            properties.setProperty("defaultBoxHeight", defaultBoxHeight);
 
             // save properties to project root folder
             properties.store(output, null);
@@ -92,17 +97,23 @@ public class Settings {
 
     private void loadValues(Properties properties)
     {
-        GRIDSIZE = Integer.parseInt(properties.getProperty("gridSize"));
+        GRID_SIZE = Integer.parseInt(properties.getProperty("gridSize"));
+        CANVAS_WIDTH = Integer.parseInt(properties.getProperty("maxCanvasWidth"));
+        CANVAS_HEIGHT = Integer.parseInt(properties.getProperty("maxCanvasHeight"));
+        BOX_WIDTH = Integer.parseInt(properties.getProperty("defaultBoxWidth"));
+        BOX_HEIGHT = Integer.parseInt(properties.getProperty("defaultBoxWidth"));
     }
 
     private void generateDefualts()
     {
-        gridSize = "10";
+        gridSize = "20";
         selectColor = "blue";
         deleteColor = "red";
         defaultColor = "gray";
-        maxCanvasWidth = "600";
-        maxCanvasHeight = "400";
+        defaultBoxWidth = "120";
+        defaultBoxHeight = "150";
+        maxCanvasWidth = "1500";
+        maxCanvasHeight = "1200";
         save();
     }
 
@@ -122,6 +133,26 @@ public class Settings {
     private String getProperty(String key)
     {
         return properties.getProperty(key);
+    }
+
+    public static int getCanvasWidth()
+    {
+        return getInstance().CANVAS_WIDTH;
+    }
+
+    public static int getCanvasHeight()
+    {
+        return getInstance().CANVAS_HEIGHT;
+    }
+
+    public static int getBoxWidth()
+    {
+        return getInstance().BOX_WIDTH;
+    }
+
+    public static int getBoxHeight()
+    {
+        return getInstance().BOX_HEIGHT;
     }
 
     public enum Colors {

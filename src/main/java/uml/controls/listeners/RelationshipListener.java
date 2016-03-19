@@ -1,7 +1,7 @@
 package uml.controls.listeners;
 
 import uml.controls.CanvasManager;
-import uml.models.Relationship;
+import uml.models.Generics.GenericRelationship;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,7 +30,7 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
         // get the point the mouse is pressed on
         m_canvasManager.setClickPoint(event.getPoint());
         // loop through relationships arraylist and see if click point is within a 5 point radius of any of the relationships origin point
-        ArrayList<Relationship> relationships = m_canvasManager.getSharedCanvas().getRelationships();
+        ArrayList<GenericRelationship> relationships = m_canvasManager.getSharedCanvas().getRelationships();
         for (int i = 0; i < relationships.size(); i++) {
             if (relationships.get(i).getStartPoint().distance(event.getPoint()) <= RADIUS
                 || relationships.get(i).getEndPoint().distance(event.getPoint()) <= RADIUS) {
@@ -56,7 +56,7 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
         int activeIndex = m_canvasManager.getActiveRelationshipIndex();
         if (activeIndex != -1) {
             // change relationship's color back to gray to show it is no longer active and repaint
-            ArrayList<Relationship> relationships = m_canvasManager.getSharedCanvas().getRelationships();
+            ArrayList<GenericRelationship> relationships = m_canvasManager.getSharedCanvas().getRelationships();
             relationships.get(activeIndex).setColor(Color.gray);
             m_canvasManager.repaintCanvas();
             m_canvasManager.setActiveRelationshipIndex(-1);
@@ -78,7 +78,7 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
         int activeIndex = m_canvasManager.getActiveRelationshipIndex();
         if (activeIndex != -1) {
             // get the active relationship
-            Relationship activeRelationship = m_canvasManager.getSharedCanvas().getRelationships().get(activeIndex);
+            GenericRelationship activeRelationship = m_canvasManager.getSharedCanvas().getRelationships().get(activeIndex);
             if (SwingUtilities.isLeftMouseButton(event)) {
                 if (activeRelationship.getStartPoint().distance(m_canvasManager.getClickPoint()) <= RADIUS) {
                     // get the distance the origin point is moved
@@ -92,6 +92,7 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
                     y = activeRelationship.getEndPoint().y - y;
                     // move the active relationship's second point to the point calculated above
                     activeRelationship.setEndPoint(new Point(x, y));
+                    activeRelationship.refreshSymbol();
                     // update the click point to where the active relationship's origin point was moved to
                     m_canvasManager.setClickPoint(activeRelationship.getStartPoint());
                 } else {
@@ -106,6 +107,7 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
                     y = activeRelationship.getStartPoint().y - y;
                     // move the active relationship's second point to the point calculated above
                     activeRelationship.setStartPoint(new Point(x, y));
+                    activeRelationship.refreshSymbol();
                     // update the click point to where the active relationship's end point was moved to
                     m_canvasManager.setClickPoint(activeRelationship.getEndPoint());
 

@@ -1,5 +1,6 @@
 package uml.controls.listeners;
 
+import uml.Settings;
 import uml.controls.CanvasManager;
 import uml.models.ClassBox;
 
@@ -12,7 +13,7 @@ import java.awt.event.MouseMotionListener;
 public class ClassBoxListener implements MouseListener, MouseMotionListener
 {
     CanvasManager m_canvasManager;
-
+    private boolean m_snapToGrid = false;
     public ClassBoxListener()
     {
         m_canvasManager = CanvasManager.getInstance();
@@ -61,7 +62,15 @@ public class ClassBoxListener implements MouseListener, MouseMotionListener
 
     @Override
     public void mouseEntered(MouseEvent event) {
-
+        ClassBox box;
+        try {
+            box = (ClassBox)event.getSource();
+            box.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        } catch (ClassCastException ex)
+        {
+            System.out.println(ex);
+            throw ex;
+        }
     }
 
     @Override
@@ -79,7 +88,9 @@ public class ClassBoxListener implements MouseListener, MouseMotionListener
             //calculate the distance of mouse drag event, update the origin to this point and move the location of the classbox
             int x = box.getOrigin().x + event.getX() - box.getClickPoint().x;
             int y = box.getOrigin().y + event.getY() - box.getClickPoint().y;
-            Point newOrigin = snapToGrid(x, y);
+
+            // Keep boxes within canvas
+            Point newOrigin = validateMovement(x, y);
             box.setOrigin(newOrigin);
             box.setLocation(box.getOrigin());
         } else if (SwingUtilities.isRightMouseButton(event)) {
@@ -102,10 +113,32 @@ public class ClassBoxListener implements MouseListener, MouseMotionListener
     {
         int gridSize = 20;
         int offset = x % gridSize;
-        x = (offset > gridSize / 2) ? x + gridSize - offset : x - offset;
+        int x2, y2;
+        x2 = (offset > gridSize / 2) ? x + gridSize - offset : x - offset;
         offset = y % gridSize;
-        y = (offset > gridSize / 2) ? y + gridSize - offset : y - offset;
+        y2 = (offset > gridSize / 2) ? y + gridSize - offset : y - offset;
 
-        return new Point(x, y);
+        return new Point(x2, y2);
+    }
+
+    private Point validateMovement(int x, int y)
+    {
+        int x2, y2;
+        int xMin = 0;
+        int xMax = Settings.getCanvasWidth() - Settings.getBoxWidth();
+        int yMin = 0;
+        int yMax = Settings.getCanvasHeight() - Settings.getBoxHeight();
+
+        x2 = x < xMin ? xMin : x;
+        x2 = x > xMax ? xMax : x2;
+        y2 = y < yMin ? yMin : y;
+        y2 = y > yMax ? yMax : y2;
+
+        if (m_snapToGrid) {
+            return snapToGrid(x2, y2);
+        }
+        else {
+            return new Point(x2, y2);
+        }
     }
 }

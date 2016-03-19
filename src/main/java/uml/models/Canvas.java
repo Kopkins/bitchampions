@@ -1,5 +1,6 @@
 package uml.models;
 
+import uml.Settings;
 import uml.models.Generics.GenericRelationship;
 
 import uml.controls.EventManager;
@@ -19,8 +20,8 @@ public class Canvas extends JLayeredPane {
      * Constructor
      */
     public Canvas() {
-        m_width = 1500;
-        m_height = 1500;
+        m_width = Settings.getCanvasWidth();
+        m_height = Settings.getCanvasHeight();
         m_relationships = new ArrayList<GenericRelationship>();
         m_classBoxes = new ArrayList<ClassBox>();
         init();
