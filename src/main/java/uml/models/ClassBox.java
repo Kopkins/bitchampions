@@ -1,5 +1,7 @@
 package uml.models;
 
+import uml.controls.EventManager;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -53,6 +55,9 @@ public class ClassBox extends JPanel {
         add(m_name);
         add(m_attributes);
         add(m_operations);
+
+        addMouseListener(EventManager.getClassBoxListener());
+        addMouseMotionListener(EventManager.getClassBoxListener());
     }
 
     /**

@@ -1,5 +1,7 @@
 package uml.models;
 
+import uml.controls.EventManager;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -23,8 +25,8 @@ public class Canvas extends JLayeredPane {
     }
 
     private void init() {
-        // Set to Null so Boxes and Lines can be placed freely
-        this.setLayout(null);
+        addMouseListener(EventManager.getRelationshipListener());
+        addMouseMotionListener(EventManager.getRelationshipListener());
     }
 
     /**

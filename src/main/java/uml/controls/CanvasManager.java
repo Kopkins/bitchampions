@@ -15,31 +15,42 @@ public class CanvasManager {
 
     // Local Variables
     private static int RADIUS = 5;
-    private Canvas m_canvas;
+    private static Canvas m_canvas;
     private Point m_clickPoint;
     private int m_activeRelationshipIndex = -1;
     public boolean m_isDeleteMode = false;
-    private CanvasManager m_canvasManager = this;
+    private static CanvasManager m_canvasManager;
 
     /**
      * Constructor
      */
-    public CanvasManager() {
+    private CanvasManager() {
         init();
+    }
+
+    /**
+     * Singleton instance of CanvasManager
+     * @return
+     */
+    public static CanvasManager getInstance()
+    {
+        if (m_canvasManager == null)
+        {
+            m_canvasManager = new CanvasManager();
+        }
+        return m_canvasManager;
     }
 
     /**
      * Add MouseListeners to CanvasManager
      */
     private void init() {
-        getSharedCanvas().addMouseListener(new EventManager(this));
-        getSharedCanvas().addMouseMotionListener(new EventManager(this));
     }
 
     /**
      * Attaches a canvas to the main window
      */
-    public void bindCanvas(Container pane) {
+    public static void bindCanvas(Container pane) {
         Canvas canvas = getSharedCanvas();
         // Setup border
         CompoundBorder line = new CompoundBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5),
@@ -56,7 +67,7 @@ public class CanvasManager {
      *
      * @return
      */
-    public Canvas getSharedCanvas() {
+    public static Canvas getSharedCanvas() {
         if (m_canvas == null) {
             m_canvas = new Canvas();
         }
@@ -105,23 +116,20 @@ public class CanvasManager {
      *
      * @return
      */
-    public ActionListener getAddBoxListener() {
+    public static ActionListener getAddBoxListener() {
         ActionListener listener = new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                //turn off delete mode if adding classBox
-                m_isDeleteMode = false;
+                getInstance().toggleDeleteMode();
                 ResetItemColor();
-
                 ClassBox classBox = new ClassBox();
-
                 ArrayList<ClassBox> classBoxes = getSharedCanvas().getClassBoxes();
                 int offset = classBoxes.size() + 1;
                 Point origin = new Point(classBox.getOrigin().x * offset, classBox.getOrigin().y * offset);
                 classBox.setOrigin(origin);
                 classBox.setBounds(origin.x, origin.y, classBox.getWidth(), classBox.getHeight());
-                addClassBox(classBox);
+                getInstance().addClassBox(classBox);
                 getSharedCanvas().revalidate();
                 getSharedCanvas().repaint();
             }
@@ -134,17 +142,14 @@ public class CanvasManager {
      *
      * @return
      */
-    public ActionListener getAddRelationshipListener(String type) {
+    public static ActionListener getAddRelationshipListener(String type) {
         ActionListener listener = new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                //turn off delete mode if adding Relationship
-                m_isDeleteMode = false;
-                ResetItemColor();
+                getInstance().toggleDeleteMode();
                 Relationship line = new Relationship(type);
                 ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
-                addRelationship(line);
+                getInstance().addRelationship(line);
                 int offset = relationships.size() * 8;
                 Point startPoint = new Point(line.getStartPoint().x + offset, line.getStartPoint().y + offset);
                 Point endPoint = new Point(line.getEndPoint().x + offset, line.getEndPoint().y + offset);
@@ -177,12 +182,12 @@ public class CanvasManager {
      *
      * @return
      */
-    public ActionListener getClearCanvasListener() {
+    public static ActionListener getClearCanvasListener() {
         ActionListener listener = new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                clearCanvas();
+                getInstance().clearCanvas();
                 getSharedCanvas().revalidate();
                 getSharedCanvas().repaint();
             }
@@ -224,7 +229,6 @@ public class CanvasManager {
             }
         };
         return listener;
-
     }
 
     /**
@@ -237,8 +241,6 @@ public class CanvasManager {
         getSharedCanvas().add(cb, JLayeredPane.DRAG_LAYER);
         getSharedCanvas().moveToFront(cb);
         addColorToBox(cb);
-        cb.addMouseListener(new EventManager(m_canvasManager, cb));
-        cb.addMouseMotionListener(new EventManager(m_canvasManager, cb));
     }
 
     /**
@@ -274,7 +276,7 @@ public class CanvasManager {
      * Clear everything from the Canvas
      *
      */
-    public void clearCanvas() {
+    private void clearCanvas() {
         ArrayList<ClassBox> classBoxes = getSharedCanvas().getClassBoxes();
         ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
         classBoxes.clear();
@@ -282,7 +284,7 @@ public class CanvasManager {
         getSharedCanvas().removeAll();
     }
 
-    public void ResetItemColor() {
+    private static void ResetItemColor() {
 
         for (Relationship r : getSharedCanvas().getRelationships()) {
             r.setColor(Color.gray);
@@ -299,4 +301,12 @@ public class CanvasManager {
         box.setBackground(color);
     }
 
+    private void toggleDeleteMode()
+    {
+        if (m_isDeleteMode)
+        {
+            ResetItemColor();
+            m_isDeleteMode = !m_isDeleteMode;
+        }
+    }
 }
