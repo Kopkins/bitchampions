@@ -2,6 +2,7 @@ package uml.views;
 
 import uml.controls.CanvasManager;
 import uml.controls.DialogManager;
+import uml.controls.EventManager;
 import uml.models.ToolBox;
 
 import javax.swing.*;
@@ -35,7 +36,7 @@ public class EditorGUI {
     private EditorGUI() {
         _window = new JFrame();
         _dm = new DialogManager(_window);
-        _cm = new CanvasManager();
+        _cm = CanvasManager.getInstance();
         initialize();
     }
 
@@ -58,20 +59,20 @@ public class EditorGUI {
 
         //Add ActionListeners to toolbox buttons
         Map<String, JButton> buttons = toolbox.getButtons();
-        buttons.get("addClassBoxButton").addActionListener(_cm.getAddBoxListener());
+        buttons.get("addClassBoxButton").addActionListener(CanvasManager.getAddBoxListener());
         buttons.get("addAssociationButton").addActionListener(_cm.getAddRelationshipListener("Association"));
         buttons.get("addDirectedAssociationButton").addActionListener(_cm.getAddRelationshipListener("DirectedAssociation"));
         buttons.get("addDependencyButton").addActionListener(_cm.getAddRelationshipListener("Dependency"));
         buttons.get("addGeneralizationButton").addActionListener(_cm.getAddRelationshipListener("Generalization"));
         buttons.get("addAggregationButton").addActionListener(_cm.getAddRelationshipListener("Aggregation"));
         buttons.get("addCompositionButton").addActionListener(_cm.getAddRelationshipListener("Composition"));
-        buttons.get("clearCanvasButton").addActionListener(_cm.getClearCanvasListener());
+        buttons.get("clearCanvasButton").addActionListener(CanvasManager.getClearCanvasListener());
         buttons.get("deleteSModeButton").addActionListener(_cm.getDeleteModeListener());
 
         //Add the toolbox to the pane and bind the canvas
         pane.setLayout(new BorderLayout());
-        pane.add(toolbox, BorderLayout.WEST);
-        _cm.bindCanvas(pane);
+        pane.add(toolbox, BorderLayout.LINE_START);
+        CanvasManager.bindCanvas(_window.getContentPane());
 
         // Center Frame in middle of this
         Toolkit toolkit = Toolkit.getDefaultToolkit();
