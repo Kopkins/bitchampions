@@ -8,11 +8,11 @@ public class Aggregation extends GenericRelationship {
     public Aggregation() {
         init();
         setType("Aggregation");
-        buildSymbol();
+        refreshSymbol();
     }
 
     @Override
-    public void buildSymbol()
+    public void refreshSymbol()
     {
         super.setSymbol(new Polygon(
             new int[]{m_end.x - 20, m_end.x - 9, m_end.x + 2, m_end.x - 9},

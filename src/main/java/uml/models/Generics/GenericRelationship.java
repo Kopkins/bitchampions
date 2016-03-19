@@ -61,27 +61,12 @@ public abstract class GenericRelationship extends JComponent {
     public void translate(int dx, int dy)
     {
         m_start.translate(dx, dy);
-        m_end.translate(dx, dx);
-        m_symbol.translate(dx, dy);
-
-        System.out.println("Start Point:    " + m_start.toString());
-        System.out.println("End Point:      " + m_end.toString());
-        System.out.println("Symbol Point x:   " + m_symbol.xpoints.toString());
-        System.out.println("Symbol Point y:   " + m_symbol.xpoints.toString());
-    }
-
-    public void translateStartPoint(int dx, int dy)
-    {
-        m_start.translate(dx, dy);
-    }
-
-    public void translateEndPoint(int dx, int dy)
-    {
         m_end.translate(dx, dy);
+        refreshSymbol();
     }
 
-    public void buildSymbol() {
-
+    public void refreshSymbol() {
+        // Implemented by subclasses
     }
 
     public void rotate() {
