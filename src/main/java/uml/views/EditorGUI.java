@@ -2,7 +2,6 @@ package uml.views;
 
 import uml.controls.CanvasManager;
 import uml.controls.DialogManager;
-import uml.controls.EventManager;
 import uml.models.ToolBox;
 
 import javax.swing.*;
@@ -25,18 +24,18 @@ public class EditorGUI {
     final private static int HEIGHT = 600;
     final private static String TITLE = "UML - Editor";
 
-    public JFrame _window;
-    private DialogManager _dm;
-    private CanvasManager _cm;
+    public JFrame m_window;
+    private DialogManager m_dialogManager;
+    private CanvasManager m_canvasManager;
     private static EditorGUI _sharedApp;
 
     /**
      * Constructor
      */
     private EditorGUI() {
-        _window = new JFrame();
-        _dm = new DialogManager(_window);
-        _cm = CanvasManager.getInstance();
+        m_window = new JFrame();
+        m_dialogManager = new DialogManager(m_window);
+        m_canvasManager = CanvasManager.getInstance();
         initialize();
     }
 
@@ -45,7 +44,7 @@ public class EditorGUI {
      */
     private void initialize() {
 
-        Container pane = _window.getContentPane();
+        Container pane = m_window.getContentPane();
 
         // Add toolbox to Pane
         ToolBox toolbox = new ToolBox();
@@ -55,36 +54,36 @@ public class EditorGUI {
 
         Border toolboxBorder = BorderFactory.createTitledBorder(line, "Toolbox");
         toolbox.setBorder(toolboxBorder);
-        toolbox.setPreferredSize(new Dimension(150, _window.getHeight()));
+        toolbox.setPreferredSize(new Dimension(150, m_window.getHeight()));
 
         //Add ActionListeners to toolbox buttons
         Map<String, JButton> buttons = toolbox.getButtons();
         buttons.get("addClassBoxButton").addActionListener(CanvasManager.getAddBoxListener());
-        buttons.get("addAssociationButton").addActionListener(_cm.getAddRelationshipListener("Association"));
-        buttons.get("addDirectedAssociationButton").addActionListener(_cm.getAddRelationshipListener("DirectedAssociation"));
-        buttons.get("addDependencyButton").addActionListener(_cm.getAddRelationshipListener("Dependency"));
-        buttons.get("addGeneralizationButton").addActionListener(_cm.getAddRelationshipListener("Generalization"));
-        buttons.get("addAggregationButton").addActionListener(_cm.getAddRelationshipListener("Aggregation"));
-        buttons.get("addCompositionButton").addActionListener(_cm.getAddRelationshipListener("Composition"));
+        buttons.get("addAssociationButton").addActionListener(m_canvasManager.getAddRelationshipListener("Association"));
+        buttons.get("addDirectedAssociationButton").addActionListener(m_canvasManager.getAddRelationshipListener("DirectedAssociation"));
+        buttons.get("addDependencyButton").addActionListener(m_canvasManager.getAddRelationshipListener("Dependency"));
+        buttons.get("addGeneralizationButton").addActionListener(m_canvasManager.getAddRelationshipListener("Generalization"));
+        buttons.get("addAggregationButton").addActionListener(m_canvasManager.getAddRelationshipListener("Aggregation"));
+        buttons.get("addCompositionButton").addActionListener(m_canvasManager.getAddRelationshipListener("Composition"));
         buttons.get("clearCanvasButton").addActionListener(CanvasManager.getClearCanvasListener());
-        buttons.get("deleteSModeButton").addActionListener(_cm.getDeleteModeListener());
+        buttons.get("deleteSModeButton").addActionListener(m_canvasManager.getDeleteModeListener());
 
         //Add the toolbox to the pane and bind the canvas
         pane.setLayout(new BorderLayout());
         pane.add(toolbox, BorderLayout.LINE_START);
-        CanvasManager.bindCanvas(_window.getContentPane());
+        CanvasManager.bindCanvas(m_window.getContentPane());
 
         // Center Frame in middle of this
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension dimension = toolkit.getScreenSize();
-        _window.setSize(WIDTH, HEIGHT);
-        int xPos = (dimension.width / 2) - (_window.getWidth() / 2);
-        int yPos = (dimension.height / 2) - (_window.getHeight() / 2);
-        _window.setTitle(TITLE);
+        m_window.setSize(WIDTH, HEIGHT);
+        int xPos = (dimension.width / 2) - (m_window.getWidth() / 2);
+        int yPos = (dimension.height / 2) - (m_window.getHeight() / 2);
+        m_window.setTitle(TITLE);
         this.attachMenuBar();
-        _window.setLocation(xPos, yPos);
+        m_window.setLocation(xPos, yPos);
         this.setExitOnWindowClose();
-        _window.setVisible(true);
+        m_window.setVisible(true);
     }
 
     /**
@@ -114,9 +113,9 @@ public class EditorGUI {
         JMenuItem about = new JMenuItem("About Us...");
 
         // Bind Events to buttons
-        exit.addActionListener(e -> _dm.confirmTermination());
-        about.addActionListener(e -> _dm.showAbout());
-        newDiagram.addActionListener(e -> _dm.showNotImplemented());
+        exit.addActionListener(e -> m_dialogManager.confirmTermination());
+        about.addActionListener(e -> m_dialogManager.showAbout());
+        newDiagram.addActionListener(e -> m_dialogManager.showNotImplemented());
 
         // Bind Buttons to Menu
         fileMenu.add(newDiagram);
@@ -126,18 +125,18 @@ public class EditorGUI {
         menuBar.add(fileMenu);
         menuBar.add(aboutMenu);
 
-        _window.setJMenuBar(menuBar);
+        m_window.setJMenuBar(menuBar);
     }
 
     /**
      * Sets the program to terminate when the this is closed
      */
     private void setExitOnWindowClose() {
-        _window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        _window.addWindowListener(new WindowAdapter() {
+        m_window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        m_window.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                _dm.confirmTermination();
+                m_dialogManager.confirmTermination();
             }
         });
     }
