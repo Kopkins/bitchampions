@@ -3,14 +3,10 @@ package uml.views;
 import uml.controls.CanvasManager;
 import uml.controls.DialogManager;
 import uml.models.ToolBox;
-
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Map;
 
 /**
  * The main view and driver class for the UML app.
@@ -26,7 +22,6 @@ public class EditorGUI {
 
     public JFrame m_window;
     private DialogManager m_dialogManager;
-    private CanvasManager m_canvasManager;
     private static EditorGUI _sharedApp;
 
     /**
@@ -35,7 +30,6 @@ public class EditorGUI {
     private EditorGUI() {
         m_window = new JFrame();
         m_dialogManager = new DialogManager(m_window);
-        m_canvasManager = CanvasManager.getInstance();
         initialize();
     }
 
@@ -46,31 +40,9 @@ public class EditorGUI {
 
         Container pane = m_window.getContentPane();
 
-        // Add toolbox to Pane
-        ToolBox toolbox = new ToolBox();
-        toolbox.setLayout(new BoxLayout(toolbox, BoxLayout.PAGE_AXIS));
-        CompoundBorder line = new CompoundBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5),
-                BorderFactory.createLineBorder(Color.black));
-
-        Border toolboxBorder = BorderFactory.createTitledBorder(line, "Toolbox");
-        toolbox.setBorder(toolboxBorder);
-        toolbox.setPreferredSize(new Dimension(150, m_window.getHeight()));
-
-        //Add ActionListeners to toolbox buttons
-        Map<String, JButton> buttons = toolbox.getButtons();
-        buttons.get("addClassBoxButton").addActionListener(CanvasManager.getAddBoxListener());
-        buttons.get("addAssociationButton").addActionListener(m_canvasManager.getAddRelationshipListener("Association"));
-        buttons.get("addDirectedAssociationButton").addActionListener(m_canvasManager.getAddRelationshipListener("DirectedAssociation"));
-        buttons.get("addDependencyButton").addActionListener(m_canvasManager.getAddRelationshipListener("Dependency"));
-        buttons.get("addGeneralizationButton").addActionListener(m_canvasManager.getAddRelationshipListener("Generalization"));
-        buttons.get("addAggregationButton").addActionListener(m_canvasManager.getAddRelationshipListener("Aggregation"));
-        buttons.get("addCompositionButton").addActionListener(m_canvasManager.getAddRelationshipListener("Composition"));
-        buttons.get("clearCanvasButton").addActionListener(CanvasManager.getClearCanvasListener());
-        buttons.get("deleteSModeButton").addActionListener(m_canvasManager.getDeleteModeListener());
-
         //Add the toolbox to the pane and bind the canvas
         pane.setLayout(new BorderLayout());
-        pane.add(toolbox, BorderLayout.LINE_START);
+        pane.add(new ToolBox(), BorderLayout.LINE_START);
         CanvasManager.bindCanvas(m_window.getContentPane());
 
         // Center Frame in middle of this

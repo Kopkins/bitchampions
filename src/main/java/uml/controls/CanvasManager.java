@@ -209,28 +209,29 @@ public class CanvasManager {
      *
      * @return
      */
-    public ActionListener getDeleteModeListener() {
+    public static ActionListener getDeleteModeListener() {
         ActionListener listener;
         listener = new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                CanvasManager canvasManager = CanvasManager.getInstance();
+                boolean deleteMode = canvasManager.m_isDeleteMode;
                 ArrayList<ClassBox> classBoxes = getSharedCanvas().getClassBoxes();
-                ArrayList<GenericRelationship> relationships = getSharedCanvas().getRelationships();
-                if (!m_isDeleteMode) {
-                    m_isDeleteMode = true;
+                if (!deleteMode) {
+                    canvasManager.m_isDeleteMode = true;
                     //a way to show if we are in delete mode.
                     for (GenericRelationship r : getSharedCanvas().getRelationships()) {
                         r.setColor(Settings.Colors.DELETE.color);
                     }
                     for (ClassBox c : classBoxes) {
-                        addColorToBox(c);
+                        canvasManager.addColorToBox(c);
                     }
                     getSharedCanvas().revalidate();
                     getSharedCanvas().repaint();
 
                 } else {
-                    m_isDeleteMode = false;
+                    canvasManager.m_isDeleteMode = false;
                     ResetItemColor();
                 }
             }
