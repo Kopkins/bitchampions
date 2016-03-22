@@ -20,6 +20,25 @@ public class ClassBoxTest extends TestCase{
         assertEquals(box1.getOrigin(), new Point(20,20));
     }
 
+    public void testResize()
+    {
+
+    }
+
+    public void testSettings(){
+
+    }
+
+
+    public void testSetClickPoint(){
+
+    }
+
+    public void testSetOrigin()
+    {
+
+    }
+
     protected void tearDown(){
 
     }

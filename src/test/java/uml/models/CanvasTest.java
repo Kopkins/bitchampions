@@ -17,10 +17,16 @@ public class CanvasTest extends TestCase {
         canvas = CanvasManager.getSharedCanvas();
     }
 
-    public void testAddBoxWithManager(){
+    public void testConstructor()
+    {
+        assertTrue(canvas != null);
+    }
+
+    public void testAddClassBox()
+    {
         for (int i = 0; i < 10; i++)
         {
-            cm.addClassBox(new ClassBox());
+            canvas.addClassBox(new ClassBox());
         }
 
         for (ClassBox box : canvas.getClassBoxes())
@@ -32,6 +38,58 @@ public class CanvasTest extends TestCase {
         assertTrue(canvas.getRelationships() != null);
         assertTrue(canvas.getRelationships().size() == 0);
     }
+
+    public void testEmptyRemoveClassBox()
+    {
+        ClassBox box = new ClassBox();
+        canvas.removeClassBox(box);
+        assertTrue(canvas.getClassBoxes().size() == 0);
+    }
+
+    public void testRemoveClassBox(){
+        // Add some boxes
+        // Remove one
+        // Assert it's not there anymore
+    }
+
+    public void testAddRelationship(){
+        // Add some boxes
+        // Remove one
+        // Assert it's not there anymore
+    }
+
+    public void testEmptyRemoveRelationship()
+    {
+
+    }
+
+    public void testRemoveRelationship()
+    {
+
+    }
+
+    public void testCanvasSizeFromSettings()
+    {
+
+    }
+
+
+//    public void testAddBoxWithManager(){
+//        for (int i = 0; i < 10; i++)
+//        {
+//            cm.addClassBox(new ClassBox());
+//        }
+//
+//        for (ClassBox box : canvas.getClassBoxes())
+//        {
+//            assertEquals(box.getOrigin(), new Point(BOX_OFFSET * 2, BOX_OFFSET * 2));
+//        }
+//
+//        assertTrue(canvas.getClassBoxes().size() == 10);
+//        assertTrue(canvas.getRelationships() != null);
+//        assertTrue(canvas.getRelationships().size() == 0);
+//    }
+
 
     protected void tearDown(){
         cm = null;

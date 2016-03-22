@@ -32,6 +32,16 @@ public class Canvas extends JLayeredPane {
         addMouseMotionListener(EventManager.getRelationshipListener());
     }
 
+    public void addClassBox(ClassBox box)
+    {
+        m_classBoxes.add(box);
+    }
+
+    public void removeClassBox(ClassBox box)
+    {
+        m_classBoxes.remove(box);
+    }
+
     /**
      * gets the ArrayList of Relationships
      */
