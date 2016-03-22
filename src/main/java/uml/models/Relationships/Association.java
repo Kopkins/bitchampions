@@ -1,10 +1,10 @@
 package uml.models.Relationships;
 
-import uml.models.Generics.GenericRelationship;
+import uml.models.Generics.Relationship;
 
 import java.awt.*;
 
-public class Association extends GenericRelationship {
+public class Association extends Relationship {
     public Association()
     {
         init();

@@ -1,10 +1,10 @@
 package uml.models.Relationships;
 
-import uml.models.Generics.GenericRelationship;
+import uml.models.Generics.Relationship;
 
 import java.awt.*;
 
-public class Composition extends GenericRelationship{
+public class Composition extends Relationship {
     public Composition() {
         init();
         setType("Composition");

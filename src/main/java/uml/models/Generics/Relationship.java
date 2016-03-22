@@ -5,7 +5,7 @@ import uml.Settings;
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class GenericRelationship extends JComponent {
+public abstract class Relationship extends JComponent {
     protected Point m_start, m_end;
     protected Color m_color;
     protected Polygon m_symbol;

@@ -1,10 +1,10 @@
 package uml.models.Relationships;
 
-import uml.models.Generics.GenericRelationship;
+import uml.models.Generics.Relationship;
 
 import java.awt.*;
 
-public class Aggregation extends GenericRelationship {
+public class Aggregation extends Relationship {
     public Aggregation() {
         init();
         setType("Aggregation");

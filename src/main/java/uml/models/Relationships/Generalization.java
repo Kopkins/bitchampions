@@ -1,13 +1,13 @@
 package uml.models.Relationships;
 
-import uml.models.Generics.GenericRelationship;
+import uml.models.Generics.Relationship;
 
 import java.awt.*;
 
-public class Generalization extends GenericRelationship{
+public class Generalization extends Relationship {
     public Generalization() {
         init();
-        setType("GenericRelationship");
+        setType("Relationship");
         refreshSymbol();
     }
 

@@ -1,9 +1,9 @@
 package uml.models.Relationships;
-import uml.models.Generics.GenericRelationship;
+import uml.models.Generics.Relationship;
 
 import java.awt.*;
 
-public class DirectedAssociation extends GenericRelationship {
+public class DirectedAssociation extends Relationship {
     public DirectedAssociation()
     {
         init();

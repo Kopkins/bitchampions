@@ -3,11 +3,9 @@ package uml.controls;
 import uml.Settings;
 import uml.models.Canvas;
 import uml.models.ClassBox;
-import uml.models.Generics.GenericRelationship;
+import uml.models.Generics.Relationship;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -155,8 +153,8 @@ public class CanvasManager {
                 //turn off delete mode if adding Relationship
                 ResetItemColor();
 
-                GenericRelationship line = RelationshipFactory.getFromType(type);
-                ArrayList<GenericRelationship> relationships = getSharedCanvas().getRelationships();
+                Relationship line = RelationshipFactory.getFromType(type);
+                ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
 
                 getInstance().toggleDeleteMode();
                 getInstance().addRelationship(line);
@@ -221,7 +219,7 @@ public class CanvasManager {
                 if (!deleteMode) {
                     canvasManager.m_isDeleteMode = true;
                     //a way to show if we are in delete mode.
-                    for (GenericRelationship r : getSharedCanvas().getRelationships()) {
+                    for (Relationship r : getSharedCanvas().getRelationships()) {
                         r.setColor(Settings.Colors.DELETE.color);
                     }
                     for (ClassBox c : classBoxes) {
@@ -255,8 +253,8 @@ public class CanvasManager {
      * Add a Relationship to the Canvas
      *
      */
-    public void addRelationship(GenericRelationship r) {
-        ArrayList<GenericRelationship> relationships = getSharedCanvas().getRelationships();
+    public void addRelationship(Relationship r) {
+        ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
         relationships.add(r);
     }
 
@@ -276,7 +274,7 @@ public class CanvasManager {
      *
      */
     public void deleteRelationship(int index) {
-        ArrayList<GenericRelationship> relationships = getSharedCanvas().getRelationships();
+        ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
         relationships.remove(index);
     }
 
@@ -286,7 +284,7 @@ public class CanvasManager {
      */
     private void clearCanvas() {
         ArrayList<ClassBox> classBoxes = getSharedCanvas().getClassBoxes();
-        ArrayList<GenericRelationship> relationships = getSharedCanvas().getRelationships();
+        ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
         classBoxes.clear();
         relationships.clear();
         getSharedCanvas().removeAll();
@@ -294,7 +292,7 @@ public class CanvasManager {
 
     private static void ResetItemColor() {
 
-        for (GenericRelationship r : getSharedCanvas().getRelationships()) {
+        for (Relationship r : getSharedCanvas().getRelationships()) {
             r.setColor(Settings.Colors.DEFAULT.color);
         }
 

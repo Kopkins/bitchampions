@@ -1,11 +1,11 @@
 package uml.models.Relationships;
 
 
-import uml.models.Generics.GenericRelationship;
+import uml.models.Generics.Relationship;
 
 import java.awt.*;
 
-public class Dependency extends GenericRelationship{
+public class Dependency extends Relationship {
     public Dependency() {
         init();
         setType("Dependency");

@@ -1,6 +1,6 @@
 package uml.controls;
 
-import uml.models.Generics.GenericRelationship;
+import uml.models.Generics.Relationship;
 import uml.models.Relationships.*;
 
 public class RelationshipFactory {
@@ -20,7 +20,7 @@ public class RelationshipFactory {
         return m_factory;
     }
 
-    public static GenericRelationship getFromType(String type)
+    public static Relationship getFromType(String type)
     {
         switch(type)
         {
@@ -39,32 +39,32 @@ public class RelationshipFactory {
         }
     }
 
-    public static GenericRelationship generateAggregation()
+    public static Relationship generateAggregation()
     {
         return new Aggregation();
     }
 
-    public static GenericRelationship generateAssociation()
+    public static Relationship generateAssociation()
     {
         return new Association();
     }
 
-    public static GenericRelationship generateComposition()
+    public static Relationship generateComposition()
     {
         return new Composition();
     }
 
-    public static GenericRelationship generateDependency()
+    public static Relationship generateDependency()
     {
         return new Dependency();
     }
 
-    public static GenericRelationship generateDirectedAssociation()
+    public static Relationship generateDirectedAssociation()
     {
         return new DirectedAssociation();
     }
 
-    public static GenericRelationship generateGeneralizaion()
+    public static Relationship generateGeneralizaion()
     {
         return new Generalization();
     }
