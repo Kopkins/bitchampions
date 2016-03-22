@@ -1,19 +1,17 @@
 package uml.models;
 
+import uml.controls.CanvasManager;
+
 import java.awt.*;
 import javax.swing.*;
 import java.util.*;
 
 public class ToolBox extends JPanel {
 
-    // Local Variables
-    private Map<String, JButton> m_buttons;
-
     /**
      * Constructor
      */
     public ToolBox() {
-        m_buttons = new HashMap();
         init();
     }
 
@@ -21,58 +19,57 @@ public class ToolBox extends JPanel {
      * Build components for ToolBox
      */
     private void init() {
+
+        this.setLayout(new GridLayout(9,1));
+
+        bindButtons();
+    }
+
+    private void bindButtons()
+    {
+        // Add ClassBox Button
         JButton addClassBoxButton = new JButton("+ Class Box");
-        addClassBoxButton.setPreferredSize(new Dimension(50, 25));
+        addClassBoxButton.addActionListener(CanvasManager.getAddBoxListener());
         add(addClassBoxButton);
-        m_buttons.put("addClassBoxButton", addClassBoxButton);
 
+        // Add Association Button
         JButton addAssociationButton = new JButton("+ Association");
-        addAssociationButton.setPreferredSize(new Dimension(25, 50));
+        addAssociationButton.addActionListener(CanvasManager.getAddRelationshipListener("Association"));
         add(addAssociationButton);
-        m_buttons.put("addAssociationButton", addAssociationButton);
 
+        // Add Directed Association Button
         JButton addDirectedAssociationButton = new JButton("+ Directed Association");
-        addDirectedAssociationButton.setPreferredSize(new Dimension(25, 50));
+        addDirectedAssociationButton.addActionListener(CanvasManager.getAddRelationshipListener("DirectedAssociation"));
         add(addDirectedAssociationButton);
-        m_buttons.put("addDirectedAssociationButton", addDirectedAssociationButton);
 
+        // Add Dependency Button
         JButton addDependencyButton = new JButton("+ Dependency");
-        addDependencyButton.setPreferredSize(new Dimension(25, 50));
+        addDependencyButton.addActionListener(CanvasManager.getAddRelationshipListener("Dependency"));
         add(addDependencyButton);
-        m_buttons.put("addDependencyButton", addDependencyButton);
 
+        // Add Generalization Button
         JButton addGeneralizationButton = new JButton("+ Generalization");
-        addGeneralizationButton.setPreferredSize(new Dimension(25, 50));
+        addGeneralizationButton.addActionListener(CanvasManager.getAddRelationshipListener("Generalization"));
         add(addGeneralizationButton);
-        m_buttons.put("addGeneralizationButton", addGeneralizationButton);
 
+        // Add Aggregation Button
         JButton addAggregationButton = new JButton("+ Aggregation");
-        addDependencyButton.setPreferredSize(new Dimension(25, 50));
+        addAggregationButton.addActionListener(CanvasManager.getAddRelationshipListener("Aggregation"));
         add(addAggregationButton);
-        m_buttons.put("addAggregationButton", addAggregationButton);
 
+        // Add Composition Button
         JButton addCompositionButton = new JButton("+ Composition");
         addDependencyButton.setPreferredSize(new Dimension(25, 50));
         add(addCompositionButton);
-        m_buttons.put("addCompositionButton", addCompositionButton);
 
-        JButton clearBoxButton = new JButton("Clear Canvas");
-        clearBoxButton.setPreferredSize(new Dimension(25, 50));
-        add(clearBoxButton);
-        m_buttons.put("clearCanvasButton", clearBoxButton);
+        // Add Clear Canvas Button
+        JButton clearCanvasButton = new JButton("Clear Canvas");
+        clearCanvasButton.addActionListener(CanvasManager.getClearCanvasListener());
+        add(clearCanvasButton);
 
+        // Delete Item Button
         JButton deleteSModeButton = new JButton("Delete Item");
-        deleteSModeButton.setPreferredSize(new Dimension(25, 50));
+        deleteSModeButton.addActionListener(CanvasManager.getDeleteModeListener());
         add(deleteSModeButton);
-        m_buttons.put("deleteSModeButton", deleteSModeButton);
-    }
-
-    /**
-     * Gets the Map of buttons.
-     *
-     * @return
-     */
-    public Map<String, JButton> getButtons() {
-        return m_buttons;
     }
 }

@@ -1,5 +1,10 @@
 package uml.models;
 
+import uml.Settings;
+import uml.models.Generics.Relationship;
+
+import uml.controls.EventManager;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -7,7 +12,7 @@ import java.util.ArrayList;
 public class Canvas extends JLayeredPane {
 
     // Local Variables
-    private int m_minWidth, m_minHeight;
+    public int m_width, m_height;
     private ArrayList<Relationship> m_relationships;
     private ArrayList<ClassBox> m_classBoxes;
 
@@ -15,16 +20,16 @@ public class Canvas extends JLayeredPane {
      * Constructor
      */
     public Canvas() {
-        m_minWidth = 800;
-        m_minHeight = 800;
+        m_width = Settings.getCanvasWidth();
+        m_height = Settings.getCanvasHeight();
         m_relationships = new ArrayList<Relationship>();
         m_classBoxes = new ArrayList<ClassBox>();
         init();
     }
 
     private void init() {
-        // Set to Null so Boxes and Lines can be placed freely
-        this.setLayout(null);
+        addMouseListener(EventManager.getRelationshipListener());
+        addMouseMotionListener(EventManager.getRelationshipListener());
     }
 
     /**
@@ -58,10 +63,10 @@ public class Canvas extends JLayeredPane {
             } else {
                 g2d.setStroke(new BasicStroke(2.0f));
             }
-            int x1 = (int) Math.round(r.getStartPoint().x);
-            int y1 = (int) Math.round(r.getStartPoint().y);
-            int x2 = (int) Math.round(r.getEndPoint().x);
-            int y2 = (int) Math.round(r.getEndPoint().y);
+            int x1 = Math.round(r.getStartPoint().x);
+            int y1 = Math.round(r.getStartPoint().y);
+            int x2 = Math.round(r.getEndPoint().x);
+            int y2 = Math.round(r.getEndPoint().y);
             g2d.setColor(r.getColor());
             g2d.drawLine(x1, y1, x2, y2);
             g2d.rotate(r.getAngle(), r.getEndPoint().x, r.getEndPoint().y);
