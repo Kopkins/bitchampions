@@ -22,7 +22,7 @@ public class EditorGUI {
 
     public JFrame m_window;
     private DialogManager m_dialogManager;
-    private static EditorGUI _sharedApp;
+    private static EditorGUI m_sharedApp;
 
     /**
      * Constructor
@@ -64,10 +64,10 @@ public class EditorGUI {
      * @return EditorGUI sharedApp
      */
     public static EditorGUI getSharedApp() {
-        if (_sharedApp == null) {
-            _sharedApp = new EditorGUI();
+        if (m_sharedApp == null) {
+            m_sharedApp = new EditorGUI();
         }
-        return _sharedApp;
+        return m_sharedApp;
     }
 
     /**
