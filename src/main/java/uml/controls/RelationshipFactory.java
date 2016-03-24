@@ -6,7 +6,7 @@ import uml.models.Relationships.*;
 public class RelationshipFactory {
 
     /**
-     * Get a relationship object based on a String identifier
+     * Get a relationship object based on a String identifier.
      *
      * @param type, which is a String identifier of the type of relationship to generate.
      * @return Relationship
