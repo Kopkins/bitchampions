@@ -1,5 +1,6 @@
 package uml.controls.listeners;
 
+import uml.Settings;
 import uml.controls.CanvasManager;
 import uml.models.Generics.Relationship;
 
@@ -12,25 +13,40 @@ import java.util.ArrayList;
 
 public class RelationshipListener implements MouseMotionListener, MouseListener {
 
-    private CanvasManager m_canvasManager;
+    // Local Variables
     private final int RADIUS = 5;
+    private CanvasManager m_canvasManager;
 
-    public RelationshipListener()
-    {
+    /**
+     * Constructor
+     */
+    public RelationshipListener() {
         m_canvasManager = CanvasManager.getInstance();
     }
 
+    /**
+     * Mandatory override for implementing MouseListener.
+     *
+     * @param event
+     */
     @Override
     public void mouseClicked(MouseEvent event) {
 
     }
 
+    /**
+     * When mouse is clicked on the canvas, query a collection of relationships to see if any endpoints
+     * reside at that location. If so, color it and select it as the current relationship.
+     *
+     * @param event
+     */
     @Override
     public void mousePressed(MouseEvent event) {
         // get the point the mouse is pressed on
         m_canvasManager.setClickPoint(event.getPoint());
-        // loop through relationships arraylist and see if click point is within a 5 point radius of any of the relationships origin point
-        ArrayList<Relationship> relationships = m_canvasManager.getSharedCanvas().getRelationships();
+        // loop through relationships arraylist and see if click point is within a 5 point radius of
+        // any of the relationships origin point
+        ArrayList<Relationship> relationships = CanvasManager.getSharedCanvas().getRelationships();
         for (int i = 0; i < relationships.size(); i++) {
             if (relationships.get(i).getStartPoint().distance(event.getPoint()) <= RADIUS
                 || relationships.get(i).getEndPoint().distance(event.getPoint()) <= RADIUS) {
@@ -42,8 +58,9 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
                 } else //get the index of the active relationship
                 {
                     m_canvasManager.setActiveRelationshipIndex(i);
-                    // if clickpoint is within 5 point radius of relationship's origin point, set the relationship to active
-                    relationships.get(i).setColor(Color.blue);
+                    // if clickpoint is within 5 point radius of relationship's origin point,
+                    // set the relationship to active
+                    relationships.get(i).setColor(Settings.Colors.SELECT.color);
                     // repaint the canvas so the active relationship's color is blue
                     m_canvasManager.repaintCanvas();
                 }
@@ -51,34 +68,53 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
         }
     }
 
+    /**
+     * When mouse is released, recolor the line.
+     *
+     * @param event
+     */
     @Override
     public void mouseReleased(MouseEvent event) {
         int activeIndex = m_canvasManager.getActiveRelationshipIndex();
         if (activeIndex != -1) {
             // change relationship's color back to gray to show it is no longer active and repaint
-            ArrayList<Relationship> relationships = m_canvasManager.getSharedCanvas().getRelationships();
-            relationships.get(activeIndex).setColor(Color.gray);
+            ArrayList<Relationship> relationships = CanvasManager.getSharedCanvas().getRelationships();
+            relationships.get(activeIndex).setColor(Settings.Colors.DEFAULT.color);
             m_canvasManager.repaintCanvas();
             m_canvasManager.setActiveRelationshipIndex(-1);
         }
     }
 
+    /**
+     * Mandatory override for implementing MouseListener.
+     *
+     * @param event
+     */
     @Override
     public void mouseEntered(MouseEvent event) {
 
     }
 
+    /**
+     * Mandatory override for implementing MouseListener.
+     *
+     * @param event
+     */
     @Override
     public void mouseExited(MouseEvent event) {
 
     }
 
+    /**
+     * Logic for moving and rotating relationship lines on the canvas.
+     * @param event
+     */
     @Override
     public void mouseDragged(MouseEvent event) {
         int activeIndex = m_canvasManager.getActiveRelationshipIndex();
         if (activeIndex != -1) {
             // get the active relationship
-            Relationship activeRelationship = m_canvasManager.getSharedCanvas().getRelationships().get(activeIndex);
+            Relationship activeRelationship = CanvasManager.getSharedCanvas().getRelationships().get(activeIndex);
             if (SwingUtilities.isLeftMouseButton(event)) {
                 if (activeRelationship.getStartPoint().distance(m_canvasManager.getClickPoint()) <= RADIUS) {
                     // get the distance the origin point is moved
@@ -131,6 +167,11 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
         }
     }
 
+    /**
+     * Mandatory override for implementing MouseMotionListener.
+     *
+     * @param event
+     */
     @Override
     public void mouseMoved(MouseEvent event) {
     }

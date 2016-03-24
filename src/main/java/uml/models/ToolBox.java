@@ -2,9 +2,8 @@ package uml.models;
 
 import uml.controls.CanvasManager;
 
-import java.awt.*;
 import javax.swing.*;
-import java.util.*;
+import java.awt.*;
 
 public class ToolBox extends JPanel {
 
@@ -26,7 +25,7 @@ public class ToolBox extends JPanel {
     }
 
     /**
-     * Binds the buttons
+     * Bind all ActionListeners to their buttons
      */
     private void bindButtons() {
         // Add ClassBox Button

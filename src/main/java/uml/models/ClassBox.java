@@ -1,7 +1,6 @@
 package uml.models;
 
 import uml.Settings;
-
 import uml.controls.EventManager;
 
 import javax.swing.*;
@@ -9,7 +8,7 @@ import java.awt.*;
 
 public class ClassBox extends JPanel {
 
-// Local Variables
+    // Local Variables
     private int m_width, m_height;
     private Point m_origin, m_clickPoint;
     private JTextField m_name;
@@ -75,7 +74,6 @@ public class ClassBox extends JPanel {
 
     /**
      * Sets the origin point.
-     *
      */
     public void setOrigin(Point p) {
         m_origin = p;
@@ -92,7 +90,6 @@ public class ClassBox extends JPanel {
 
     /**
      * Sets the point that was clicked on.
-     *
      */
     public void setClickPoint(Point p) {
         m_clickPoint = p;
@@ -100,7 +97,6 @@ public class ClassBox extends JPanel {
 
     /**
      * Resize the class box
-     *
      */
     public void resize(Point p) {
         //Calculate the distance the mouse traveled

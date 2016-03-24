@@ -3,6 +3,7 @@ package uml.views;
 import uml.controls.CanvasManager;
 import uml.controls.DialogManager;
 import uml.models.ToolBox;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -19,10 +20,11 @@ public class EditorGUI {
     final private static int WIDTH = 800;
     final private static int HEIGHT = 600;
     final private static String TITLE = "UML - Editor";
-
+    private static EditorGUI _sharedApp;
     public JFrame m_window;
     private DialogManager m_dialogManager;
     private static EditorGUI m_sharedApp;
+
 
     /**
      * Constructor
@@ -31,6 +33,27 @@ public class EditorGUI {
         m_window = new JFrame();
         m_dialogManager = new DialogManager(m_window);
         initialize();
+    }
+
+    /**
+     * Ensures that only one instance of this class is in use at a time.
+     *
+     * @return EditorGUI sharedApp
+     */
+    public static EditorGUI getSharedApp() {
+        if (_sharedApp == null) {
+            _sharedApp = new EditorGUI();
+        }
+        return _sharedApp;
+    }
+
+    /**
+     * The main driver for the UML Editor App.
+     *
+     * @param args which are command line arguments
+     */
+    public static void main(String[] args) {
+        getSharedApp();
     }
 
     /**
@@ -56,18 +79,6 @@ public class EditorGUI {
         m_window.setLocation(xPos, yPos);
         this.setExitOnWindowClose();
         m_window.setVisible(true);
-    }
-
-    /**
-     * Ensures that only one instance of this class is in use at a time.
-     *
-     * @return EditorGUI sharedApp
-     */
-    public static EditorGUI getSharedApp() {
-        if (m_sharedApp == null) {
-            m_sharedApp = new EditorGUI();
-        }
-        return m_sharedApp;
     }
 
     /**
@@ -111,15 +122,6 @@ public class EditorGUI {
                 m_dialogManager.confirmTermination();
             }
         });
-    }
-
-    /**
-     * The main driver for the UML Editor App.
-     *
-     * @param args which are command line arguments
-     */
-    public static void main(String[] args) {
-        getSharedApp();
     }
 
 }
