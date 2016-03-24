@@ -59,7 +59,7 @@ public class ToolBox extends JPanel {
 
         // Add Composition Button
         JButton addCompositionButton = new JButton("+ Composition");
-        addDependencyButton.setPreferredSize(new Dimension(25, 50));
+        addCompositionButton.addActionListener(CanvasManager.getAddRelationshipListener("Composition"));
         add(addCompositionButton);
 
         // Add Clear Canvas Button
