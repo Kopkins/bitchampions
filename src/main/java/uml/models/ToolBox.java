@@ -2,9 +2,8 @@ package uml.models;
 
 import uml.controls.CanvasManager;
 
-import java.awt.*;
 import javax.swing.*;
-import java.util.*;
+import java.awt.*;
 
 public class ToolBox extends JPanel {
 
@@ -20,13 +19,15 @@ public class ToolBox extends JPanel {
      */
     private void init() {
 
-        this.setLayout(new GridLayout(9,1));
+        this.setLayout(new GridLayout(9, 1));
 
         bindButtons();
     }
 
-    private void bindButtons()
-    {
+    /**
+     * Bind all ActionListeners to their buttons
+     */
+    private void bindButtons() {
         // Add ClassBox Button
         JButton addClassBoxButton = new JButton("+ Class Box");
         addClassBoxButton.addActionListener(CanvasManager.getAddBoxListener());
@@ -59,7 +60,7 @@ public class ToolBox extends JPanel {
 
         // Add Composition Button
         JButton addCompositionButton = new JButton("+ Composition");
-        addDependencyButton.setPreferredSize(new Dimension(25, 50));
+        addCompositionButton.addActionListener(CanvasManager.getAddRelationshipListener("Composition"));
         add(addCompositionButton);
 
         // Add Clear Canvas Button

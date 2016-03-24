@@ -16,10 +16,10 @@ public class CanvasManager {
     // Local Variables
     private static int RADIUS = 5;
     private static Canvas m_canvas;
+    private static CanvasManager m_canvasManager;
+    public boolean m_isDeleteMode = false;
     private Point m_clickPoint;
     private int m_activeRelationshipIndex = -1;
-    public boolean m_isDeleteMode = false;
-    private static CanvasManager m_canvasManager;
 
     /**
      * Constructor
@@ -30,27 +30,19 @@ public class CanvasManager {
 
     /**
      * Singleton instance of CanvasManager
+     *
      * @return
      */
-    public static CanvasManager getInstance()
-    {
-        if (m_canvasManager == null)
-        {
+    public static CanvasManager getInstance() {
+        if (m_canvasManager == null) {
             m_canvasManager = new CanvasManager();
         }
         return m_canvasManager;
     }
 
     /**
-     * Add MouseListeners to CanvasManager
-     */
-    private void init() {
-    }
-
-    /**
      * Attaches a canvas to the main window
      */
-
     public static void bindCanvas(Container pane) {
         // Get shared instance of canvas.
         Canvas canvas = getSharedCanvas();
@@ -76,43 +68,6 @@ public class CanvasManager {
             m_canvas = new Canvas();
         }
         return m_canvas;
-    }
-
-    /**
-     * Gets the index of the activeRelationship.
-     *
-     * @return
-     */
-    public int getActiveRelationshipIndex() {
-        return m_activeRelationshipIndex;
-    }
-
-    /**
-     * Sets the index of the activeRelationship.
-     *
-     */
-    public void setActiveRelationshipIndex(Integer index) {
-        m_activeRelationshipIndex = index;
-    }
-
-    public Point getClickPoint() {
-        return m_clickPoint;
-    }
-
-    /**
-     * Sets the point that was clicked on.
-     *
-     */
-    public void setClickPoint(Point p) {
-        m_clickPoint = p;
-    }
-
-    /**
-     * Repaints the canvas
-     *
-     */
-    public void repaintCanvas() {
-        getSharedCanvas().repaint();
     }
 
     /**
@@ -162,22 +117,6 @@ public class CanvasManager {
                 int offset = relationships.size() * 8;
                 line.translate(offset, offset);
 
-                getSharedCanvas().repaint();
-            }
-        };
-        return listener;
-    }
-
-    /**
-     * Get an ActionListener for revalidating and repainting the canvas panel
-     *
-     * @return listener
-     */
-    public ActionListener getRevalidateListener() {
-        ActionListener listener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                getSharedCanvas().revalidate();
                 getSharedCanvas().repaint();
             }
         };
@@ -238,58 +177,8 @@ public class CanvasManager {
     }
 
     /**
-     * Add a classBox to the Canvas
-     *
+     * Reset the color of each of the components in the canvas.
      */
-    public void addClassBox(ClassBox cb) {
-        ArrayList<ClassBox> classBoxes = getSharedCanvas().getClassBoxes();
-        classBoxes.add(cb);
-        getSharedCanvas().add(cb, JLayeredPane.DRAG_LAYER);
-        getSharedCanvas().moveToFront(cb);
-        addColorToBox(cb);
-    }
-
-    /**
-     * Add a Relationship to the Canvas
-     *
-     */
-    public void addRelationship(Relationship r) {
-        ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
-        relationships.add(r);
-    }
-
-    /**
-     * Delete a classBox from the Canvas
-     *
-     */
-    public void deleteClassBox(ClassBox cb) {
-
-        ArrayList<ClassBox> boxes = getSharedCanvas().getClassBoxes();
-        boxes.remove(cb);
-        getSharedCanvas().remove(cb);
-    }
-
-    /**
-     * Delete a Relationship from the Canvas
-     *
-     */
-    public void deleteRelationship(int index) {
-        ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
-        relationships.remove(index);
-    }
-
-    /**
-     * Clear everything from the Canvas
-     *
-     */
-    private void clearCanvas() {
-        ArrayList<ClassBox> classBoxes = getSharedCanvas().getClassBoxes();
-        ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
-        classBoxes.clear();
-        relationships.clear();
-        getSharedCanvas().removeAll();
-    }
-
     private static void ResetItemColor() {
 
         for (Relationship r : getSharedCanvas().getRelationships()) {
@@ -302,15 +191,125 @@ public class CanvasManager {
         getSharedCanvas().repaint();
     }
 
+    /**
+     * Add MouseListeners to CanvasManager
+     */
+    private void init() {
+    }
+
+    /**
+     * Gets the index of the activeRelationship.
+     *
+     * @return
+     */
+    public int getActiveRelationshipIndex() {
+        return m_activeRelationshipIndex;
+    }
+
+    /**
+     * Sets the index of the activeRelationship.
+     */
+    public void setActiveRelationshipIndex(Integer index) {
+        m_activeRelationshipIndex = index;
+    }
+
+    public Point getClickPoint() {
+        return m_clickPoint;
+    }
+
+    /**
+     * Sets the point that was clicked on.
+     */
+    public void setClickPoint(Point p) {
+        m_clickPoint = p;
+    }
+
+    /**
+     * Repaints the canvas
+     */
+    public void repaintCanvas() {
+        getSharedCanvas().repaint();
+    }
+
+    /**
+     * Get an ActionListener for revalidating and repainting the canvas panel
+     *
+     * @return listener
+     */
+    public ActionListener getRevalidateListener() {
+        ActionListener listener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getSharedCanvas().revalidate();
+                getSharedCanvas().repaint();
+            }
+        };
+        return listener;
+    }
+
+    /**
+     * Add a classBox to the Canvas
+     */
+    public void addClassBox(ClassBox cb) {
+        ArrayList<ClassBox> classBoxes = getSharedCanvas().getClassBoxes();
+        classBoxes.add(cb);
+        getSharedCanvas().add(cb, JLayeredPane.DRAG_LAYER);
+        getSharedCanvas().moveToFront(cb);
+        addColorToBox(cb);
+    }
+
+    /**
+     * Add a Relationship to the Canvas
+     */
+    public void addRelationship(Relationship r) {
+        ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
+        relationships.add(r);
+    }
+
+    /**
+     * Delete a classBox from the Canvas
+     */
+    public void deleteClassBox(ClassBox cb) {
+
+        ArrayList<ClassBox> boxes = getSharedCanvas().getClassBoxes();
+        boxes.remove(cb);
+        getSharedCanvas().remove(cb);
+    }
+
+    /**
+     * Delete a Relationship from the Canvas
+     */
+    public void deleteRelationship(int index) {
+        ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
+        relationships.remove(index);
+    }
+
+    /**
+     * Clear everything from the Canvas
+     */
+    private void clearCanvas() {
+        ArrayList<ClassBox> classBoxes = getSharedCanvas().getClassBoxes();
+        ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
+        classBoxes.clear();
+        relationships.clear();
+        getSharedCanvas().removeAll();
+    }
+
+    /**
+     * Add color to an individual classBox
+     *
+     * @param box, which is the box being colored.
+     */
     private void addColorToBox(ClassBox box) {
         Color color = m_isDeleteMode ? Settings.Colors.DELETE.color : Settings.Colors.DEFAULT.color;
         box.setBackground(color);
     }
 
-    private void toggleDeleteMode()
-    {
-        if (m_isDeleteMode)
-        {
+    /**
+     * Toggle the deleteMode state on and off.
+     */
+    private void toggleDeleteMode() {
+        if (m_isDeleteMode) {
             ResetItemColor();
             m_isDeleteMode = !m_isDeleteMode;
         }

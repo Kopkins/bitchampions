@@ -1,9 +1,8 @@
 package uml.models;
 
 import uml.Settings;
-import uml.models.Generics.Relationship;
-
 import uml.controls.EventManager;
+import uml.models.Generics.Relationship;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,12 +21,15 @@ public class Canvas extends JLayeredPane {
     public Canvas() {
         m_width = Settings.getCanvasWidth();
         m_height = Settings.getCanvasHeight();
-        m_relationships = new ArrayList<Relationship>();
-        m_classBoxes = new ArrayList<ClassBox>();
-        init();
+        m_relationships = new ArrayList<>();
+        m_classBoxes = new ArrayList<>();
+        bindListeners();
     }
 
-    private void init() {
+    /**
+     * Binds the mouse listeners to the canvas.
+     */
+    private void bindListeners() {
         addMouseListener(EventManager.getRelationshipListener());
         addMouseMotionListener(EventManager.getRelationshipListener());
     }
@@ -58,7 +60,6 @@ public class Canvas extends JLayeredPane {
 
     /**
      * Override paint method to draw relationships on canvas
-     *
      */
     public void paint(Graphics g) {
         super.paint(g);
