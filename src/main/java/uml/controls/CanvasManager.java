@@ -308,7 +308,7 @@ public class CanvasManager {
     /**
      * Toggle the deleteMode state on and off.
      */
-    private void toggleDeleteMode() {
+    public void toggleDeleteMode() {
         if (m_isDeleteMode) {
             ResetItemColor();
             m_isDeleteMode = !m_isDeleteMode;

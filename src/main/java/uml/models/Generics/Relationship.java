@@ -75,7 +75,7 @@ public abstract class Relationship extends JComponent {
      * @param p, Point whick is the start point of this Relationship
      */
     public void setStartPoint(Point p) {
-        m_start = validatePoint(p);
+        m_start = p;
     }
 
     /**
@@ -93,22 +93,7 @@ public abstract class Relationship extends JComponent {
      * @param p, Point which is the end point fo this Relationship
      */
     public void setEndPoint(Point p) {
-        m_end = validatePoint(p);
-    }
-
-    /**
-     * Validates that Point is within canvas range.
-     * @param p
-     * @return
-     */
-    private Point validatePoint(Point p)
-    {
-        double x = p.getX() <= 0 ? 0 : p.getX();
-        double y = p.getY() <= 0 ? 0 : p.getY();
-
-        x = x >= Settings.getCanvasWidth() ? Settings.getCanvasWidth() : x;
-        y = y >= Settings.getCanvasHeight() ? Settings.getCanvasHeight() : y;
-        return new Point((int)x,(int)y);
+        m_end = p;
     }
 
     /**
