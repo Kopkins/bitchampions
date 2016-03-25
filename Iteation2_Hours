@@ -1,8 +1,15 @@
 Iteration 2 Time sheet
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * *
-    Name
+    Jared McAndrews
   * * * * * * * * * * * * * * * * * * * * * * * * * */
 
   THING                                          HOURS
   -----                                          -----
++ Group Meetings				                 5h
++ Implmented Drawing & Rotating Symbols          5h
++ Implemented Resizing/Rotating Relationships 	 5h
++ Implemented Resizable ClassBoxes 			     5h
++ Removed Large Margins From ClassBox 			 1h
++ Added Relationship Buttons To Toolbox          .5h
+
