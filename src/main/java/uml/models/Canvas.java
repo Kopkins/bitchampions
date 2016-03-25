@@ -35,6 +35,43 @@ public class Canvas extends JLayeredPane {
     }
 
     /**
+     * Add a classbox to the collection of boxes.
+     * @param box
+     */
+    public void addClassBox(ClassBox box)
+    {
+        m_classBoxes.add(box);
+        this.add(box);
+    }
+
+    /**
+     * Remove a ClassBox from the collection of boxes.
+     * @param box
+     */
+    public void removeClassBox(ClassBox box)
+    {
+        m_classBoxes.remove(box);
+        this.remove(box);
+    }
+
+    /**
+     * Add a relationship to the collection.
+     * @param relationship
+     */
+    public void addRelationship(Relationship relationship)
+    {
+        m_relationships.add(relationship);
+    }
+
+    /**
+     * Remove a relationship from the collection.
+     * @param relationship
+     */
+    public void removeRelationship(Relationship relationship)
+    {
+        m_relationships.remove(relationship);
+    }
+    /**
      * gets the ArrayList of Relationships
      */
     public ArrayList<Relationship> getRelationships() {

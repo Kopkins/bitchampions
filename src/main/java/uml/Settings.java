@@ -14,7 +14,7 @@ public class Settings {
 
     // Member Variables
     private Properties properties;
-    private final String OUTPUT_FILE = "app.properties";;
+    private final String OUTPUT_FILE = "app.properties";
     private FileInputStream input;
     private FileOutputStream output;
     private int GRID_SIZE, CANVAS_WIDTH,
@@ -160,7 +160,7 @@ public class Settings {
      * Generate default values and save them out to the file.
      */
     private void generateDefualts() {
-        gridSize = "20";
+        gridSize = "10";
         selectColor = "blue";
         deleteColor = "red";
         defaultColor = "gray";
@@ -169,6 +169,7 @@ public class Settings {
         maxCanvasWidth = "1500";
         maxCanvasHeight = "1200";
         save();
+        load();
     }
 
     /**

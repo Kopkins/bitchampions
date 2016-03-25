@@ -51,6 +51,7 @@ public class ClassBoxListener implements MouseListener, MouseMotionListener {
             //check if in deleteMode
             if (m_canvasManager.m_isDeleteMode) {
                 m_canvasManager.deleteClassBox(box);
+                m_canvasManager.toggleDeleteMode();
                 m_canvasManager.repaintCanvas();
             } else {
                 // changed color to blue to show classBox is active

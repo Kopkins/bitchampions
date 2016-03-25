@@ -2,6 +2,7 @@ package uml.controls.listeners;
 
 import uml.Settings;
 import uml.controls.CanvasManager;
+import uml.models.*;
 import uml.models.Generics.Relationship;
 
 import javax.swing.*;
@@ -54,6 +55,7 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
                 if (m_canvasManager.m_isDeleteMode) {
                     m_canvasManager.deleteRelationship(i);
                     m_canvasManager.setActiveRelationshipIndex(-1);
+                    m_canvasManager.toggleDeleteMode();
                     m_canvasManager.repaintCanvas();
                 } else //get the index of the active relationship
                 {
