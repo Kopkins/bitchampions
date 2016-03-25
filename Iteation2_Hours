@@ -1,15 +1,29 @@
 Iteration 2 Time sheet
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * *
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * 
     Jared McAndrews
+  * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+  Contribution                                      HOURS
+  ------------                                      -----
++ Group Meetings				                    5h
++ Implmented Drawing & Rotating Symbols             5h
++ Implemented Resizing/Rotating Relationships 	    5h
++ Implemented Resizable ClassBoxes 			        5h
++ Removed Large Margins From ClassBox 			    1h
++ Added Relationship Buttons To Toolbox             .5h
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * *
+    Vincent Smith
   * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-  THING                                          HOURS
-  -----                                          -----
-+ Group Meetings				                 5h
-+ Implmented Drawing & Rotating Symbols          5h
-+ Implemented Resizing/Rotating Relationships 	 5h
-+ Implemented Resizable ClassBoxes 			     5h
-+ Removed Large Margins From ClassBox 			 1h
-+ Added Relationship Buttons To Toolbox          .5h
+  Contribution                                      HOURS
+  ------------                                      -----
++ Group Meetings				                    4h
++ Isolate Event Listeners                           3h
++ Research JLayeredPanes and other Layout options	3h
++ Add Settings class 			                    4h
++ Add inheritence to Relationships 			        3h
++ Add Unit tests                                    4h
++ Bound ClassBoxes to the canvas Region             0.5h
 
