@@ -24,7 +24,7 @@ public class CanvasManager {
     /**
      * Constructor
      */
-    private CanvasManager() {
+    public CanvasManager() {
         init();
     }
 
