@@ -20,12 +20,13 @@ public class CanvasManager {
     public boolean m_isDeleteMode = false;
     private Point m_clickPoint;
     private int m_activeRelationshipIndex = -1;
+    private static UndoRedoManager m_undoRedoManager;
 
     /**
      * Constructor
      */
     public CanvasManager() {
-        init();
+       m_undoRedoManager = UndoRedoManager.getInstance();
     }
 
     /**
@@ -49,7 +50,7 @@ public class CanvasManager {
 
         // Prepare dimensions/preferences
         canvas.setPreferredSize(
-            new Dimension(canvas.m_width, canvas.m_height));
+                new Dimension(canvas.m_width, canvas.m_height));
 
         canvas.setBackground(Color.white);
         canvas.setOpaque(true);
@@ -68,6 +69,24 @@ public class CanvasManager {
             m_canvas = new Canvas();
         }
         return m_canvas;
+    }
+
+    /**
+     * Refreshes the canvas when the classBox and relationship arraylists are
+     * set from save/load or undo/redo
+     *
+     */
+    public static void refreshCanvas() {
+        //clear everything that is displayed on the canvas
+        getSharedCanvas().removeAll();
+        //add each classbox to canvas
+        for (ClassBox cb : getSharedCanvas().getClassBoxes()) {
+            getSharedCanvas().add(cb, JLayeredPane.DRAG_LAYER);
+            getSharedCanvas().moveToFront(cb);
+        }
+        // revalidate and paint all the relationships on the canvas
+        getSharedCanvas().revalidate();
+        getSharedCanvas().repaint();
     }
 
     /**
@@ -91,6 +110,9 @@ public class CanvasManager {
                 getInstance().addClassBox(classBox);
                 getSharedCanvas().revalidate();
                 getSharedCanvas().repaint();
+                // add current state to undoRedoManager
+                m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getRelationships());
+                m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getClassBoxes());
             }
         };
         return listener;
@@ -118,6 +140,9 @@ public class CanvasManager {
                 line.translate(offset, offset);
 
                 getSharedCanvas().repaint();
+                // add current state to undoRedoManager
+                m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getRelationships());
+                m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getClassBoxes());
             }
         };
         return listener;
@@ -136,6 +161,9 @@ public class CanvasManager {
                 getInstance().clearCanvas();
                 getSharedCanvas().revalidate();
                 getSharedCanvas().repaint();
+                // add current state to undoRedoManager
+        m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getRelationships());
+        m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getClassBoxes());
             }
         };
         return listener;
@@ -192,12 +220,6 @@ public class CanvasManager {
     }
 
     /**
-     * Add MouseListeners to CanvasManager
-     */
-    private void init() {
-    }
-
-    /**
      * Gets the index of the activeRelationship.
      *
      * @return
@@ -248,6 +270,86 @@ public class CanvasManager {
     }
 
     /**
+     * Get an ActionListener that will save a file.
+     *
+     * @return
+     */
+    public static ActionListener getSaveListener() {
+        ActionListener listener = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SaveLoadManager slm = SaveLoadManager.getInstance();
+                slm.save(getSharedCanvas().getRelationships(), getSharedCanvas().getClassBoxes());
+            }
+        };
+        return listener;
+    }
+
+    /**
+     * Get an ActionListener that will load a file.
+     *
+     * @return
+     */
+    public static ActionListener getLoadListener() {
+        ActionListener listener = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SaveLoadManager slm = SaveLoadManager.getInstance();
+                slm.load();
+                getSharedCanvas().setRelationships(slm.getRelationships());
+                getSharedCanvas().setClassBoxes(slm.getClassBoxes());
+                refreshCanvas();
+                // add current state to undoRedoManager
+                m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getRelationships());
+                m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getClassBoxes());
+            }
+        };
+        return listener;
+    }
+
+    /**
+     * Get an ActionListener that will pop classBox arraylist from the undo
+     * stack, and refresh the canvas.
+     *
+     * @return
+     */
+    public static ActionListener getUndoListener() {
+        ActionListener listener = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getSharedCanvas().setClassBoxes(m_undoRedoManager.popClassBoxesFromUndo());
+                getSharedCanvas().setRelationships(m_undoRedoManager.popRelationshipsFromUndo());
+                refreshCanvas();
+            }
+        };
+        return listener;
+
+    }
+
+    /**
+     * Get an ActionListener that will pop classBox arraylist from the redo
+     * stack, and refresh the canvas.
+     *
+     * @return
+     */
+    public static ActionListener getRedoListener() {
+        ActionListener listener = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getSharedCanvas().setClassBoxes(m_undoRedoManager.popClassBoxesFromRedo());
+                getSharedCanvas().setRelationships(m_undoRedoManager.popRelationshipsFromRedo());
+                refreshCanvas();
+            }
+        };
+        return listener;
+
+    }
+
+    /**
      * Add a classBox to the Canvas
      */
     public void addClassBox(ClassBox cb) {
@@ -270,7 +372,6 @@ public class CanvasManager {
      * Delete a classBox from the Canvas
      */
     public void deleteClassBox(ClassBox cb) {
-
         ArrayList<ClassBox> boxes = getSharedCanvas().getClassBoxes();
         boxes.remove(cb);
         getSharedCanvas().remove(cb);

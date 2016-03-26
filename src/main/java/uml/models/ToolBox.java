@@ -72,5 +72,25 @@ public class ToolBox extends JPanel {
         JButton deleteSModeButton = new JButton("Delete Item");
         deleteSModeButton.addActionListener(CanvasManager.getDeleteModeListener());
         add(deleteSModeButton);
+        
+        // Add Save button
+        JButton saveButton = new JButton("Save");
+        saveButton.addActionListener(CanvasManager.getSaveListener());
+        add(saveButton);
+        
+        // Add Load button
+        JButton loadButton = new JButton("Load");
+        loadButton.addActionListener(CanvasManager.getLoadListener());
+        add(loadButton);
+        
+        // Add Undo button
+        JButton undoButton = new JButton("Undo");
+        undoButton.addActionListener(CanvasManager.getUndoListener());
+        add(undoButton);
+        
+        // Add Redo button
+        JButton redoButton = new JButton("Redo");
+        redoButton.addActionListener(CanvasManager.getRedoListener());
+        add(redoButton);
     }
 }

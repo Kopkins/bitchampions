@@ -4,7 +4,7 @@ import uml.Settings;
 import uml.controls.CanvasManager;
 import uml.models.*;
 import uml.models.Generics.Relationship;
-
+import uml.controls.UndoRedoManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -17,12 +17,14 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
     // Local Variables
     private final int RADIUS = 5;
     private CanvasManager m_canvasManager;
+    private UndoRedoManager m_undoRedoManager;
 
     /**
      * Constructor
      */
     public RelationshipListener() {
         m_canvasManager = CanvasManager.getInstance();
+        m_undoRedoManager = UndoRedoManager.getInstance();
     }
 
     /**
@@ -36,8 +38,9 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
     }
 
     /**
-     * When mouse is clicked on the canvas, query a collection of relationships to see if any endpoints
-     * reside at that location. If so, color it and select it as the current relationship.
+     * When mouse is clicked on the canvas, query a collection of relationships
+     * to see if any endpoints reside at that location. If so, color it and
+     * select it as the current relationship.
      *
      * @param event
      */
@@ -50,13 +53,18 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
         ArrayList<Relationship> relationships = CanvasManager.getSharedCanvas().getRelationships();
         for (int i = 0; i < relationships.size(); i++) {
             if (relationships.get(i).getStartPoint().distance(event.getPoint()) <= RADIUS
-                || relationships.get(i).getEndPoint().distance(event.getPoint()) <= RADIUS) {
+                    || relationships.get(i).getEndPoint().distance(event.getPoint()) <= RADIUS) {
                 //check if in delete mode
                 if (m_canvasManager.m_isDeleteMode) {
+                    // changed color to grey for undo/redo before deleteing 
+                    relationships.get(i).setColor(Color.gray);
                     m_canvasManager.deleteRelationship(i);
                     m_canvasManager.setActiveRelationshipIndex(-1);
                     m_canvasManager.toggleDeleteMode();
                     m_canvasManager.repaintCanvas();
+                    // add current state to undoRedoManager
+                    m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getRelationships());
+                    m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getClassBoxes());
                 } else //get the index of the active relationship
                 {
                     m_canvasManager.setActiveRelationshipIndex(i);
@@ -109,6 +117,7 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
 
     /**
      * Logic for moving and rotating relationship lines on the canvas.
+     *
      * @param event
      */
     @Override

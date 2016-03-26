@@ -3,7 +3,7 @@ package uml.controls.listeners;
 import uml.Settings;
 import uml.controls.CanvasManager;
 import uml.models.ClassBox;
-
+import uml.controls.UndoRedoManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -14,13 +14,15 @@ public class ClassBoxListener implements MouseListener, MouseMotionListener {
 
     //Local Variables
     CanvasManager m_canvasManager;
+    UndoRedoManager m_undoRedoManager;
     private boolean m_snapToGrid = true;
-
+    
     /**
      * Constructor
      */
     public ClassBoxListener() {
         m_canvasManager = CanvasManager.getInstance();
+        m_undoRedoManager = UndoRedoManager.getInstance();
     }
 
     /**
@@ -50,9 +52,14 @@ public class ClassBoxListener implements MouseListener, MouseMotionListener {
             box.setClickPoint(event.getPoint());
             //check if in deleteMode
             if (m_canvasManager.m_isDeleteMode) {
+                // changed color to grey for undo/redo before deleteing 
+                box.setBackground(Color.gray);
                 m_canvasManager.deleteClassBox(box);
                 m_canvasManager.toggleDeleteMode();
                 m_canvasManager.repaintCanvas();
+                // add current state to undoRedoManager
+                m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getRelationships());
+                m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getClassBoxes());
             } else {
                 // changed color to blue to show classBox is active
                 box.setBackground(Color.blue);
