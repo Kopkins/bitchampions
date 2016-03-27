@@ -46,6 +46,7 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
      */
     @Override
     public void mousePressed(MouseEvent event) {
+        m_canvasManager.toggleAnchorMode();
         // get the point the mouse is pressed on
         m_canvasManager.setClickPoint(event.getPoint());
         // loop through relationships arraylist and see if click point is within a 5 point radius of
@@ -86,6 +87,7 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
     @Override
     public void mouseReleased(MouseEvent event) {
         int activeIndex = m_canvasManager.getActiveRelationshipIndex();
+        m_canvasManager.toggleAnchorMode();
         if (activeIndex != -1) {
             // change relationship's color back to gray to show it is no longer active and repaint
             ArrayList<Relationship> relationships = CanvasManager.getSharedCanvas().getRelationships();
@@ -126,8 +128,10 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
         if (activeIndex != -1) {
             // get the active relationship
             Relationship activeRelationship = CanvasManager.getSharedCanvas().getRelationships().get(activeIndex);
-            if (SwingUtilities.isLeftMouseButton(event)) {
+            if (SwingUtilities.isLeftMouseButton(event) && !activeRelationship.isAnchored()) {
                 if (activeRelationship.getStartPoint().distance(m_canvasManager.getClickPoint()) <= RADIUS) {
+                    // set the point type to start
+                    m_canvasManager.setPointType("start");
                     // get the distance the origin point is moved
                     int x = activeRelationship.getStartPoint().x - event.getX();
                     int y = activeRelationship.getStartPoint().y - event.getY();
@@ -143,6 +147,8 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
                     // update the click point to where the active relationship's origin point was moved to
                     m_canvasManager.setClickPoint(activeRelationship.getStartPoint());
                 } else {
+                    // set the point type to end
+                    m_canvasManager.setPointType("end");
                     // get the distance the end point is moved
                     int x = activeRelationship.getEndPoint().x - event.getX();
                     int y = activeRelationship.getEndPoint().y - event.getY();
@@ -161,12 +167,16 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
                 }
             } else if (SwingUtilities.isRightMouseButton(event)) {
                 if (activeRelationship.getStartPoint().distance(m_canvasManager.getClickPoint()) <= RADIUS) {
+                    // set the point type to start
+                    m_canvasManager.setPointType("start");
                     // set the active relationship's origin point to the point where the mouse is dragged
                     activeRelationship.setStartPoint(event.getPoint());
                     // update the click point to where the active relationship's origin point was moved to
                     m_canvasManager.setClickPoint(activeRelationship.getStartPoint());
                     activeRelationship.rotate();
                 } else {
+                    // set the point type to end
+                    m_canvasManager.setPointType("end");
                     // set the active relationship's end point to the point where the mouse is dragged
                     activeRelationship.setEndPoint(event.getPoint());
                     // update the click point to where the active relationship's end point was moved to

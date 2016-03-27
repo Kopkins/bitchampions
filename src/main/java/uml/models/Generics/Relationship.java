@@ -13,6 +13,7 @@ public abstract class Relationship extends JComponent {
     protected Polygon m_symbol;
     protected String m_type;
     protected double m_angle;
+    private boolean m_anchored;
 
     /**
      * Initialize the main components of the Relationship
@@ -103,6 +104,23 @@ public abstract class Relationship extends JComponent {
      */
     public double getAngle() {
         return m_angle;
+    }
+    
+     /**
+     * Sets anchored.
+     *
+     */
+    public void setAnchored(boolean b) {
+        m_anchored = b;
+    }
+
+    /**
+     * Gets the value of anchored.
+     *
+     * @return
+     */
+    public boolean isAnchored() {
+        return m_anchored;
     }
 
     /**

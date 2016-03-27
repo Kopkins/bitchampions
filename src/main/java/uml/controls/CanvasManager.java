@@ -18,9 +18,12 @@ public class CanvasManager {
     private static Canvas m_canvas;
     private static CanvasManager m_canvasManager;
     public boolean m_isDeleteMode = false;
+    public boolean m_isAnchorMode = false; 
     private Point m_clickPoint;
     private int m_activeRelationshipIndex = -1;
     private static UndoRedoManager m_undoRedoManager;
+    private String m_pointType = "";
+    
 
     /**
      * Constructor
@@ -245,6 +248,23 @@ public class CanvasManager {
     public void setClickPoint(Point p) {
         m_clickPoint = p;
     }
+    
+    /**
+     * Set point type
+     *
+     */
+    public void setPointType(String s) {
+        m_pointType = s;
+    }
+
+    /**
+     * Get the point type
+     *
+     * @return String
+     */
+    public String getPointType() {
+        return m_pointType;
+    }
 
     /**
      * Repaints the canvas
@@ -414,5 +434,12 @@ public class CanvasManager {
             ResetItemColor();
             m_isDeleteMode = !m_isDeleteMode;
         }
+    }
+    
+    /**
+     * Toggle the anchorMode state on and off.
+     */
+    public void toggleAnchorMode() {
+            m_isAnchorMode = !m_isAnchorMode;
     }
 }

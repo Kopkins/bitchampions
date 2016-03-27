@@ -5,6 +5,8 @@ import uml.controls.EventManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ClassBox extends JPanel {
 
@@ -13,6 +15,7 @@ public class ClassBox extends JPanel {
     private Point m_origin, m_clickPoint;
     private JTextField m_name;
     private JTextArea m_attributes, m_operations;
+    private Map m_anchors;
 
     /**
      * Constructor
@@ -22,6 +25,7 @@ public class ClassBox extends JPanel {
         m_height = 150;
         m_origin = new Point(20, 20);
         m_clickPoint = new Point();
+        m_anchors = new HashMap<Integer, String>();
         init();
     }
 
@@ -129,4 +133,32 @@ public class ClassBox extends JPanel {
             m_operations.setPreferredSize(new Dimension(m_width - 6, m_operations.getHeight()));
         }
     }
+
+    /**
+     * Gets the map of anchors.
+     *
+     * @return
+     */
+    public Map getAnchors() {
+        return m_anchors;
+    }
+
+    /**
+     * Add anchor to map of anchors.
+     *
+     */
+    public void addAnchor(Integer index, String type) {
+        m_anchors.put(index, type);
+    }
+
+    /**
+     * Delete anchor from map of anchors.
+     *
+     */
+    public void deleteAnchor(Integer index) {
+        if (m_anchors.containsKey(index)) {
+            m_anchors.remove(index);
+        }
+    }
+
 }
