@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import uml.models.Generics.Relationship;
+import uml.controls.CanvasManager;
 
 public class ClassBox extends JPanel {
 
@@ -103,6 +105,8 @@ public class ClassBox extends JPanel {
      * Resize the class box
      */
     public void resize(Point p) {
+        int originalWidth = m_width;
+        int originalHeight = m_height;
         //Calculate the distance the mouse traveled
         int adjustedWidth = p.x - m_clickPoint.x;
         int adjustedHeight = p.y - m_clickPoint.y;
@@ -121,16 +125,18 @@ public class ClassBox extends JPanel {
             //If the clickPoint is on bottom of classBox then reisze the height the second textArea
             m_attributes.setPreferredSize(new Dimension(m_width - 6, m_attributes.getHeight()));
             m_operations.setPreferredSize(new Dimension(m_width - 6, m_operations.getHeight() + adjustedHeight));
-
+            moveAnchorsWhenResized(m_width - originalWidth, m_height - originalHeight);
         } else if (m_clickPoint.y > .2 * m_height) {
             //If the clickPoint is on middle of classBox then reisze the height the first textArea
             m_attributes.setPreferredSize(new Dimension(m_width - 6, m_attributes.getHeight() + adjustedHeight));
             m_operations.setPreferredSize(new Dimension(m_width - 6, m_operations.getHeight()));
             //if the middle textArea's height changes then we need to move the last textArea's location 
             m_operations.setLocation(m_operations.getX(), m_operations.getY() + adjustedHeight);
+            moveAnchorsWhenResized(m_width - originalWidth, m_height - originalHeight);
         } else {
             m_attributes.setPreferredSize(new Dimension(m_width - 6, m_attributes.getHeight()));
             m_operations.setPreferredSize(new Dimension(m_width - 6, m_operations.getHeight()));
+            moveAnchorsWhenResized(m_width - originalWidth, m_height - originalHeight);
         }
     }
 
@@ -161,4 +167,36 @@ public class ClassBox extends JPanel {
         }
     }
 
+    /**
+     * Moves the anchors when the classbox is resized
+     *
+     */
+    private void moveAnchorsWhenResized(int adjustedWidth, int adjustedHeight) {
+        Map anchors = m_anchors;
+        //need to move every anchor with the classbox resize
+        for (Object key : anchors.keySet()) {
+            int i = Integer.parseInt(key.toString());
+            Relationship r = CanvasManager.getSharedCanvas().getRelationships().get(i);
+            // determine whether to move the start point or end point of relationship
+            if (anchors.get(key) == "start") {
+                int x = r.getStartPoint().x;
+                //only move the x coord if the x coord of the side of the box the anchor is attached to is moving
+                if (x < MouseInfo.getPointerInfo().getLocation().x) {
+                    x += adjustedWidth;
+                }
+                int y = r.getStartPoint().y + adjustedHeight;
+                r.setStartPoint(new Point(x, y));
+            } else {
+                int x = r.getEndPoint().x;
+                //only move the x coord if the x coord of the side of the box the anchor is attached to is moving
+                if (x > MouseInfo.getPointerInfo().getLocation().x) {
+                    x += adjustedWidth;
+                }
+                int y = r.getEndPoint().y + adjustedHeight;
+                r.setEndPoint(new Point(x, y));
+            }
+            // rotate the angle for the relatioship
+            r.rotate();
+        }
+    }
 }

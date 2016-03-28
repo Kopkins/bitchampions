@@ -176,7 +176,7 @@ public class ClassBoxListener implements MouseListener, MouseMotionListener {
                         x = r.getStartPoint().x + deltaX;
                         y = r.getStartPoint().y + deltaY;
                         r.setStartPoint(new Point(x, y));
-                         //m_canvasManager.setClickPoint(r.getStartPoint());
+                        //m_canvasManager.setClickPoint(r.getStartPoint());
                     } else {
                         x = r.getEndPoint().x + deltaX;
                         y = r.getEndPoint().y + deltaY;
@@ -185,33 +185,13 @@ public class ClassBoxListener implements MouseListener, MouseMotionListener {
                     // rotate the angle for the relatioship and repaint
                     r.rotate();
                     m_canvasManager.repaintCanvas();
-                   
                 }
             } else if (SwingUtilities.isRightMouseButton(event)) {
                 box.resize(event.getPoint());
-                // need to move every anchor associated with the class box as the class box moves
-                Map anchors = box.getAnchors();
-                for (Object key : anchors.keySet()) {
-                    int i = Integer.parseInt(key.toString());
-                    Relationship r = m_canvasManager.getSharedCanvas().getRelationships().get(i);
-                    // determine whether to move the start point or end point of relationship
-                    if (anchors.get(key) == "start") {
-                        int x = r.getStartPoint().x + event.getX() - box.getClickPoint().x;
-                        int y = r.getStartPoint().y + event.getY() - box.getClickPoint().y;
-                        r.setStartPoint(new Point(x, y));
-                    } else {
-                        int x = r.getEndPoint().x + event.getX() - box.getClickPoint().x;
-                        int y = r.getEndPoint().y + event.getY() - box.getClickPoint().y;
-                        r.setEndPoint(new Point(x, y));
-                    }
-                    // rotate the angle for the relatioship and repaint
-                    r.rotate();
-                    CanvasManager.getSharedCanvas().revalidate();
-                    CanvasManager.getSharedCanvas().repaint();
-                }
+                CanvasManager.getSharedCanvas().revalidate();
+                CanvasManager.getSharedCanvas().repaint();
                 box.setClickPoint(event.getPoint());
             }
-
         } catch (ClassCastException ex) {
             System.out.println(ex);
         }
