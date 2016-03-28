@@ -3,7 +3,7 @@ package uml.models;
 import uml.Settings;
 import uml.controls.EventManager;
 import uml.models.Generics.Relationship;
-
+import uml.models.Relationships.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -111,7 +111,7 @@ public class Canvas extends JLayeredPane {
 
         //draw each relationship
         for (Relationship r : m_relationships) {
-            if (r.getType() == "Dependency") {
+            if (r instanceof Dependency) {
                 g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0));
             } else {
                 g2d.setStroke(new BasicStroke(2.0f));
@@ -123,14 +123,14 @@ public class Canvas extends JLayeredPane {
             g2d.setColor(r.getColor());
             g2d.drawLine(x1, y1, x2, y2);
             g2d.rotate(r.getAngle(), r.getEndPoint().x, r.getEndPoint().y);
-            if (r.getType() == "Dependency") {
+            if (r instanceof Dependency) {
                 g2d.setStroke(new BasicStroke(2.0f));
             }
-            if (r.getType() == "Dependency" || r.getType() == "DirectedAssociation") {
+            if (r instanceof Dependency || r instanceof DirectedAssociation) {
                 Polygon symbol = r.getSymbol();
                 g2d.drawLine(symbol.xpoints[0], symbol.ypoints[0], symbol.xpoints[1], symbol.ypoints[1]);
                 g2d.drawLine(symbol.xpoints[0], symbol.ypoints[0], symbol.xpoints[2], symbol.ypoints[2]);
-            } else if (r.getType() == "Composition") {
+            } else if (r instanceof Composition) {
                 g2d.fillPolygon(r.getSymbol());
             } else {
                 g2d.setColor(this.getBackground());

@@ -134,6 +134,7 @@ public class CanvasManager {
                 ResetItemColor();
 
                 Relationship line = RelationshipFactory.getFromType(type);
+                line.setType(type);
                 ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
 
                 getInstance().toggleDeleteMode();
