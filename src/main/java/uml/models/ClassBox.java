@@ -178,7 +178,7 @@ public class ClassBox extends JPanel {
             int i = Integer.parseInt(key.toString());
             Relationship r = CanvasManager.getSharedCanvas().getRelationships().get(i);
             // determine whether to move the start point or end point of relationship
-            if (anchors.get(key) == "start") {
+            if (anchors.get(key).equals("start")) {
                 int x = r.getStartPoint().x;
                 //only move the x coord if its on the right side of the box
                 if (x > m_origin.x + m_name.getWidth()) {
