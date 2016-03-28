@@ -114,20 +114,20 @@ public class ClassBox extends JPanel {
         if (m_clickPoint.x > m_width * .5) {
             m_width += adjustedWidth;
         }
-        //If the clickPoint is not on the upper part of the classBox then resize the height
-        if (m_clickPoint.y > .2 * m_height) {
+        //If the clickPoint is below the attributes text area
+        if (m_clickPoint.y > m_name.getHeight() + m_attributes.getHeight()) {
             m_height += adjustedHeight;
         }
         setSize(new Dimension(m_width, m_height));
         //resize the text fields based on size of the ClassBox
         m_name.setPreferredSize(new Dimension(m_width - 6, m_name.getHeight()));
-        if (m_clickPoint.y > .8 * m_height) {
+        if (m_clickPoint.y > m_name.getHeight() + m_attributes.getHeight() + m_operations.getHeight()) {
             //If the clickPoint is on bottom of classBox then reisze the height the second textArea
             m_attributes.setPreferredSize(new Dimension(m_width - 6, m_attributes.getHeight()));
             m_operations.setPreferredSize(new Dimension(m_width - 6, m_operations.getHeight() + adjustedHeight));
             moveAnchorsWhenResized(m_width - originalWidth, m_height - originalHeight);
-        } else if (m_clickPoint.y > .2 * m_height) {
-            //If the clickPoint is on middle of classBox then reisze the height the first textArea
+        } else if (m_clickPoint.y > m_name.getHeight() + m_attributes.getHeight()) {
+            //If the clickPoint is below the attributes text area, but not on bottom of classBox, then reisze the height the first textArea
             m_attributes.setPreferredSize(new Dimension(m_width - 6, m_attributes.getHeight() + adjustedHeight));
             m_operations.setPreferredSize(new Dimension(m_width - 6, m_operations.getHeight()));
             //if the middle textArea's height changes then we need to move the last textArea's location 
@@ -180,19 +180,27 @@ public class ClassBox extends JPanel {
             // determine whether to move the start point or end point of relationship
             if (anchors.get(key) == "start") {
                 int x = r.getStartPoint().x;
-                //only move the x coord if the x coord of the side of the box the anchor is attached to is moving
-                if (x < MouseInfo.getPointerInfo().getLocation().x) {
+                //only move the x coord if its on the right side of the box
+                if (x > m_origin.x + m_name.getWidth()) {
                     x += adjustedWidth;
                 }
-                int y = r.getStartPoint().y + adjustedHeight;
+                //only move the y coord if its not on top of the box
+                int y = r.getStartPoint().y;
+                if(y > m_origin.y + 10){
+                    y += adjustedHeight;
+                }
                 r.setStartPoint(new Point(x, y));
             } else {
                 int x = r.getEndPoint().x;
-                //only move the x coord if the x coord of the side of the box the anchor is attached to is moving
-                if (x > MouseInfo.getPointerInfo().getLocation().x) {
+                //only move the x coord if its on the right side of the box
+                if (x > m_origin.x + m_name.getWidth()) {
                     x += adjustedWidth;
                 }
-                int y = r.getEndPoint().y + adjustedHeight;
+                //only move the y coord if its not on top of the box
+                int y = r.getEndPoint().y;
+                if(y > m_origin.y + 10){
+                    y += adjustedHeight;
+                }
                 r.setEndPoint(new Point(x, y));
             }
             // rotate the angle for the relatioship
