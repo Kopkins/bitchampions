@@ -60,6 +60,13 @@ public class ClassBoxListener implements MouseListener, MouseMotionListener {
                 box.setBackground(Color.gray);
                 m_canvasManager.deleteClassBox(box);
                 m_canvasManager.toggleDeleteMode();
+                // need to delete every anchor associated with the class box 
+                Map anchors = box.getAnchors();
+                for (Object key : anchors.keySet()) {
+                    int i = Integer.parseInt(key.toString());
+                    Relationship r = m_canvasManager.getSharedCanvas().getRelationships().get(i);
+                    r.setAnchoredCount(r.getAnchoredCount() - 1);
+                }
                 m_canvasManager.repaintCanvas();
                 // add current state to undoRedoManager
                 m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getDeepCopyRelationships());
@@ -108,10 +115,13 @@ public class ClassBoxListener implements MouseListener, MouseMotionListener {
                 box.setBackground(Color.blue);
                 //add the anchor to the classbox
                 int index = m_canvasManager.getActiveRelationshipIndex();
-                box.addAnchor(index, m_canvasManager.getPointType());
-                // set anchored to true for the active relationship
-                ArrayList<Relationship> relationships = m_canvasManager.getSharedCanvas().getRelationships();
-                relationships.get(index).setAnchored(true);
+                // if box already has this anchor dont add
+                if (!box.getAnchors().containsKey(index)) {
+                    box.addAnchor(index, m_canvasManager.getPointType());
+                    // set anchored to true for the active relationship
+                    Relationship r = m_canvasManager.getSharedCanvas().getRelationships().get(index);
+                    r.setAnchoredCount(r.getAnchoredCount() + 1);
+                }
             }
         } catch (ClassCastException ex) {
             System.out.println(ex);
@@ -134,8 +144,8 @@ public class ClassBoxListener implements MouseListener, MouseMotionListener {
                 int index = m_canvasManager.getActiveRelationshipIndex();
                 box.deleteAnchor(index);
                 // set anchored to false for the active relationship
-                ArrayList<Relationship> relationships = m_canvasManager.getSharedCanvas().getRelationships();
-                relationships.get(index).setAnchored(false);
+                Relationship r = m_canvasManager.getSharedCanvas().getRelationships().get(index);
+                r.setAnchoredCount(r.getAnchoredCount() - 1);
             }
             // change color back to gray to show classBox is no longer active
             box.setBackground(Color.gray);
@@ -175,7 +185,7 @@ public class ClassBoxListener implements MouseListener, MouseMotionListener {
                     int i = Integer.parseInt(key.toString());
                     Relationship r = m_canvasManager.getSharedCanvas().getRelationships().get(i);
                     // determine whether to move the start point or end point of relationship
-                    if (anchors.get(key).equals ("start")) {
+                    if (anchors.get(key).equals("start")) {
                         x = r.getStartPoint().x + deltaX;
                         y = r.getStartPoint().y + deltaY;
                         r.setStartPoint(new Point(x, y));

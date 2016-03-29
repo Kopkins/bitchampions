@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import uml.models.ClassBox;
 
-public abstract class Relationship extends JComponent implements Cloneable{
+public abstract class Relationship extends JComponent implements Cloneable {
 
     // Local Variables
     protected Point m_start, m_end;
@@ -14,7 +14,7 @@ public abstract class Relationship extends JComponent implements Cloneable{
     protected Polygon m_symbol;
     protected String m_type;
     protected double m_angle;
-    private boolean m_anchored;
+    private int m_anchoredCount;
 
     /**
      * Initialize the main components of the Relationship
@@ -24,6 +24,7 @@ public abstract class Relationship extends JComponent implements Cloneable{
         m_start = new Point(320, 20);
         m_end = new Point(440, 20);
         m_color = Settings.Colors.DEFAULT.color;
+        m_anchoredCount = 0;
     }
 
     /**
@@ -106,13 +107,19 @@ public abstract class Relationship extends JComponent implements Cloneable{
     public double getAngle() {
         return m_angle;
     }
-    
-     /**
+
+    /**
      * Sets anchored.
      *
+     * @param int
      */
-    public void setAnchored(boolean b) {
-        m_anchored = b;
+    public void setAnchoredCount(int i) {
+        // the relationship can be anchored to atmost 2 classboxes, ensure that this is always the case
+        if (i > 2) {
+            m_anchoredCount = 2;
+        } else {
+            m_anchoredCount = i;
+        }
     }
 
     /**
@@ -120,8 +127,8 @@ public abstract class Relationship extends JComponent implements Cloneable{
      *
      * @return
      */
-    public boolean isAnchored() {
-        return m_anchored;
+    public int getAnchoredCount() {
+        return m_anchoredCount;
     }
 
     /**
@@ -168,13 +175,13 @@ public abstract class Relationship extends JComponent implements Cloneable{
     public void setSymbol(Polygon symbol) {
         m_symbol = symbol;
     }
-    
+
     /**
      * Override clone method
      *
      * @return clone of relationship
      */
-     @Override
+    @Override
     public Relationship clone() {
         final Relationship copy;
 
