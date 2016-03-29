@@ -4,8 +4,9 @@ import uml.Settings;
 
 import javax.swing.*;
 import java.awt.*;
+import uml.models.ClassBox;
 
-public abstract class Relationship extends JComponent {
+public abstract class Relationship extends JComponent implements Cloneable{
 
     // Local Variables
     protected Point m_start, m_end;
@@ -166,6 +167,25 @@ public abstract class Relationship extends JComponent {
      */
     public void setSymbol(Polygon symbol) {
         m_symbol = symbol;
+    }
+    
+    /**
+     * Override clone method
+     *
+     * @return clone of relationship
+     */
+     @Override
+    public Relationship clone() {
+        final Relationship copy;
+
+        try {
+            copy = (Relationship) super.clone();
+        } catch (CloneNotSupportedException e) {
+
+            e.printStackTrace();
+            return null;
+        }
+        return copy;
     }
 
 }

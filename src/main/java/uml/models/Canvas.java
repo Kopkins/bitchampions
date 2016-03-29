@@ -78,12 +78,34 @@ public class Canvas extends JLayeredPane {
     public ArrayList<Relationship> getRelationships() {
         return m_relationships;
     }
+    
+    /**
+     * gets a deep copy the ArrayList of Relationships
+     */
+    public ArrayList<Relationship> getDeepCopyRelationships() {
+        ArrayList<Relationship> deepCopy = new ArrayList<Relationship>();
+        for(Relationship r : m_relationships){
+            deepCopy.add(r.clone());
+        }
+        return deepCopy;
+    }
 
     /**
      * gets the ArrayList of ClassBoxes
      */
     public ArrayList<ClassBox> getClassBoxes() {
         return m_classBoxes;
+    }
+    
+    /**
+     * gets a deep copy the ArrayList of ClassBoxes
+     */
+    public ArrayList<ClassBox> getDeepCopyClassBoxes() {
+        ArrayList<ClassBox> deepCopy = new ArrayList<ClassBox>();
+        for(ClassBox cb : m_classBoxes){
+            deepCopy.add(cb.clone());
+        }
+        return deepCopy;
     }
 
     /**

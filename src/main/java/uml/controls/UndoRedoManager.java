@@ -47,7 +47,7 @@ public class UndoRedoManager {
      * Pushes relationship array list to relationships undo stack
      */
     public void pushRelationshipsToUndo(ArrayList<Relationship> retionships) {
-        m_undoRelationships.add(new ArrayList<Relationship>(retionships));
+        m_undoRelationships.add(retionships);
     }
 
     /**
@@ -73,7 +73,7 @@ public class UndoRedoManager {
      * Pushes classbox arraylist to classBox undo stack
      */
     public void pushClassBoxesToUndo(ArrayList<ClassBox> classBoxes) {
-        m_undoClassBoxes.add(new ArrayList<ClassBox>(classBoxes));
+        m_undoClassBoxes.add(classBoxes);
     }
 
     /**
@@ -98,7 +98,7 @@ public class UndoRedoManager {
      * Pushes relationship array list to relationship redo stack
      */
     public void pushRelationshipsToRedo(ArrayList<Relationship> retionships) {
-        m_redoRelationships.add(new ArrayList<Relationship>(retionships));    
+        m_redoRelationships.add(retionships);    
     }
 
     /**
@@ -125,7 +125,7 @@ public class UndoRedoManager {
      * Pushes classbox arraylist to classBox redo stack
      */
     public void pushClassBoxesToRedo(ArrayList<ClassBox> classBoxes) {
-        m_redoClassBoxes.add(new ArrayList<ClassBox>(classBoxes));
+        m_redoClassBoxes.add(classBoxes);
     }
 
     /**

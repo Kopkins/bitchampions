@@ -62,8 +62,8 @@ public class ClassBoxListener implements MouseListener, MouseMotionListener {
                 m_canvasManager.toggleDeleteMode();
                 m_canvasManager.repaintCanvas();
                 // add current state to undoRedoManager
-                m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getRelationships());
-                m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getClassBoxes());
+                m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getDeepCopyRelationships());
+                m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getDeepCopyClassBoxes());
             } else {
                 // changed color to blue to show classBox is active
                 box.setBackground(Color.blue);
@@ -84,6 +84,9 @@ public class ClassBoxListener implements MouseListener, MouseMotionListener {
         try {
             box = (ClassBox) event.getSource();
             box.setBackground(Color.gray);
+            // add current state to undoRedoManager
+            m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getDeepCopyRelationships());
+            m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getDeepCopyClassBoxes());
         } catch (ClassCastException ex) {
             System.out.println(ex);
         }
@@ -172,7 +175,7 @@ public class ClassBoxListener implements MouseListener, MouseMotionListener {
                     int i = Integer.parseInt(key.toString());
                     Relationship r = m_canvasManager.getSharedCanvas().getRelationships().get(i);
                     // determine whether to move the start point or end point of relationship
-                    if (anchors.get(key) == "start") {
+                    if (anchors.get(key).equals ("start")) {
                         x = r.getStartPoint().x + deltaX;
                         y = r.getStartPoint().y + deltaY;
                         r.setStartPoint(new Point(x, y));

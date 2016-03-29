@@ -2,7 +2,7 @@ package uml.models;
 
 import uml.Settings;
 import uml.controls.EventManager;
-
+import java.io.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.Map;
 import uml.models.Generics.Relationship;
 import uml.controls.CanvasManager;
 
-public class ClassBox extends JPanel {
+public class ClassBox extends JPanel implements Cloneable {
 
     // Local Variables
     private int m_width, m_height;
@@ -50,13 +50,13 @@ public class ClassBox extends JPanel {
 
         //initialize the textarea for the classbox attributes and set it's size and border
         m_attributes = new JTextArea();
-        m_attributes.setLineWrap(true);
+        //m_attributes.setLineWrap(true);
         m_attributes.setPreferredSize(new Dimension(m_width - 6, (m_height - 18) * 3 / 7));
         m_attributes.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
         //initialize the textarea for the classbox methods and set it's size and border
         m_operations = new JTextArea();
-        m_operations.setLineWrap(true);
+        //m_operations.setLineWrap(true);
         m_operations.setPreferredSize(new Dimension(m_width - 6, (m_height - 18) * 3 / 7));
         m_operations.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
@@ -186,7 +186,7 @@ public class ClassBox extends JPanel {
                 }
                 //only move the y coord if its not on top of the box
                 int y = r.getStartPoint().y;
-                if(y > m_origin.y + 10){
+                if (y > m_origin.y + 10) {
                     y += adjustedHeight;
                 }
                 r.setStartPoint(new Point(x, y));
@@ -198,7 +198,7 @@ public class ClassBox extends JPanel {
                 }
                 //only move the y coord if its not on top of the box
                 int y = r.getEndPoint().y;
-                if(y > m_origin.y + 10){
+                if (y > m_origin.y + 10) {
                     y += adjustedHeight;
                 }
                 r.setEndPoint(new Point(x, y));
@@ -206,5 +206,37 @@ public class ClassBox extends JPanel {
             // rotate the angle for the relatioship
             r.rotate();
         }
+    }
+
+    /**
+     * Override clone method using serialization
+     * @return
+     * returns a clone of the classbox 
+     * Source http://www.javaworld.com/article/2077578/learn-java/java-tip-76--an-alternative-to-the-deep-copy-technique.html
+     */
+    @Override
+    public ClassBox clone() {
+        ObjectOutputStream oos;
+        ObjectInputStream ois;
+      try
+      {
+         ByteArrayOutputStream bos = new ByteArrayOutputStream();
+         oos = new ObjectOutputStream(bos);
+         oos.writeObject(this);   
+         oos.flush();              
+         ByteArrayInputStream bin = new ByteArrayInputStream(bos.toByteArray());
+         ois = new ObjectInputStream(bin);
+         oos.close();
+         ois.close();
+         ClassBox copy = (ClassBox)ois.readObject(); 
+         copy.addMouseListener(EventManager.getClassBoxListener());
+         copy.addMouseMotionListener(EventManager.getClassBoxListener());
+         return copy;
+      }
+      catch(Exception e)
+      {
+         e.printStackTrace();
+         return null;
+      }
     }
 }

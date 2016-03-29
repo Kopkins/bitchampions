@@ -64,8 +64,8 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
                     m_canvasManager.toggleDeleteMode();
                     m_canvasManager.repaintCanvas();
                     // add current state to undoRedoManager
-                    m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getRelationships());
-                    m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getClassBoxes());
+                    m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getDeepCopyRelationships());
+                    m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getDeepCopyClassBoxes());
                 } else //get the index of the active relationship
                 {
                     m_canvasManager.setActiveRelationshipIndex(i);
@@ -94,6 +94,9 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
             relationships.get(activeIndex).setColor(Settings.Colors.DEFAULT.color);
             m_canvasManager.repaintCanvas();
             m_canvasManager.setActiveRelationshipIndex(-1);
+            // add current state to undoRedoManager
+            m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getDeepCopyRelationships());
+            m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getDeepCopyClassBoxes());
         }
     }
 

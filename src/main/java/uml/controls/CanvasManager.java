@@ -18,18 +18,17 @@ public class CanvasManager {
     private static Canvas m_canvas;
     private static CanvasManager m_canvasManager;
     public boolean m_isDeleteMode = false;
-    public boolean m_isAnchorMode = false; 
+    public boolean m_isAnchorMode = false;
     private Point m_clickPoint;
     private int m_activeRelationshipIndex = -1;
     private static UndoRedoManager m_undoRedoManager;
     private String m_pointType = "";
-    
 
     /**
      * Constructor
      */
     public CanvasManager() {
-       m_undoRedoManager = UndoRedoManager.getInstance();
+        m_undoRedoManager = UndoRedoManager.getInstance();
     }
 
     /**
@@ -114,8 +113,8 @@ public class CanvasManager {
                 getSharedCanvas().revalidate();
                 getSharedCanvas().repaint();
                 // add current state to undoRedoManager
-                m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getRelationships());
-                m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getClassBoxes());
+                m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getDeepCopyRelationships());
+                m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getDeepCopyClassBoxes());
             }
         };
         return listener;
@@ -145,8 +144,8 @@ public class CanvasManager {
 
                 getSharedCanvas().repaint();
                 // add current state to undoRedoManager
-                m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getRelationships());
-                m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getClassBoxes());
+                m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getDeepCopyRelationships());
+                m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getDeepCopyClassBoxes());
             }
         };
         return listener;
@@ -166,8 +165,8 @@ public class CanvasManager {
                 getSharedCanvas().revalidate();
                 getSharedCanvas().repaint();
                 // add current state to undoRedoManager
-        m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getRelationships());
-        m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getClassBoxes());
+                m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getDeepCopyRelationships());
+                m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getDeepCopyClassBoxes());
             }
         };
         return listener;
@@ -249,7 +248,7 @@ public class CanvasManager {
     public void setClickPoint(Point p) {
         m_clickPoint = p;
     }
-    
+
     /**
      * Set point type
      *
@@ -323,8 +322,8 @@ public class CanvasManager {
                 getSharedCanvas().setClassBoxes(slm.getClassBoxes());
                 refreshCanvas();
                 // add current state to undoRedoManager
-                m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getRelationships());
-                m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getClassBoxes());
+                m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getDeepCopyRelationships());
+                m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getDeepCopyClassBoxes());
             }
         };
         return listener;
@@ -343,6 +342,9 @@ public class CanvasManager {
             public void actionPerformed(ActionEvent e) {
                 getSharedCanvas().setClassBoxes(m_undoRedoManager.popClassBoxesFromUndo());
                 getSharedCanvas().setRelationships(m_undoRedoManager.popRelationshipsFromUndo());
+                // set the classboxes and relationships to deep copies
+                getSharedCanvas().setRelationships(getSharedCanvas().getDeepCopyRelationships());
+                getSharedCanvas().setClassBoxes(getSharedCanvas().getDeepCopyClassBoxes());
                 refreshCanvas();
             }
         };
@@ -363,6 +365,9 @@ public class CanvasManager {
             public void actionPerformed(ActionEvent e) {
                 getSharedCanvas().setClassBoxes(m_undoRedoManager.popClassBoxesFromRedo());
                 getSharedCanvas().setRelationships(m_undoRedoManager.popRelationshipsFromRedo());
+                // set the classboxes and relationships to deep copies
+                getSharedCanvas().setRelationships(getSharedCanvas().getDeepCopyRelationships());
+                getSharedCanvas().setClassBoxes(getSharedCanvas().getDeepCopyClassBoxes());
                 refreshCanvas();
             }
         };
@@ -436,11 +441,11 @@ public class CanvasManager {
             m_isDeleteMode = !m_isDeleteMode;
         }
     }
-    
+
     /**
      * Toggle the anchorMode state on and off.
      */
     public void toggleAnchorMode() {
-            m_isAnchorMode = !m_isAnchorMode;
+        m_isAnchorMode = !m_isAnchorMode;
     }
 }
