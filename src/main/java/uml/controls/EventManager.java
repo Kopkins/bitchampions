@@ -1,7 +1,6 @@
 package uml.controls;
 
-import uml.controls.listeners.ClassBoxListener;
-import uml.controls.listeners.RelationshipListener;
+import uml.controls.listeners.*;
 
 public class EventManager {
 
@@ -9,13 +8,15 @@ public class EventManager {
     private static EventManager m_eventManager;
     private ClassBoxListener m_classBoxListener;
     private RelationshipListener m_relationshipListener;
+    private ClassBoxKeyListener m_classBoxKeyListener;
 
     /**
-     * Constructor that takes a ClassBoxManager
+     * Constructor
      */
     private EventManager() {
         m_classBoxListener = new ClassBoxListener();
         m_relationshipListener = new RelationshipListener();
+        m_classBoxKeyListener = new ClassBoxKeyListener();
     }
 
     /**
@@ -46,5 +47,14 @@ public class EventManager {
      */
     public static RelationshipListener getRelationshipListener() {
         return getInstance().m_relationshipListener;
+    }
+
+    /**
+     * Get the ClassBoxKeyListener
+     *
+     * @return ClassBoxKeyListener
+     */
+    public static ClassBoxKeyListener getClassBoxKeyListener() {
+        return getInstance().m_classBoxKeyListener;
     }
 }

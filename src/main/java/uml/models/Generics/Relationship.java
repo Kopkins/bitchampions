@@ -4,8 +4,9 @@ import uml.Settings;
 
 import javax.swing.*;
 import java.awt.*;
+import uml.models.ClassBox;
 
-public abstract class Relationship extends JComponent {
+public abstract class Relationship extends JComponent implements Cloneable {
 
     // Local Variables
     protected Point m_start, m_end;
@@ -13,6 +14,7 @@ public abstract class Relationship extends JComponent {
     protected Polygon m_symbol;
     protected String m_type;
     protected double m_angle;
+    private int m_anchoredCount;
 
     /**
      * Initialize the main components of the Relationship
@@ -22,6 +24,7 @@ public abstract class Relationship extends JComponent {
         m_start = new Point(320, 20);
         m_end = new Point(440, 20);
         m_color = Settings.Colors.DEFAULT.color;
+        m_anchoredCount = 0;
     }
 
     /**
@@ -106,6 +109,29 @@ public abstract class Relationship extends JComponent {
     }
 
     /**
+     * Sets anchored.
+     *
+     * @param int
+     */
+    public void setAnchoredCount(int i) {
+        // the relationship can be anchored to atmost 2 classboxes, ensure that this is always the case
+        if (i > 2) {
+            m_anchoredCount = 2;
+        } else {
+            m_anchoredCount = i;
+        }
+    }
+
+    /**
+     * Gets the value of anchored.
+     *
+     * @return
+     */
+    public int getAnchoredCount() {
+        return m_anchoredCount;
+    }
+
+    /**
      * Translate the current relationship.
      *
      * @param dx, which is the change in the horizontal component of the point.
@@ -148,6 +174,25 @@ public abstract class Relationship extends JComponent {
      */
     public void setSymbol(Polygon symbol) {
         m_symbol = symbol;
+    }
+
+    /**
+     * Override clone method
+     *
+     * @return clone of relationship
+     */
+    @Override
+    public Relationship clone() {
+        final Relationship copy;
+
+        try {
+            copy = (Relationship) super.clone();
+        } catch (CloneNotSupportedException e) {
+
+            e.printStackTrace();
+            return null;
+        }
+        return copy;
     }
 
 }
