@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import uml.models.Generics.Relationship;
-import uml.controls.CanvasManager;
+import uml.controls.*;
 
 public class ClassBox extends JPanel implements Cloneable {
 
@@ -47,18 +47,21 @@ public class ClassBox extends JPanel implements Cloneable {
         m_name.setHorizontalAlignment(SwingConstants.CENTER);
         m_name.setPreferredSize(new Dimension(m_width - 6, (m_height - 18) / 7));
         m_name.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        m_name.addKeyListener(EventManager.getTextFieldKeyListener());
 
         //initialize the textarea for the classbox attributes and set it's size and border
         m_attributes = new JTextArea();
-        //m_attributes.setLineWrap(true);
+        m_attributes.setLineWrap(true);
         m_attributes.setPreferredSize(new Dimension(m_width - 6, (m_height - 18) * 3 / 7));
         m_attributes.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        m_attributes.addKeyListener(EventManager.getTextAreaKeyListener());
 
         //initialize the textarea for the classbox methods and set it's size and border
         m_operations = new JTextArea();
-        //m_operations.setLineWrap(true);
+        m_operations.setLineWrap(true);
         m_operations.setPreferredSize(new Dimension(m_width - 6, (m_height - 18) * 3 / 7));
         m_operations.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        m_operations.addKeyListener(EventManager.getTextAreaKeyListener());
 
         //add the name, attribute, and method fields to the classbox
         add(m_name);
@@ -228,9 +231,13 @@ public class ClassBox extends JPanel implements Cloneable {
          ois = new ObjectInputStream(bin);
          oos.close();
          ois.close();
-         ClassBox copy = (ClassBox)ois.readObject(); 
+         ClassBox copy = (ClassBox)ois.readObject();
+         // add event listeners to the copy
          copy.addMouseListener(EventManager.getClassBoxListener());
          copy.addMouseMotionListener(EventManager.getClassBoxListener());
+         copy.m_name.addKeyListener(EventManager.getTextFieldKeyListener());
+         copy.m_attributes.addKeyListener(EventManager.getTextAreaKeyListener());
+         copy.m_operations.addKeyListener(EventManager.getTextAreaKeyListener());
          return copy;
       }
       catch(Exception e)
