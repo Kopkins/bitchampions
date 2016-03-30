@@ -1,7 +1,7 @@
 package uml.models;
 
 import uml.Settings;
-import uml.controls.EventManager;
+import uml.controls.CanvasManager;
 import java.io.*;
 import javax.swing.*;
 import java.awt.*;
@@ -47,21 +47,21 @@ public class ClassBox extends JPanel implements Cloneable {
         m_name.setHorizontalAlignment(SwingConstants.CENTER);
         m_name.setPreferredSize(new Dimension(m_width - 6, (m_height - 18) / 7));
         m_name.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        m_name.addKeyListener(EventManager.getTextFieldKeyListener());
+        m_name.addKeyListener(EventManager.getClassBoxKeyListener());
 
         //initialize the textarea for the classbox attributes and set it's size and border
         m_attributes = new JTextArea();
         m_attributes.setLineWrap(true);
         m_attributes.setPreferredSize(new Dimension(m_width - 6, (m_height - 18) * 3 / 7));
         m_attributes.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        m_attributes.addKeyListener(EventManager.getTextAreaKeyListener());
+        m_attributes.addKeyListener(EventManager.getClassBoxKeyListener());
 
         //initialize the textarea for the classbox methods and set it's size and border
         m_operations = new JTextArea();
         m_operations.setLineWrap(true);
         m_operations.setPreferredSize(new Dimension(m_width - 6, (m_height - 18) * 3 / 7));
         m_operations.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        m_operations.addKeyListener(EventManager.getTextAreaKeyListener());
+        m_operations.addKeyListener(EventManager.getClassBoxKeyListener());
 
         //add the name, attribute, and method fields to the classbox
         add(m_name);
@@ -213,37 +213,34 @@ public class ClassBox extends JPanel implements Cloneable {
 
     /**
      * Override clone method using serialization
-     * @return
-     * returns a clone of the classbox 
-     * Source http://www.javaworld.com/article/2077578/learn-java/java-tip-76--an-alternative-to-the-deep-copy-technique.html
+     *
+     * @return returns a clone of the classbox Source
+     * http://www.javaworld.com/article/2077578/learn-java/java-tip-76--an-alternative-to-the-deep-copy-technique.html
      */
     @Override
     public ClassBox clone() {
         ObjectOutputStream oos;
         ObjectInputStream ois;
-      try
-      {
-         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-         oos = new ObjectOutputStream(bos);
-         oos.writeObject(this);   
-         oos.flush();              
-         ByteArrayInputStream bin = new ByteArrayInputStream(bos.toByteArray());
-         ois = new ObjectInputStream(bin);
-         oos.close();
-         ois.close();
-         ClassBox copy = (ClassBox)ois.readObject();
-         // add event listeners to the copy
-         copy.addMouseListener(EventManager.getClassBoxListener());
-         copy.addMouseMotionListener(EventManager.getClassBoxListener());
-         copy.m_name.addKeyListener(EventManager.getTextFieldKeyListener());
-         copy.m_attributes.addKeyListener(EventManager.getTextAreaKeyListener());
-         copy.m_operations.addKeyListener(EventManager.getTextAreaKeyListener());
-         return copy;
-      }
-      catch(Exception e)
-      {
-         e.printStackTrace();
-         return null;
-      }
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            oos = new ObjectOutputStream(bos);
+            oos.writeObject(this);
+            oos.flush();
+            ByteArrayInputStream bin = new ByteArrayInputStream(bos.toByteArray());
+            ois = new ObjectInputStream(bin);
+            oos.close();
+            ois.close();
+            ClassBox copy = (ClassBox) ois.readObject();
+            // add event listeners to the copy
+            copy.addMouseListener(EventManager.getClassBoxListener());
+            copy.addMouseMotionListener(EventManager.getClassBoxListener());
+            copy.m_name.addKeyListener(EventManager.getClassBoxKeyListener());
+            copy.m_attributes.addKeyListener(EventManager.getClassBoxKeyListener());
+            copy.m_operations.addKeyListener(EventManager.getClassBoxKeyListener());
+            return copy;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -8,8 +8,7 @@ public class EventManager {
     private static EventManager m_eventManager;
     private ClassBoxListener m_classBoxListener;
     private RelationshipListener m_relationshipListener;
-    private TextFieldKeyListener m_textFieldKeyListener;
-    private TextAreaKeyListener m_textAreaKeyListener;
+    private ClassBoxKeyListener m_classBoxKeyListener;
 
     /**
      * Constructor
@@ -17,8 +16,7 @@ public class EventManager {
     private EventManager() {
         m_classBoxListener = new ClassBoxListener();
         m_relationshipListener = new RelationshipListener();
-        m_textAreaKeyListener = new TextAreaKeyListener();
-        m_textFieldKeyListener = new TextFieldKeyListener();
+        m_classBoxKeyListener = new ClassBoxKeyListener();
     }
 
     /**
@@ -52,20 +50,11 @@ public class EventManager {
     }
 
     /**
-     * Get the TextAreaKeyListener
+     * Get the ClassBoxKeyListener
      *
-     * @return TextAreaKeyListener
+     * @return ClassBoxKeyListener
      */
-    public static TextAreaKeyListener getTextAreaKeyListener() {
-        return getInstance().m_textAreaKeyListener;
-    }
-    
-    /**
-     * Get the TextFieldKeyListener
-     *
-     * @return TextFieldKeyListener
-     */
-    public static TextFieldKeyListener getTextFieldKeyListener() {
-        return getInstance().m_textFieldKeyListener;
+    public static ClassBoxKeyListener getClassBoxKeyListener() {
+        return getInstance().m_classBoxKeyListener;
     }
 }

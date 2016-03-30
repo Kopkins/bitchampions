@@ -7,11 +7,10 @@ package uml.controls.listeners;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import javax.swing.JTextArea;
 import uml.controls.CanvasManager;
 import uml.controls.UndoRedoManager;
 
-public class TextAreaKeyListener implements KeyListener {
+public class ClassBoxKeyListener implements KeyListener {
 
     //Local Variables
     UndoRedoManager m_undoRedoManager;
@@ -19,7 +18,7 @@ public class TextAreaKeyListener implements KeyListener {
     /**
      * Constructor
      */
-    public TextAreaKeyListener() {
+    public ClassBoxKeyListener() {
         m_undoRedoManager = UndoRedoManager.getInstance();
     }
 
@@ -33,24 +32,17 @@ public class TextAreaKeyListener implements KeyListener {
     }
 
     /**
-     * Method to save the canvas state to undo/red manager when enter is pressed
+     * Override keyPressed method to save the canvas state to undo/red manager
+     * when control + enter is pressed
      *
      * @param event
      */
     @Override
     public void keyPressed(KeyEvent e) {
-     JTextArea area;
-        try {
-            area = (JTextArea) e.getSource();
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                // add current state to undoRedoManager
-                m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getDeepCopyRelationships());
-                m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getDeepCopyClassBoxes());
-            }
-
-        } catch (ClassCastException ex) {
-            System.out.println(ex);
-            throw ex;
+        if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
+            // add current state to undoRedoManager
+            m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getDeepCopyRelationships());
+            m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getDeepCopyClassBoxes());
         }
     }
 
