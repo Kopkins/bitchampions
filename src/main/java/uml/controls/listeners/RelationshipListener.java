@@ -46,7 +46,6 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
      */
     @Override
     public void mousePressed(MouseEvent event) {
-        m_canvasManager.toggleAnchorMode();
         // get the point the mouse is pressed on
         m_canvasManager.setClickPoint(event.getPoint());
         // loop through relationships arraylist and see if click point is within a 5 point radius of
@@ -55,6 +54,7 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
         for (int i = 0; i < relationships.size(); i++) {
             if (relationships.get(i).getStartPoint().distance(event.getPoint()) <= RADIUS
                     || relationships.get(i).getEndPoint().distance(event.getPoint()) <= RADIUS) {
+                m_canvasManager.toggleAnchorMode();
                 //check if in delete mode
                 if (m_canvasManager.m_isDeleteMode) {
                     // changed color to grey for undo/redo before deleteing 
@@ -87,8 +87,8 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
     @Override
     public void mouseReleased(MouseEvent event) {
         int activeIndex = m_canvasManager.getActiveRelationshipIndex();
-        m_canvasManager.toggleAnchorMode();
         if (activeIndex != -1) {
+             m_canvasManager.toggleAnchorMode();
             // change relationship's color back to gray to show it is no longer active and repaint
             ArrayList<Relationship> relationships = CanvasManager.getSharedCanvas().getRelationships();
             relationships.get(activeIndex).setColor(Settings.Colors.DEFAULT.color);

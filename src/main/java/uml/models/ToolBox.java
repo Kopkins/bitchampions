@@ -19,7 +19,7 @@ public class ToolBox extends JPanel {
      */
     private void init() {
 
-        this.setLayout(new GridLayout(9, 1));
+        this.setLayout(new GridLayout(13, 1));
 
         bindButtons();
     }

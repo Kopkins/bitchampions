@@ -117,25 +117,30 @@ public class ClassBox extends JPanel implements Cloneable {
         if (m_clickPoint.x > m_width * .5) {
             m_width += adjustedWidth;
         }
-        //If the clickPoint is below the attributes text area
-        if (m_clickPoint.y > m_name.getHeight() + m_attributes.getHeight()) {
-            m_height += adjustedHeight;
-        }
-        setSize(new Dimension(m_width, m_height));
-        //resize the text fields based on size of the ClassBox
-        m_name.setPreferredSize(new Dimension(m_width - 6, m_name.getHeight()));
-        if (m_clickPoint.y > m_name.getHeight() + m_attributes.getHeight() + m_operations.getHeight()) {
-            //If the clickPoint is on bottom of classBox then reisze the height the second textArea
-            m_attributes.setPreferredSize(new Dimension(m_width - 6, m_attributes.getHeight()));
-            m_operations.setPreferredSize(new Dimension(m_width - 6, m_operations.getHeight() + adjustedHeight));
-            moveAnchorsWhenResized(m_width - originalWidth, m_height - originalHeight);
-        } else if (m_clickPoint.y > m_name.getHeight() + m_attributes.getHeight()) {
-            //If the clickPoint is below the attributes text area, but not on bottom of classBox, then reisze the height the first textArea
-            m_attributes.setPreferredSize(new Dimension(m_width - 6, m_attributes.getHeight() + adjustedHeight));
-            m_operations.setPreferredSize(new Dimension(m_width - 6, m_operations.getHeight()));
-            //if the middle textArea's height changes then we need to move the last textArea's location 
-            m_operations.setLocation(m_operations.getX(), m_operations.getY() + adjustedHeight);
-            moveAnchorsWhenResized(m_width - originalWidth, m_height - originalHeight);
+        //ensure that the class box does not shrink beyond name area
+        if (p.y > m_name.getHeight() + 25) {
+            //If the clickPoint is below the attributes text area
+            if (m_clickPoint.y > m_name.getHeight() + m_attributes.getHeight()) {
+                m_height += adjustedHeight;
+            }
+
+            setSize(new Dimension(m_width, m_height));
+            //resize the text fields based on size of the ClassBox
+            m_name.setPreferredSize(new Dimension(m_width - 6, m_name.getHeight()));
+            if (m_clickPoint.y > m_name.getHeight() + m_attributes.getHeight() + m_operations.getHeight() && 
+                    p.y > m_name.getHeight() + m_attributes.getHeight() + 20) {
+                //If the clickPoint is on bottom of classBox then reisze the height the second textArea
+                m_attributes.setPreferredSize(new Dimension(m_width - 6, m_attributes.getHeight()));
+                m_operations.setPreferredSize(new Dimension(m_width - 6, m_operations.getHeight() + adjustedHeight));
+                moveAnchorsWhenResized(m_width - originalWidth, m_height - originalHeight);
+            } else if (m_clickPoint.y > m_name.getHeight() + m_attributes.getHeight() && p.y > m_name.getHeight() + 20) {
+                //If the clickPoint is below the attributes text area, but not on bottom of classBox, then reisze the height the first textArea
+                m_attributes.setPreferredSize(new Dimension(m_width - 6, m_attributes.getHeight() + adjustedHeight));
+                m_operations.setPreferredSize(new Dimension(m_width - 6, m_operations.getHeight()));
+                //if the middle textArea's height changes then we need to move the last textArea's location 
+                m_operations.setLocation(m_operations.getX(), m_operations.getY() + adjustedHeight);
+                moveAnchorsWhenResized(m_width - originalWidth, m_height - originalHeight);
+            }
         } else {
             m_attributes.setPreferredSize(new Dimension(m_width - 6, m_attributes.getHeight()));
             m_operations.setPreferredSize(new Dimension(m_width - 6, m_operations.getHeight()));

@@ -147,9 +147,10 @@ public class ClassBoxListener implements MouseListener, MouseMotionListener {
                 Relationship r = m_canvasManager.getSharedCanvas().getRelationships().get(index);
                 r.setAnchoredCount(r.getAnchoredCount() - 1);
             }
-            // change color back to gray to show classBox is no longer active
-            box.setBackground(Color.gray);
-
+            if (!m_canvasManager.m_isDeleteMode) {
+                // change color back to gray to show classBox is no longer active
+                box.setBackground(Color.gray);
+            }
         } catch (ClassCastException ex) {
             System.out.println(ex);
             throw ex;
