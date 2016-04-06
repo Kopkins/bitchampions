@@ -94,14 +94,17 @@ public class EditorGUI {
         JMenuItem newDiagram = new JMenuItem("New Diagram...");
         JMenuItem exit = new JMenuItem("Exit");
         JMenuItem about = new JMenuItem("About Us...");
-
+        JMenuItem export = new JMenuItem("Export");
+        
         // Bind Events to buttons
         exit.addActionListener(e -> m_dialogManager.confirmTermination());
         about.addActionListener(e -> m_dialogManager.showAbout());
         newDiagram.addActionListener(e -> m_dialogManager.showNotImplemented());
+        export.addActionListener(CanvasManager.getExportListenger());
 
         // Bind Buttons to Menu
         fileMenu.add(newDiagram);
+        fileMenu.add(export);
         fileMenu.add(exit);
         aboutMenu.add(about);
 
