@@ -9,7 +9,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 public class CanvasManager {
 
@@ -373,6 +379,39 @@ public class CanvasManager {
         };
         return listener;
 
+        
+        
+    }
+
+    
+     /**
+     * Get an ActionListener that will export the canvas to jpg and open it
+     *
+     * @return
+     */
+    public static ActionListener getExportListenger() {
+         ActionListener listener;
+        listener = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CanvasManager canvasManager = CanvasManager.getInstance();
+                BufferedImage bi = new BufferedImage(m_canvas.getSize().width, m_canvas.getSize().height, BufferedImage.TYPE_3BYTE_BGR); 
+                Graphics g = bi.createGraphics();
+                m_canvas.paint(g);
+                g.dispose();
+                
+                //this file may need to be saved to a generic place if we are going to release.
+                try{ImageIO.write(bi,"jpg",new File("umlImage.jpg"));}catch (Exception ex) {}
+                
+                try {
+                    Desktop.getDesktop().open(new File("umlImage.jpg"));
+                } catch (IOException ex) {
+                    Logger.getLogger(CanvasManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        };
+        return listener;
     }
 
     /**
