@@ -53,6 +53,9 @@ public class EditorGUI {
      * @param args which are command line arguments
      */
     public static void main(String[] args) {
+        if(System.getProperty("os.name").equals("Mac OS X")){
+            System.setProperty("apple.laf.useScreenMenuBar","true");
+        }
         getSharedApp();
     }
 
