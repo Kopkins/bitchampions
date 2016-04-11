@@ -4,6 +4,7 @@ import uml.Settings;
 import uml.models.Canvas;
 import uml.models.ClassBox;
 import uml.models.Generics.Relationship;
+import uml.views.EditorGUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -300,13 +301,25 @@ public class CanvasManager {
      *
      * @return
      */
-    public static ActionListener getSaveListener() {
+    public static ActionListener getSaveListener(boolean skipDialog) {
         ActionListener listener = new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                DialogManager dialogManager = new DialogManager(EditorGUI.getSharedApp().m_window);
                 SaveLoadManager slm = SaveLoadManager.getInstance();
-                slm.save(getSharedCanvas().getRelationships(), getSharedCanvas().getClassBoxes());
+                String fileName = slm.getFileName();
+                if (SaveLoadManager.isValidFileName(fileName))
+                {
+                    if (!skipDialog) {
+                        fileName = dialogManager.getSaveFileFromDialog();
+                        slm.setFileName(fileName);
+                    }
+                    File file = new File(fileName);
+                    if (!file.exists() || dialogManager.confirmSave(fileName)) {
+                        slm.save(getSharedCanvas().getRelationships(), getSharedCanvas().getClassBoxes());
+                    }
+                }
             }
         };
         return listener;
@@ -323,13 +336,19 @@ public class CanvasManager {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SaveLoadManager slm = SaveLoadManager.getInstance();
-                slm.load();
-                getSharedCanvas().setRelationships(slm.getRelationships());
-                getSharedCanvas().setClassBoxes(slm.getClassBoxes());
-                refreshCanvas();
-                // add current state to undoRedoManager
-                m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getDeepCopyRelationships());
-                m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getDeepCopyClassBoxes());
+                DialogManager dialogManager = new DialogManager(EditorGUI.getSharedApp().m_window);
+                String fileName = dialogManager.getOpenFileFromDialog();
+                if (slm.isValidFileName(fileName)){
+                    slm.setFileName(fileName);
+                    slm.load();
+
+                    getSharedCanvas().setRelationships(slm.getRelationships());
+                    getSharedCanvas().setClassBoxes(slm.getClassBoxes());
+                    refreshCanvas();
+                    // add current state to undoRedoManager
+                    m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getDeepCopyRelationships());
+                    m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getDeepCopyClassBoxes());
+                }
             }
         };
         return listener;
@@ -378,9 +397,6 @@ public class CanvasManager {
             }
         };
         return listener;
-
-        
-        
     }
 
     
@@ -389,25 +405,36 @@ public class CanvasManager {
      *
      * @return
      */
-    public static ActionListener getExportListenger() {
+    public static ActionListener getExportListener() {
          ActionListener listener;
         listener = new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                CanvasManager canvasManager = CanvasManager.getInstance();
-                BufferedImage bi = new BufferedImage(m_canvas.getSize().width, m_canvas.getSize().height, BufferedImage.TYPE_3BYTE_BGR); 
+                BufferedImage bi = new BufferedImage(m_canvas.getSize().width, m_canvas.getSize().height, BufferedImage.TYPE_3BYTE_BGR);
+                DialogManager dialogManager = new DialogManager(EditorGUI.getSharedApp().m_window);
                 Graphics g = bi.createGraphics();
                 m_canvas.paint(g);
                 g.dispose();
-                
-                //this file may need to be saved to a generic place if we are going to release.
-                try{ImageIO.write(bi,"jpg",new File("umlImage.jpg"));}catch (Exception ex) {}
-                
-                try {
-                    Desktop.getDesktop().open(new File("umlImage.jpg"));
-                } catch (IOException ex) {
-                    Logger.getLogger(CanvasManager.class.getName()).log(Level.SEVERE, null, ex);
+
+                String fileName = dialogManager.getExportFileFromDialog();
+
+                if (SaveLoadManager.isValidImageFile(fileName)) {
+                    File file = new File(fileName);
+
+                    if (!file.exists() || dialogManager.confirmSave(fileName)) {
+                        //this file may need to be saved to a generic place if we are going to release.
+                        try {
+                            ImageIO.write(bi, "jpg", new File(fileName));
+                        } catch (Exception ex) {
+                        }
+
+                        try {
+                            Desktop.getDesktop().open(new File(fileName));
+                        } catch (IOException ex) {
+                            Logger.getLogger(CanvasManager.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                 }
             }
         };

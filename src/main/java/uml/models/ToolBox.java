@@ -19,7 +19,7 @@ public class ToolBox extends JPanel {
      */
     private void init() {
 
-        this.setLayout(new GridLayout(13, 1));
+        this.setLayout(new GridLayout(11, 1));
 
         bindButtons();
     }
@@ -72,16 +72,6 @@ public class ToolBox extends JPanel {
         JButton deleteSModeButton = new JButton("Delete Item");
         deleteSModeButton.addActionListener(CanvasManager.getDeleteModeListener());
         add(deleteSModeButton);
-        
-        // Add Save button
-        JButton saveButton = new JButton("Save");
-        saveButton.addActionListener(CanvasManager.getSaveListener());
-        add(saveButton);
-        
-        // Add Load button
-        JButton loadButton = new JButton("Load");
-        loadButton.addActionListener(CanvasManager.getLoadListener());
-        add(loadButton);
         
         // Add Undo button
         JButton undoButton = new JButton("Undo");

@@ -11,6 +11,7 @@ import javax.swing.JLayeredPane;
 import static uml.controls.CanvasManager.getSharedCanvas;
 import uml.models.ClassBox;
 import uml.models.Generics.Relationship;
+import uml.views.EditorGUI;
 
 /**
  *
@@ -22,11 +23,13 @@ public class SaveLoadManager {
     private ArrayList<Relationship> m_relationships;
     private ArrayList<ClassBox> m_classBoxes;
     private static SaveLoadManager m_saveLoadManager;
+    private static String m_fileName;
 
     /**
      * Constructor
      */
     public SaveLoadManager() {
+        m_fileName = "untitled.sav";
         m_relationships = new ArrayList<Relationship>();
         m_classBoxes = new ArrayList<ClassBox>();
     }
@@ -50,12 +53,12 @@ public class SaveLoadManager {
      */
     public void save(ArrayList<Relationship> relationships, ArrayList<ClassBox> classBoxes) {
         try {
-
-            FileOutputStream saveFile = new FileOutputStream("SaveObj.sav");
-            ObjectOutputStream save = new ObjectOutputStream(saveFile);
-            save.writeObject(relationships);
-            save.writeObject(classBoxes);
-            save.close();
+                EditorGUI.updateFileName(m_fileName);
+                FileOutputStream saveFile = new FileOutputStream(m_fileName);
+                ObjectOutputStream save = new ObjectOutputStream(saveFile);
+                save.writeObject(relationships);
+                save.writeObject(classBoxes);
+                save.close();
         } catch (Exception exc) {
             exc.printStackTrace();
         }
@@ -67,16 +70,17 @@ public class SaveLoadManager {
      */
     public void load() {
         try {
-            FileInputStream saveFile = new FileInputStream("SaveObj.sav");
-            ObjectInputStream save = new ObjectInputStream(saveFile);
-            m_relationships = (ArrayList<Relationship>) save.readObject();
-            m_classBoxes = (ArrayList<ClassBox>) save.readObject();
-            save.close();
-            //add mouse actionListeners to each classbox
-            for (ClassBox cb : m_classBoxes) {
-                cb.addMouseListener(EventManager.getClassBoxListener());
-                cb.addMouseMotionListener(EventManager.getClassBoxListener());
-            }
+                EditorGUI.updateFileName(m_fileName);
+                FileInputStream loadFile = new FileInputStream(m_fileName);
+                ObjectInputStream save = new ObjectInputStream(loadFile);
+                m_relationships = (ArrayList<Relationship>) save.readObject();
+                m_classBoxes = (ArrayList<ClassBox>) save.readObject();
+                save.close();
+                //add mouse actionListeners to each classbox
+                for (ClassBox cb : m_classBoxes) {
+                    cb.addMouseListener(EventManager.getClassBoxListener());
+                    cb.addMouseMotionListener(EventManager.getClassBoxListener());
+                }
         } catch (Exception exc) {
             exc.printStackTrace();
         }
@@ -94,5 +98,43 @@ public class SaveLoadManager {
      */
     public ArrayList<ClassBox> getClassBoxes() {
         return m_classBoxes;
+    }
+
+    public String getFileName()
+    {
+        return m_fileName;
+    }
+
+    public void setFileName(String fileName)
+    {
+        m_fileName = fileName;
+    }
+
+    public static boolean isValidFileName(String fileName)
+    {
+        if (fileName.isEmpty())
+        {
+            return false;
+        } else if (!fileName.endsWith(".sav") || fileName.length() <= 4)
+        {
+            return false;
+        } else
+        {
+            return true;
+        }
+    }
+
+    public static boolean isValidImageFile(String fileName)
+    {
+        if (fileName.isEmpty())
+        {
+            return false;
+        } else if (!fileName.endsWith(".jpg") || fileName.length() <= 4)
+        {
+            return false;
+        } else
+        {
+            return true;
+        }
     }
 }
