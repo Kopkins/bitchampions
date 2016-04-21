@@ -15,6 +15,7 @@ public abstract class Relationship extends JComponent implements Cloneable {
     protected String m_type;
     protected double m_angle;
     private int m_anchoredCount;
+    private int m_id;
 
     /**
      * Initialize the main components of the Relationship
@@ -25,6 +26,7 @@ public abstract class Relationship extends JComponent implements Cloneable {
         m_end = new Point(440, 20);
         m_color = Settings.Colors.DEFAULT.color;
         m_anchoredCount = 0;
+        m_id = 0;
     }
 
     /**
@@ -129,6 +131,24 @@ public abstract class Relationship extends JComponent implements Cloneable {
      */
     public int getAnchoredCount() {
         return m_anchoredCount;
+    }
+
+    /**
+     * Sets id.
+     *
+     * @param int
+     */
+    public void setId(int i) {
+        m_id = i;
+    }
+
+    /**
+     * Gets the id.
+     *
+     * @return
+     */
+    public int getId() {
+        return m_id;
     }
 
     /**

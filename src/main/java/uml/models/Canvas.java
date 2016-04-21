@@ -7,6 +7,7 @@ import uml.models.Relationships.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import static uml.controls.CanvasManager.getSharedCanvas;
 
 public class Canvas extends JLayeredPane {
 
@@ -77,6 +78,20 @@ public class Canvas extends JLayeredPane {
      */
     public ArrayList<Relationship> getRelationships() {
         return m_relationships;
+    }
+    
+    /**
+     * get relationship by id
+     */
+    public Relationship getRelationshipById(int id) {
+        for(int i = 0; i < m_relationships.size(); i++){
+            if(m_relationships.get(i).getId() == id){
+                
+                return m_relationships.get(i);
+            }
+        }
+        Aggregation r = new Aggregation();
+        return r;
     }
     
     /**

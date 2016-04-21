@@ -161,17 +161,17 @@ public class ClassBox extends JPanel implements Cloneable {
      * Add anchor to map of anchors.
      *
      */
-    public void addAnchor(Integer index, String type) {
-        m_anchors.put(index, type);
+    public void addAnchor(Integer id, String type) {
+        m_anchors.put(id, type);
     }
 
     /**
      * Delete anchor from map of anchors.
      *
      */
-    public void deleteAnchor(Integer index) {
-        if (m_anchors.containsKey(index)) {
-            m_anchors.remove(index);
+    public void deleteAnchor(Integer id) {
+        if (m_anchors.containsKey(id)) {
+            m_anchors.remove(id);
         }
     }
 
@@ -184,7 +184,7 @@ public class ClassBox extends JPanel implements Cloneable {
         //need to move every anchor with the classbox resize
         for (Object key : anchors.keySet()) {
             int i = Integer.parseInt(key.toString());
-            Relationship r = CanvasManager.getSharedCanvas().getRelationships().get(i);
+            Relationship r = CanvasManager.getSharedCanvas().getRelationshipById(i);
             // determine whether to move the start point or end point of relationship
             if (anchors.get(key).equals("start")) {
                 int x = r.getStartPoint().x;

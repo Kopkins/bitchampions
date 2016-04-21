@@ -30,6 +30,7 @@ public class CanvasManager {
     private int m_activeRelationshipIndex = -1;
     private static UndoRedoManager m_undoRedoManager;
     private String m_pointType = "";
+    private static int m_relationshipCount = 0;
 
     /**
      * Constructor
@@ -136,10 +137,11 @@ public class CanvasManager {
         ActionListener listener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                m_relationshipCount++;
                 //turn off delete mode if adding Relationship
                 ResetItemColor();
-
                 Relationship line = RelationshipFactory.getFromType(type);
+                line.setId(m_relationshipCount);
                 line.setType(type);
                 ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
 
@@ -309,8 +311,7 @@ public class CanvasManager {
                 DialogManager dialogManager = new DialogManager(EditorGUI.getSharedApp().m_window);
                 SaveLoadManager slm = SaveLoadManager.getInstance();
                 String fileName = slm.getFileName();
-                if (SaveLoadManager.isValidFileName(fileName))
-                {
+                if (SaveLoadManager.isValidFileName(fileName)) {
                     if (!skipDialog) {
                         fileName = dialogManager.getSaveFileFromDialog();
                         slm.setFileName(fileName);
@@ -338,7 +339,7 @@ public class CanvasManager {
                 SaveLoadManager slm = SaveLoadManager.getInstance();
                 DialogManager dialogManager = new DialogManager(EditorGUI.getSharedApp().m_window);
                 String fileName = dialogManager.getOpenFileFromDialog();
-                if (slm.isValidFileName(fileName)){
+                if (slm.isValidFileName(fileName)) {
                     slm.setFileName(fileName);
                     slm.load();
 
@@ -399,14 +400,13 @@ public class CanvasManager {
         return listener;
     }
 
-    
-     /**
+    /**
      * Get an ActionListener that will export the canvas to jpg and open it
      *
      * @return
      */
     public static ActionListener getExportListener() {
-         ActionListener listener;
+        ActionListener listener;
         listener = new ActionListener() {
 
             @Override
@@ -477,6 +477,21 @@ public class CanvasManager {
         relationships.remove(index);
     }
 
+    /**
+     * Delete anchor from class boxes
+     */
+    public void deleteAnchor(int index) {
+        ArrayList<Relationship> relationships = getSharedCanvas().getRelationships();
+        Relationship r = relationships.get(index);
+        for (ClassBox cb : getSharedCanvas().getClassBoxes()) {
+            cb.deleteAnchor(r.getId());
+            //anchoredCount for the  relationship
+            if (r.getAnchoredCount() > 0) {
+                r.setAnchoredCount(r.getAnchoredCount() - 1);
+            }
+        }
+    }
+    
     /**
      * Clear everything from the Canvas
      */
