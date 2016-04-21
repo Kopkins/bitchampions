@@ -131,7 +131,7 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
         if (activeIndex != -1) {
             // get the active relationship
             Relationship activeRelationship = CanvasManager.getSharedCanvas().getRelationships().get(activeIndex);
-            if (SwingUtilities.isLeftMouseButton(event) && activeRelationship.getAnchoredCount() < 1) {
+            if (SwingUtilities.isRightMouseButton(event) && activeRelationship.getAnchoredCount() < 1) {
                 if (activeRelationship.getStartPoint().distance(m_canvasManager.getClickPoint()) <= RADIUS) {
                     // set the point type to start
                     m_canvasManager.setPointType("start");
@@ -168,7 +168,7 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
                     m_canvasManager.setClickPoint(activeRelationship.getEndPoint());
 
                 }
-            } else if (SwingUtilities.isRightMouseButton(event)) {
+            } else if (SwingUtilities.isLeftMouseButton(event)) {
                 if (activeRelationship.getStartPoint().distance(m_canvasManager.getClickPoint()) <= RADIUS) {
                     // set the point type to start
                     m_canvasManager.setPointType("start");
