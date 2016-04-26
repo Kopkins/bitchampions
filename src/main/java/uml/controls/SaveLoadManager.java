@@ -115,13 +115,7 @@ public class SaveLoadManager {
         if (fileName.isEmpty())
         {
             return false;
-        } else if (!fileName.endsWith(".sav") || fileName.length() <= 4)
-        {
-            return false;
-        } else
-        {
-            return true;
-        }
+        } else return !(!fileName.endsWith(".sav") || fileName.length() <= 4);
     }
 
     public static boolean isValidImageFile(String fileName)
@@ -129,12 +123,6 @@ public class SaveLoadManager {
         if (fileName.isEmpty())
         {
             return false;
-        } else if (!fileName.endsWith(".jpg") || fileName.length() <= 4)
-        {
-            return false;
-        } else
-        {
-            return true;
-        }
+        } else return !(!fileName.endsWith(".jpg") || fileName.length() <= 4);
     }
 }

@@ -339,7 +339,7 @@ public class CanvasManager {
                 SaveLoadManager slm = SaveLoadManager.getInstance();
                 DialogManager dialogManager = new DialogManager(EditorGUI.getSharedApp().m_window);
                 String fileName = dialogManager.getOpenFileFromDialog();
-                if (slm.isValidFileName(fileName)) {
+                if (SaveLoadManager.isValidFileName(fileName)) {
                     slm.setFileName(fileName);
                     slm.load();
 
