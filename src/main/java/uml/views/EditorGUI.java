@@ -1,14 +1,11 @@
 package uml.views;
 
-import uml.controls.CanvasManager;
-import uml.controls.DialogManager;
-import uml.controls.SaveLoadManager;
+import uml.controls.*;
 import uml.models.ToolBox;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 /**
  * The main view and driver class for the UML app.
@@ -26,6 +23,7 @@ public class EditorGUI {
     private DialogManager m_dialogManager;
     private static EditorGUI m_sharedApp;
     private static String m_fileName;
+    private static int primaryMask = ActionEvent.CTRL_MASK;
 
     /**
      * Constructor
@@ -57,6 +55,7 @@ public class EditorGUI {
     public static void main(String[] args) {
         if(System.getProperty("os.name").equals("Mac OS X")){
             System.setProperty("apple.laf.useScreenMenuBar","true");
+            primaryMask = ActionEvent.META_MASK;
         }
         getSharedApp();
     }
@@ -91,9 +90,10 @@ public class EditorGUI {
      */
     private void attachMenuBar() {
         JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu, aboutMenu;
+        JMenu fileMenu, aboutMenu, editMenu;
         fileMenu = new JMenu("File");
         aboutMenu = new JMenu("About");
+        editMenu = new JMenu("Edit");
 
         // Buttons
         JMenuItem newDiagram = new JMenuItem("New");
@@ -103,8 +103,20 @@ public class EditorGUI {
         JMenuItem saveAs = new JMenuItem("Save As...");
         JMenuItem save = new JMenuItem("Save");
         JMenuItem open = new JMenuItem("Open...");
-        JMenuItem rename = new JMenuItem("Rename");
-        
+        JMenuItem undo = new JMenuItem("Undo");
+        JMenuItem redo = new JMenuItem("Redo");
+
+        // Bind Accelerators and Mnemonics
+        newDiagram.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, primaryMask));
+        open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, primaryMask));
+        save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, primaryMask));
+        saveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, primaryMask + ActionEvent.SHIFT_MASK));
+        close.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, primaryMask));
+        export.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, primaryMask));
+        undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, primaryMask));
+        redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, primaryMask + ActionEvent.SHIFT_MASK));
+
+
         // Bind Events to buttons
         close.addActionListener(e -> m_dialogManager.confirmTermination());
         about.addActionListener(e -> m_dialogManager.showAbout());
@@ -113,6 +125,9 @@ public class EditorGUI {
         open.addActionListener(CanvasManager.getLoadListener());
         saveAs.addActionListener(CanvasManager.getSaveListener(false));
         save.addActionListener(CanvasManager.getSaveListener(true));
+        undo.addActionListener(CanvasManager.getUndoListener());
+        redo.addActionListener(CanvasManager.getRedoListener());
+
         // Bind Buttons to Menu
         fileMenu.add(newDiagram);
         fileMenu.add(open);
@@ -121,10 +136,12 @@ public class EditorGUI {
         fileMenu.add(saveAs);
         fileMenu.add(save);
         fileMenu.add(export);
-        fileMenu.add(rename);
-        aboutMenu.add(about);
+        editMenu.add(undo);
+        editMenu.add(redo);
 
+        aboutMenu.add(about);
         menuBar.add(fileMenu);
+        menuBar.add(editMenu);
         menuBar.add(aboutMenu);
 
         m_window.setJMenuBar(menuBar);
