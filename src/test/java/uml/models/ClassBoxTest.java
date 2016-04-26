@@ -36,7 +36,6 @@ public class ClassBoxTest extends TestCase{
     {
         Point p = new Point(100,100);
         box1.setOrigin(p);
-
         assertEquals(p, box1.getOrigin());
         assertTrue(box1.getOrigin() == p);
     }
