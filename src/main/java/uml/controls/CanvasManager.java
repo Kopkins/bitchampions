@@ -425,7 +425,7 @@ public class CanvasManager {
                     if (!file.exists() || dialogManager.confirmSave(fileName)) {
                         //this file may need to be saved to a generic place if we are going to release.
                         try {
-                            ImageIO.write(bi, "jpg", new File(fileName));
+                            ImageIO.write(bi, "png", new File(fileName));
                         } catch (Exception ex) {
                         }
 
