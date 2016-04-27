@@ -6,6 +6,7 @@ import uml.models.ClassBox;
 import uml.models.Generics.Relationship;
 import uml.views.EditorGUI;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,7 +17,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 
 public class CanvasManager {
 
@@ -24,13 +24,13 @@ public class CanvasManager {
     private static int RADIUS = 5;
     private static Canvas m_canvas;
     private static CanvasManager m_canvasManager;
+    private static UndoRedoManager m_undoRedoManager;
+    private static int m_relationshipCount = 0;
     public boolean m_isDeleteMode = false;
     public boolean m_isAnchorMode = false;
     private Point m_clickPoint;
     private int m_activeRelationshipIndex = -1;
-    private static UndoRedoManager m_undoRedoManager;
     private String m_pointType = "";
-    private static int m_relationshipCount = 0;
 
     /**
      * Constructor
@@ -232,73 +232,6 @@ public class CanvasManager {
     }
 
     /**
-     * Gets the index of the activeRelationship.
-     *
-     * @return
-     */
-    public int getActiveRelationshipIndex() {
-        return m_activeRelationshipIndex;
-    }
-
-    /**
-     * Sets the index of the activeRelationship.
-     */
-    public void setActiveRelationshipIndex(Integer index) {
-        m_activeRelationshipIndex = index;
-    }
-
-    public Point getClickPoint() {
-        return m_clickPoint;
-    }
-
-    /**
-     * Sets the point that was clicked on.
-     */
-    public void setClickPoint(Point p) {
-        m_clickPoint = p;
-    }
-
-    /**
-     * Set point type
-     *
-     */
-    public void setPointType(String s) {
-        m_pointType = s;
-    }
-
-    /**
-     * Get the point type
-     *
-     * @return String
-     */
-    public String getPointType() {
-        return m_pointType;
-    }
-
-    /**
-     * Repaints the canvas
-     */
-    public void repaintCanvas() {
-        getSharedCanvas().repaint();
-    }
-
-    /**
-     * Get an ActionListener for revalidating and repainting the canvas panel
-     *
-     * @return listener
-     */
-    public ActionListener getRevalidateListener() {
-        ActionListener listener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                getSharedCanvas().revalidate();
-                getSharedCanvas().repaint();
-            }
-        };
-        return listener;
-    }
-
-    /**
      * Get an ActionListener that will save a file.
      *
      * @return
@@ -339,7 +272,7 @@ public class CanvasManager {
                 SaveLoadManager slm = SaveLoadManager.getInstance();
                 DialogManager dialogManager = new DialogManager(EditorGUI.getSharedApp().m_window);
                 String fileName = dialogManager.getOpenFileFromDialog();
-                if (slm.isValidFileName(fileName)) {
+                if (SaveLoadManager.isValidFileName(fileName)) {
                     slm.setFileName(fileName);
                     slm.load();
 
@@ -436,6 +369,73 @@ public class CanvasManager {
                         }
                     }
                 }
+            }
+        };
+        return listener;
+    }
+
+    /**
+     * Gets the index of the activeRelationship.
+     *
+     * @return
+     */
+    public int getActiveRelationshipIndex() {
+        return m_activeRelationshipIndex;
+    }
+
+    /**
+     * Sets the index of the activeRelationship.
+     */
+    public void setActiveRelationshipIndex(Integer index) {
+        m_activeRelationshipIndex = index;
+    }
+
+    public Point getClickPoint() {
+        return m_clickPoint;
+    }
+
+    /**
+     * Sets the point that was clicked on.
+     */
+    public void setClickPoint(Point p) {
+        m_clickPoint = p;
+    }
+
+    /**
+     * Get the point type
+     *
+     * @return String
+     */
+    public String getPointType() {
+        return m_pointType;
+    }
+
+    /**
+     * Set point type
+     *
+     */
+    public void setPointType(String s) {
+        m_pointType = s;
+    }
+
+    /**
+     * Repaints the canvas
+     */
+    public void repaintCanvas() {
+        getSharedCanvas().repaint();
+    }
+
+    /**
+     * Get an ActionListener for revalidating and repainting the canvas panel
+     *
+     * @return listener
+     */
+    public ActionListener getRevalidateListener() {
+        ActionListener listener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getSharedCanvas().revalidate();
+                getSharedCanvas().repaint();
             }
         };
         return listener;

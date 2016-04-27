@@ -102,7 +102,6 @@ public class CanvasTest extends TestCase {
     public void testEmptyRemoveRelationship()
     {
         canvas.removeRelationship(new Association());
-        System.out.println(canvas.getRelationships().size());
         assertTrue(canvas.getRelationships().size() == 0);
 
     }

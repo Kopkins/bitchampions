@@ -7,6 +7,8 @@ package uml.controls;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JLayeredPane;
 import static uml.controls.CanvasManager.getSharedCanvas;
 import uml.models.ClassBox;
@@ -112,29 +114,19 @@ public class SaveLoadManager {
 
     public static boolean isValidFileName(String fileName)
     {
-        if (fileName.isEmpty())
-        {
-            return false;
-        } else if (!fileName.endsWith(".sav") || fileName.length() <= 4)
-        {
-            return false;
-        } else
-        {
-            return true;
-        }
+        String pattern = "(^[a-zA-Z0-9]+.sav$)";
+        Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher(fileName);
+
+        return m.find();
     }
 
     public static boolean isValidImageFile(String fileName)
     {
-        if (fileName.isEmpty())
-        {
-            return false;
-        } else if (!fileName.endsWith(".jpg") || fileName.length() <= 4)
-        {
-            return false;
-        } else
-        {
-            return true;
-        }
+        String pattern = "(^[a-zA-Z0-9]+.jpg)";
+        Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher(fileName);
+
+        return m.find();
     }
 }

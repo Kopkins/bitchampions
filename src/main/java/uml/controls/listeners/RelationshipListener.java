@@ -57,7 +57,7 @@ public class RelationshipListener implements MouseMotionListener, MouseListener 
                 m_canvasManager.toggleAnchorMode();
                 //check if in delete mode
                 if (m_canvasManager.m_isDeleteMode) {
-                    Relationship r = m_canvasManager.getSharedCanvas().getRelationships().get(i);
+                    Relationship r = CanvasManager.getSharedCanvas().getRelationships().get(i);
                     // changed color to grey for undo/redo before deleteing 
                     r.setColor(Color.gray);
                     // check if relationship is anchored

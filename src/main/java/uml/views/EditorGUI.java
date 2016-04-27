@@ -9,8 +9,6 @@ import java.awt.event.*;
 
 /**
  * The main view and driver class for the UML app.
- *
- * @author Vincent Smith 2/4/16
  */
 public class EditorGUI {
 
@@ -21,7 +19,6 @@ public class EditorGUI {
     private static EditorGUI _sharedApp;
     public JFrame m_window;
     private DialogManager m_dialogManager;
-    private static EditorGUI m_sharedApp;
     private static String m_fileName;
     private static int primaryMask = ActionEvent.CTRL_MASK;
 

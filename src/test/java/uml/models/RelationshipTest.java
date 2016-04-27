@@ -1,6 +1,7 @@
 package uml.models;
 
 import junit.framework.TestCase;
+import uml.controls.RelationshipFactory;
 import uml.models.Generics.Relationship;
 import uml.models.Relationships.Association;
 
@@ -11,7 +12,7 @@ public class RelationshipTest extends TestCase{
 
     @Override
     protected void setUp() throws Exception {
-        rel = new Association();
+        rel = RelationshipFactory.getFromType("association");
     }
 
     public void testConstruct()
@@ -64,7 +65,20 @@ public class RelationshipTest extends TestCase{
         rel.rotate();
 
         assertEquals(rel.getAngle(), Math.PI);
+    }
 
+    public void testFactory() throws Exception {
+        String[] relationshipTypes = {
+            "Aggregation", "Composition",
+            "Dependency", "DirectedAssociation",
+            "Generalization", "Association"
+        };
+
+        for (String s : relationshipTypes)
+        {
+            Relationship r = RelationshipFactory.getFromType(s);
+            assertEquals(r.getType(), s);
+        }
     }
 
     @Override
