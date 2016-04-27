@@ -11,7 +11,7 @@ public class Generalization extends Relationship {
      */
     public Generalization() {
         init();
-        setType("Relationship");
+        setType("Generalization");
         refreshSymbol();
     }
 
