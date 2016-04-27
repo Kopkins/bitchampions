@@ -44,8 +44,8 @@ public class SaveLoadManagerTest extends TestCase {
     }
 
     public void testIsValidFileName() throws Exception {
-        String[] validNames = {"1.sav", "dog.sav", "TestName3000.sav"};
-        String[] invalidNames = {".sav", "", "\t.sav", "file.exe", "00000"};
+        String[] validNames = {"1.sav", "sav.sav", "dog.sav", "TestName3000.sav"};
+        String[] invalidNames = {"sav",".sav", "", "\t.sav", "file.exe", "00000"};
 
         for (String s : validNames)
         {
@@ -60,7 +60,7 @@ public class SaveLoadManagerTest extends TestCase {
 
     public void testIsValidImageFile() throws Exception {
         String[] validNames = {"1.jpg", "dog.jpg", "TestName3000.jpg"};
-        String[] invalidNames = {".sav", ".jpg", "\t.jpg", "file.exe", "00000", "word.png"};
+        String[] invalidNames = {".sav", "jpg", ".jpg", "\t.jpg", "file.exe", "00000", "word.png"};
 
         for (String s : validNames)
         {

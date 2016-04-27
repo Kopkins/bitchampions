@@ -117,7 +117,7 @@ public class EditorGUI {
         // Bind Events to buttons
         close.addActionListener(e -> m_dialogManager.confirmTermination());
         about.addActionListener(e -> m_dialogManager.showAbout());
-        newDiagram.addActionListener(e -> m_dialogManager.showNotImplemented());
+        newDiagram.addActionListener(CanvasManager.getNewDiagramListener());
         export.addActionListener(CanvasManager.getExportListener());
         open.addActionListener(CanvasManager.getLoadListener());
         saveAs.addActionListener(CanvasManager.getSaveListener(false));

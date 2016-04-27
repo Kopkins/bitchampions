@@ -147,4 +147,15 @@ public class UndoRedoManager {
         }
         return returnVal;
     }
+
+    /**
+     * Clear the undo redo stacks
+     */
+    public void clear()
+    {
+        m_redoClassBoxes.clear();
+        m_redoRelationships.clear();
+        m_undoClassBoxes.clear();
+        m_undoRelationships.clear();
+    }
 }
