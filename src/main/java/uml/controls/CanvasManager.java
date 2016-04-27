@@ -60,7 +60,7 @@ public class CanvasManager {
 
         // Prepare dimensions/preferences
         canvas.setPreferredSize(
-                new Dimension(canvas.m_width, canvas.m_height));
+            new Dimension(canvas.m_width, canvas.m_height));
 
         canvas.setBackground(Color.white);
         canvas.setOpaque(true);
@@ -84,7 +84,6 @@ public class CanvasManager {
     /**
      * Refreshes the canvas when the classBox and relationship arraylists are
      * set from save/load or undo/redo
-     *
      */
     public static void refreshCanvas() {
         //clear everything that is displayed on the canvas
@@ -170,12 +169,16 @@ public class CanvasManager {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                getInstance().clearCanvas();
-                getSharedCanvas().revalidate();
-                getSharedCanvas().repaint();
-                // add current state to undoRedoManager
-                m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getDeepCopyRelationships());
-                m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getDeepCopyClassBoxes());
+
+                DialogManager dialogManager = new DialogManager(EditorGUI.getSharedApp().m_window);
+                if (dialogManager.confirmClear()) {
+                    getInstance().clearCanvas();
+                    getSharedCanvas().revalidate();
+                    getSharedCanvas().repaint();
+                    // add current state to undoRedoManager
+                    m_undoRedoManager.pushRelationshipsToUndo(CanvasManager.getSharedCanvas().getDeepCopyRelationships());
+                    m_undoRedoManager.pushClassBoxesToUndo(CanvasManager.getSharedCanvas().getDeepCopyClassBoxes());
+                }
             }
         };
         return listener;
@@ -243,16 +246,64 @@ public class CanvasManager {
             public void actionPerformed(ActionEvent e) {
                 DialogManager dialogManager = new DialogManager(EditorGUI.getSharedApp().m_window);
                 SaveLoadManager slm = SaveLoadManager.getInstance();
-                String fileName = slm.getFileName();
-                if (SaveLoadManager.isValidFileName(fileName)) {
-                    if (!skipDialog) {
-                        fileName = dialogManager.getSaveFileFromDialog();
-                        slm.setFileName(fileName);
+
+                try {
+
+                    String fileName = !skipDialog ? dialogManager.getSaveFileFromDialog() : slm.getFileName();
+                    if (fileName != null) {
+                        File file = new File(fileName);
+
+                        if ((SaveLoadManager.isValidFileName(fileName)) &&
+                            (!file.exists() || dialogManager.confirmSave(fileName))) {
+                            slm.setFileName(fileName);
+                            slm.save(getSharedCanvas().getRelationships(), getSharedCanvas().getClassBoxes());
+                        }
                     }
-                    File file = new File(fileName);
-                    if (!file.exists() || dialogManager.confirmSave(fileName)) {
-                        slm.save(getSharedCanvas().getRelationships(), getSharedCanvas().getClassBoxes());
+                } catch (IllegalStateException ise) {
+                    dialogManager.displayError(ise.getMessage());
+                }
+            }
+        };
+        return listener;
+    }
+
+    /**
+     * Get an ActionListener that will create a new canvas.
+     *
+     * @return
+     */
+    public static ActionListener getNewDiagramListener() {
+        ActionListener listener = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                final int YES = 0;
+                final int NO = 1;
+                DialogManager dialogManager = new DialogManager(EditorGUI.getSharedApp().m_window);
+                int needToSave = dialogManager.confirmNewDiagram();
+
+                try {
+                    if (needToSave == YES) {
+                        SaveLoadManager slm = SaveLoadManager.getInstance();
+                        String fileName = dialogManager.getSaveFileFromDialog();
+
+                        if (SaveLoadManager.isValidFileName(fileName)) {
+                            File saveFile = new File(fileName);
+                            if (!saveFile.exists() || dialogManager.confirmSave(fileName)) {
+                                slm.setFileName(fileName);
+                                slm.save(getSharedCanvas().getRelationships(), getSharedCanvas().getClassBoxes());
+                                needToSave = NO;
+                            }
+                        }
                     }
+
+                    if (needToSave == NO) {
+                        m_canvasManager.clearCanvas();
+                        UndoRedoManager.getInstance().clear();
+                        getSharedCanvas().repaint();
+                    }
+                } catch (IllegalStateException ise) {
+                    dialogManager.displayError(ise.getMessage());
                 }
             }
         };
@@ -412,7 +463,6 @@ public class CanvasManager {
 
     /**
      * Set point type
-     *
      */
     public void setPointType(String s) {
         m_pointType = s;
@@ -491,7 +541,7 @@ public class CanvasManager {
             }
         }
     }
-    
+
     /**
      * Clear everything from the Canvas
      */

@@ -54,15 +54,6 @@ public class DialogManager {
     }
 
     /**
-     * Displays a dialog stating that a feature is not yet implemented.
-     */
-    public void showNotImplemented() {
-        String message = "Sorry. This feature is not yet implemented";
-        String title = "Oh no!";
-        JOptionPane.showMessageDialog(frame, message, title, JOptionPane.PLAIN_MESSAGE);
-    }
-
-    /**
      * Gives a file explorer for saving and loading a file.
      */
     public String getOpenFileFromDialog()
@@ -95,12 +86,18 @@ public class DialogManager {
         fileChooser.setDialogTitle("Save UML file");
         fileChooser.setFileFilter(new FileNameExtensionFilter("UML Files (*.sav)", "sav"));
         fileChooser.setFileHidingEnabled(true);
-        String fileName = "";
+        String fileName = SaveLoadManager.getInstance().getFileName();
+        File file = new File(fileName);
+        fileChooser.setSelectedFile(file);
+
         int i = fileChooser.showSaveDialog(frame);
-        if(i == JFileChooser.APPROVE_OPTION) {
+        if(i != JFileChooser.APPROVE_OPTION) {
+            fileName = null;
+        } else {
             fileName = fileChooser.getSelectedFile().getName();
-            if (!fileName.endsWith(".sav")) {
-                displayError("Invalid file type. Must end in .sav");
+            if (!SaveLoadManager.isValidFileName(fileName))
+            {
+                throw new IllegalStateException("Files must end in .sav");
             }
         }
         return fileName;
@@ -145,11 +142,46 @@ public class DialogManager {
      * Confirm whether or not to overwrite an existing file
      * @return boolean which is the users decision
      */
+    public int confirmNewDiagram()
+    {
+        String message = "Would you like to save first?";
+        String title = "New Diagram";
+        Object[] options = {"Yes", "No",};
+
+        int result = JOptionPane.showOptionDialog(frame, message, title,
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null, options, options[1]);
+
+        return result;
+    }
+
+    /**
+     * Confirm whether or not to overwrite an existing file
+     * @return boolean which is the users decision
+     */
     public boolean confirmSave(String fileName)
     {
-        SaveLoadManager slm = SaveLoadManager.getInstance();
         String message = "Are you sure you want to overwrite " + fileName + "?";
         String title = "Quick Save";
+        Object[] options = {"Yes", "No",};
+
+        int result = JOptionPane.showOptionDialog(frame, message, title,
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null, options, options[1]);
+
+        return result == 0;
+    }
+
+    /**
+     * Confirm whether or not to overwrite an existing file
+     * @return boolean which is the users decision
+     */
+    public boolean confirmClear()
+    {
+        String message = "Are you sure?";
+        String title = "Clear";
         Object[] options = {"Yes", "No",};
 
         int result = JOptionPane.showOptionDialog(frame, message, title,

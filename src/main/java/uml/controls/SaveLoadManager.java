@@ -123,7 +123,7 @@ public class SaveLoadManager {
 
     public static boolean isValidImageFile(String fileName)
     {
-        String pattern = "(^[a-zA-Z0-9]+.jpg)";
+        String pattern = "(^[a-zA-Z0-9]+.jpg$)";
         Pattern p = Pattern.compile(pattern);
         Matcher m = p.matcher(fileName);
 
